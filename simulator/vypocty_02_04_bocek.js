@@ -859,6 +859,33 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	parseFloat(rodinkaPridavkyNaDeti) + parseFloat(dalsiPrijmy[2]) + parseFloat(rodinkaPrispevekNaBydleni) + parseFloat(rodinkaPrispevekNaZivobyti) +
 	parseFloat(rodinkaDoplatekNaBydleni) - parseFloat(bydleni[0]) - parseFloat(bydleni[1]);
 
+	// důchod
+	prijmyAVydajeRodinyPoZapocteniDavek[5] = dalsiPrijmy[0];
+
+	// rodičovská
+	prijmyAVydajeRodinyPoZapocteniDavek[6] = dalsiPrijmy[1];
+
+	// přídavky na děti
+	prijmyAVydajeRodinyPoZapocteniDavek[7] = rodinkaPridavkyNaDeti;
+
+	// ostatní příjmy
+	prijmyAVydajeRodinyPoZapocteniDavek[8] = dalsiPrijmy[2];
+
+	// příspěvek na bydlení
+	prijmyAVydajeRodinyPoZapocteniDavek[9] = rodinkaPrispevekNaBydleni;
+
+	// příspěvek na živobytí
+	prijmyAVydajeRodinyPoZapocteniDavek[10] = rodinkaPrispevekNaZivobyti;
+
+	// doplatek na bydlení
+	prijmyAVydajeRodinyPoZapocteniDavek[11] = rodinkaDoplatekNaBydleni;
+
+	// nájem
+	prijmyAVydajeRodinyPoZapocteniDavek[12] = najem;
+
+	// poplatky
+	prijmyAVydajeRodinyPoZapocteniDavek[13] = poplatky;
+
 	return(prijmyAVydajeRodinyPoZapocteniDavek);
 }
 
@@ -976,6 +1003,15 @@ function prepisFormular() {
 		text += "<p>Příjem třetího dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[2][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[2][1] + " Kč.</p>";
 		text += "<p>Čistý příjem domácnosti před zaplacením nájmu: " + prijmyAVydajeRodinyPoZapocteniDavek[3] + " Kč.</p>";
 		text += "<p>Čistý příjem domácnosti po zaplacení nájmu: " + prijmyAVydajeRodinyPoZapocteniDavek[4] + " Kč.</p>";
+		text += "<p>(<font color=\"green\">Důchod " + prijmyAVydajeRodinyPoZapocteniDavek[5] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Rodičovská: " + prijmyAVydajeRodinyPoZapocteniDavek[6] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Přídavky na děti: " + prijmyAVydajeRodinyPoZapocteniDavek[7] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Ostatní příjmy: " + prijmyAVydajeRodinyPoZapocteniDavek[8] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Příspěvek na bydlení: " + prijmyAVydajeRodinyPoZapocteniDavek[9] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Příspěvek na živobytí: " + prijmyAVydajeRodinyPoZapocteniDavek[10] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Doplatek na bydlení: " + prijmyAVydajeRodinyPoZapocteniDavek[11] + " Kč.</font></p>";
+		text += "<p><font color=\"red\">Nájem: " + prijmyAVydajeRodinyPoZapocteniDavek[12] + " Kč.</font></p>";
+		text += "<p><font color=\"red\">Poplatky: " + prijmyAVydajeRodinyPoZapocteniDavek[13] + " Kč.</font>)</p>";
 
 	document.getElementById('results').innerHTML = text;
 
