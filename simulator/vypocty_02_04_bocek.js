@@ -998,9 +998,9 @@ function prepisFormular() {
 
 	var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
 
-	var text = "<p>Příjem prvního dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[0][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[0][1] + " Kč.</p>";
-		text += "<p>Příjem druhého dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[1][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[1][1] + " Kč.</p>";
-		text += "<p>Příjem třetího dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[2][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[2][1] + " Kč.</p>";
+	var text = "<p>Čistý příjem prvního dospělého: " + prijmyAVydajeRodinyPoZapocteniDavek[0][0] + " Kč.</p>";
+		text += "<p>Čistý příjem druhého dospělého: " + prijmyAVydajeRodinyPoZapocteniDavek[1][0] + " Kč.</p>";
+		text += "<p>Čistý příjem třetího dospělého: " + prijmyAVydajeRodinyPoZapocteniDavek[2][0] + " Kč.</p>";
 		text += "<p>Čistý příjem domácnosti před zaplacením nájmu: " + prijmyAVydajeRodinyPoZapocteniDavek[3] + " Kč.</p>";
 		text += "<p>Čistý příjem domácnosti po zaplacení nájmu: " + prijmyAVydajeRodinyPoZapocteniDavek[4] + " Kč.</p>";
 		text += "<p>(<font color=\"green\">Důchod " + prijmyAVydajeRodinyPoZapocteniDavek[5] + " Kč.</font></p>";
