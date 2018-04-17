@@ -52,6 +52,11 @@ function spocitejSlozkyNaHPP(hrubyPrijem = 0, vyjimkaMinimalniZaklad = false) {
 		zalohaNaDan = 0,
 		minimalniMzda = 12200;
 
+	// pokud 0, vrať 0
+	if (hrubyPrijem == 0) {
+		return([0, 0, 0, 0, 0])
+	}
+
 	// sociální pojištění: 6,5 % příjmu, zdravotní pojištění: 4,5 % příjmu, záloha na daň: 15 % ze superhrubé mzdy (134 % hrubé)
 	if ( (hrubyPrijem < minimalniMzda) && (!vyjimkaMinimalniZaklad) ) {
 		socialniPojisteni = 0.065 * minimalniMzda;
@@ -67,6 +72,7 @@ function spocitejSlozkyNaHPP(hrubyPrijem = 0, vyjimkaMinimalniZaklad = false) {
 
 	return([hrubyPrijem, cistyPrijem, socialniPojisteni, zdravotniPojisteni, zalohaNaDan]);
 }
+
 
 
 
@@ -91,6 +97,11 @@ function spocitejSlozkyNaDPC(hrubyPrijem = 0, platiZdravotniJinde = false) {
 		zalohaNaDan = 0,
 		maximalniCastkaBezPojistneho = 2500,
 		minimalniMzda = 12200;
+
+	// pokud 0, vrať 0
+	if (hrubyPrijem == 0) {
+		return([0, 0, 0, 0, 0])
+	}
 
 	// pod limitem je sociální i zdravotní nula, proto stačí počítat s hrubým příjmem
 	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
@@ -139,6 +150,11 @@ function spocitejSlozkyNaDPP(hrubyPrijem = 0, platiZdravotniJinde = false) {
 		cistyPrijem = 0,
 		maximalniCastkaBezPojistneho = 10000,
 		minimalniMzda = 12200;
+
+	// pokud 0, vrať 0
+	if (hrubyPrijem == 0) {
+		return([0, 0, 0, 0, 0])
+	}
 
 	// pod limitem je sociální i zdravotní nula, proto stačí počítat s hrubým příjmem
 	if (hrubyPrijem <= maximalniCastkaBezPojistneho) {
@@ -896,84 +912,84 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 function prepisFormular() {
 
 	prvniDospelyPrvniZamestnavatel[0] = parseFloat(document.getElementById("prvniDospelyPrvniZamestnavatelHPPPrijem").value);
-	prvniDospelyPrvniZamestnavatel[1] = document.getElementById("prvniDospelyPrvniZamestnavatelHPPVyjimka").value;
+	prvniDospelyPrvniZamestnavatel[1] = JSON.parse(document.getElementById("prvniDospelyPrvniZamestnavatelHPPVyjimka").value);
 	prvniDospelyPrvniZamestnavatel[2] = parseFloat(document.getElementById("prvniDospelyPrvniZamestnavatelDPCPrijem").value);
-	prvniDospelyPrvniZamestnavatel[3] = document.getElementById("prvniDospelyPrvniZamestnavatelDPCZdravotni").value;
+	prvniDospelyPrvniZamestnavatel[3] = JSON.parse(document.getElementById("prvniDospelyPrvniZamestnavatelDPCZdravotni").value);
 	prvniDospelyPrvniZamestnavatel[4] = parseFloat(document.getElementById("prvniDospelyPrvniZamestnavatelDPPPrijem").value);
-	prvniDospelyPrvniZamestnavatel[5] = document.getElementById("prvniDospelyPrvniZamestnavatelDPPZdravotni").value;
-	prvniDospelyPrvniZamestnavatel[6] = document.getElementById("prvniDospelyPrvniZamestnavatelRuzovyPapir").value;
+	prvniDospelyPrvniZamestnavatel[5] = JSON.parse(document.getElementById("prvniDospelyPrvniZamestnavatelDPPZdravotni").value);
+	prvniDospelyPrvniZamestnavatel[6] = JSON.parse(document.getElementById("prvniDospelyPrvniZamestnavatelRuzovyPapir").value);
 	prvniDospelyPrvniZamestnavatel[7] = parseFloat(document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDeti").value);
 
 	prvniDospelyDruhyZamestnavatel[0] = parseFloat(document.getElementById("prvniDospelyDruhyZamestnavatelHPPPrijem").value);
-	prvniDospelyDruhyZamestnavatel[1] = document.getElementById("prvniDospelyDruhyZamestnavatelHPPVyjimka").value;
+	prvniDospelyDruhyZamestnavatel[1] = JSON.parse(document.getElementById("prvniDospelyDruhyZamestnavatelHPPVyjimka").value);
 	prvniDospelyDruhyZamestnavatel[2] = parseFloat(document.getElementById("prvniDospelyDruhyZamestnavatelDPCPrijem").value);
-	prvniDospelyDruhyZamestnavatel[3] = document.getElementById("prvniDospelyDruhyZamestnavatelDPCZdravotni").value;
+	prvniDospelyDruhyZamestnavatel[3] = JSON.parse(document.getElementById("prvniDospelyDruhyZamestnavatelDPCZdravotni").value);
 	prvniDospelyDruhyZamestnavatel[4] = parseFloat(document.getElementById("prvniDospelyDruhyZamestnavatelDPPPrijem").value);
-	prvniDospelyDruhyZamestnavatel[5] = document.getElementById("prvniDospelyDruhyZamestnavatelDPPZdravotni").value;
-	prvniDospelyDruhyZamestnavatel[6] = document.getElementById("prvniDospelyDruhyZamestnavatelRuzovyPapir").value;
+	prvniDospelyDruhyZamestnavatel[5] = JSON.parse(document.getElementById("prvniDospelyDruhyZamestnavatelDPPZdravotni").value);
+	prvniDospelyDruhyZamestnavatel[6] = JSON.parse(document.getElementById("prvniDospelyDruhyZamestnavatelRuzovyPapir").value);
 	prvniDospelyDruhyZamestnavatel[7] = parseFloat(document.getElementById("prvniDospelyDruhyZamestnavatelVyzivovaneDeti").value);
 
 	prvniDospelyTretiZamestnavatel[0] = parseFloat(document.getElementById("prvniDospelyTretiZamestnavatelHPPPrijem").value);
-	prvniDospelyTretiZamestnavatel[1] = document.getElementById("prvniDospelyTretiZamestnavatelHPPVyjimka").value;
+	prvniDospelyTretiZamestnavatel[1] = JSON.parse(document.getElementById("prvniDospelyTretiZamestnavatelHPPVyjimka").value);
 	prvniDospelyTretiZamestnavatel[2] = parseFloat(document.getElementById("prvniDospelyTretiZamestnavatelDPCPrijem").value);
-	prvniDospelyTretiZamestnavatel[3] = document.getElementById("prvniDospelyTretiZamestnavatelDPCZdravotni").value;
+	prvniDospelyTretiZamestnavatel[3] = JSON.parse(document.getElementById("prvniDospelyTretiZamestnavatelDPCZdravotni").value);
 	prvniDospelyTretiZamestnavatel[4] = parseFloat(document.getElementById("prvniDospelyTretiZamestnavatelDPPPrijem").value);
-	prvniDospelyTretiZamestnavatel[5] = document.getElementById("prvniDospelyTretiZamestnavatelDPPZdravotni").value;
-	prvniDospelyTretiZamestnavatel[6] = document.getElementById("prvniDospelyTretiZamestnavatelRuzovyPapir").value;
+	prvniDospelyTretiZamestnavatel[5] = JSON.parse(document.getElementById("prvniDospelyTretiZamestnavatelDPPZdravotni").value);
+	prvniDospelyTretiZamestnavatel[6] = JSON.parse(document.getElementById("prvniDospelyTretiZamestnavatelRuzovyPapir").value);
 	prvniDospelyTretiZamestnavatel[7] = parseFloat(document.getElementById("prvniDospelyTretiZamestnavatelVyzivovaneDeti").value);
 
 	druhyDospelyPrvniZamestnavatel[0] = parseFloat(document.getElementById("druhyDospelyPrvniZamestnavatelHPPPrijem").value);
-	druhyDospelyPrvniZamestnavatel[1] = document.getElementById("druhyDospelyPrvniZamestnavatelHPPVyjimka").value;
+	druhyDospelyPrvniZamestnavatel[1] = JSON.parse(document.getElementById("druhyDospelyPrvniZamestnavatelHPPVyjimka").value);
 	druhyDospelyPrvniZamestnavatel[2] = parseFloat(document.getElementById("druhyDospelyPrvniZamestnavatelDPCPrijem").value);
-	druhyDospelyPrvniZamestnavatel[3] = document.getElementById("druhyDospelyPrvniZamestnavatelDPCZdravotni").value;
+	druhyDospelyPrvniZamestnavatel[3] = JSON.parse(document.getElementById("druhyDospelyPrvniZamestnavatelDPCZdravotni").value);
 	druhyDospelyPrvniZamestnavatel[4] = parseFloat(document.getElementById("druhyDospelyPrvniZamestnavatelDPPPrijem").value);
-	druhyDospelyPrvniZamestnavatel[5] = document.getElementById("druhyDospelyPrvniZamestnavatelDPPZdravotni").value;
-	druhyDospelyPrvniZamestnavatel[6] = document.getElementById("druhyDospelyPrvniZamestnavatelRuzovyPapir").value;
+	druhyDospelyPrvniZamestnavatel[5] = JSON.parse(document.getElementById("druhyDospelyPrvniZamestnavatelDPPZdravotni").value);
+	druhyDospelyPrvniZamestnavatel[6] = JSON.parse(document.getElementById("druhyDospelyPrvniZamestnavatelRuzovyPapir").value);
 	druhyDospelyPrvniZamestnavatel[7] = parseFloat(document.getElementById("druhyDospelyPrvniZamestnavatelVyzivovaneDeti").value);
 
 	druhyDospelyDruhyZamestnavatel[0] = parseFloat(document.getElementById("druhyDospelyDruhyZamestnavatelHPPPrijem").value);
-	druhyDospelyDruhyZamestnavatel[1] = document.getElementById("druhyDospelyDruhyZamestnavatelHPPVyjimka").value;
+	druhyDospelyDruhyZamestnavatel[1] = JSON.parse(document.getElementById("druhyDospelyDruhyZamestnavatelHPPVyjimka").value);
 	druhyDospelyDruhyZamestnavatel[2] = parseFloat(document.getElementById("druhyDospelyDruhyZamestnavatelDPCPrijem").value);
-	druhyDospelyDruhyZamestnavatel[3] = document.getElementById("druhyDospelyDruhyZamestnavatelDPCZdravotni").value;
+	druhyDospelyDruhyZamestnavatel[3] = JSON.parse(document.getElementById("druhyDospelyDruhyZamestnavatelDPCZdravotni").value);
 	druhyDospelyDruhyZamestnavatel[4] = parseFloat(document.getElementById("druhyDospelyDruhyZamestnavatelDPPPrijem").value);
-	druhyDospelyDruhyZamestnavatel[5] = document.getElementById("druhyDospelyDruhyZamestnavatelDPPZdravotni").value;
-	druhyDospelyDruhyZamestnavatel[6] = document.getElementById("druhyDospelyDruhyZamestnavatelRuzovyPapir").value;
+	druhyDospelyDruhyZamestnavatel[5] = JSON.parse(document.getElementById("druhyDospelyDruhyZamestnavatelDPPZdravotni").value);
+	druhyDospelyDruhyZamestnavatel[6] = JSON.parse(document.getElementById("druhyDospelyDruhyZamestnavatelRuzovyPapir").value);
 	druhyDospelyDruhyZamestnavatel[7] = parseFloat(document.getElementById("druhyDospelyDruhyZamestnavatelVyzivovaneDeti").value);
 
 	druhyDospelyTretiZamestnavatel[0] = parseFloat(document.getElementById("druhyDospelyTretiZamestnavatelHPPPrijem").value);
-	druhyDospelyTretiZamestnavatel[1] = document.getElementById("druhyDospelyTretiZamestnavatelHPPVyjimka").value;
+	druhyDospelyTretiZamestnavatel[1] = JSON.parse(document.getElementById("druhyDospelyTretiZamestnavatelHPPVyjimka").value);
 	druhyDospelyTretiZamestnavatel[2] = parseFloat(document.getElementById("druhyDospelyTretiZamestnavatelDPCPrijem").value);
-	druhyDospelyTretiZamestnavatel[3] = document.getElementById("druhyDospelyTretiZamestnavatelDPCZdravotni").value;
+	druhyDospelyTretiZamestnavatel[3] = JSON.parse(document.getElementById("druhyDospelyTretiZamestnavatelDPCZdravotni").value);
 	druhyDospelyTretiZamestnavatel[4] = parseFloat(document.getElementById("druhyDospelyTretiZamestnavatelDPPPrijem").value);
-	druhyDospelyTretiZamestnavatel[5] = document.getElementById("druhyDospelyTretiZamestnavatelDPPZdravotni").value;
-	druhyDospelyTretiZamestnavatel[6] = document.getElementById("druhyDospelyTretiZamestnavatelRuzovyPapir").value;
+	druhyDospelyTretiZamestnavatel[5] = JSON.parse(document.getElementById("druhyDospelyTretiZamestnavatelDPPZdravotni").value);
+	druhyDospelyTretiZamestnavatel[6] = JSON.parse(document.getElementById("druhyDospelyTretiZamestnavatelRuzovyPapir").value);
 	druhyDospelyTretiZamestnavatel[7] = parseFloat(document.getElementById("druhyDospelyTretiZamestnavatelVyzivovaneDeti").value);
 
 	tretiDospelyPrvniZamestnavatel[0] = parseFloat(document.getElementById("tretiDospelyPrvniZamestnavatelHPPPrijem").value);
-	tretiDospelyPrvniZamestnavatel[1] = document.getElementById("tretiDospelyPrvniZamestnavatelHPPVyjimka").value;
+	tretiDospelyPrvniZamestnavatel[1] = JSON.parse(document.getElementById("tretiDospelyPrvniZamestnavatelHPPVyjimka").value);
 	tretiDospelyPrvniZamestnavatel[2] = parseFloat(document.getElementById("tretiDospelyPrvniZamestnavatelDPCPrijem").value);
-	tretiDospelyPrvniZamestnavatel[3] = document.getElementById("tretiDospelyPrvniZamestnavatelDPCZdravotni").value;
+	tretiDospelyPrvniZamestnavatel[3] = JSON.parse(document.getElementById("tretiDospelyPrvniZamestnavatelDPCZdravotni").value);
 	tretiDospelyPrvniZamestnavatel[4] = parseFloat(document.getElementById("tretiDospelyPrvniZamestnavatelDPPPrijem").value);
-	tretiDospelyPrvniZamestnavatel[5] = document.getElementById("tretiDospelyPrvniZamestnavatelDPPZdravotni").value;
-	tretiDospelyPrvniZamestnavatel[6] = document.getElementById("tretiDospelyPrvniZamestnavatelRuzovyPapir").value;
+	tretiDospelyPrvniZamestnavatel[5] = JSON.parse(document.getElementById("tretiDospelyPrvniZamestnavatelDPPZdravotni").value);
+	tretiDospelyPrvniZamestnavatel[6] = JSON.parse(document.getElementById("tretiDospelyPrvniZamestnavatelRuzovyPapir").value);
 	tretiDospelyPrvniZamestnavatel[7] = parseFloat(document.getElementById("tretiDospelyPrvniZamestnavatelVyzivovaneDeti").value);
 
 	tretiDospelyDruhyZamestnavatel[0] = parseFloat(document.getElementById("tretiDospelyDruhyZamestnavatelHPPPrijem").value);
-	tretiDospelyDruhyZamestnavatel[1] = document.getElementById("tretiDospelyDruhyZamestnavatelHPPVyjimka").value;
+	tretiDospelyDruhyZamestnavatel[1] = JSON.parse(document.getElementById("tretiDospelyDruhyZamestnavatelHPPVyjimka").value);
 	tretiDospelyDruhyZamestnavatel[2] = parseFloat(document.getElementById("tretiDospelyDruhyZamestnavatelDPCPrijem").value);
-	tretiDospelyDruhyZamestnavatel[3] = document.getElementById("tretiDospelyDruhyZamestnavatelDPCZdravotni").value;
+	tretiDospelyDruhyZamestnavatel[3] = JSON.parse(document.getElementById("tretiDospelyDruhyZamestnavatelDPCZdravotni").value);
 	tretiDospelyDruhyZamestnavatel[4] = parseFloat(document.getElementById("tretiDospelyDruhyZamestnavatelDPPPrijem").value);
-	tretiDospelyDruhyZamestnavatel[5] = document.getElementById("tretiDospelyDruhyZamestnavatelDPPZdravotni").value;
-	tretiDospelyDruhyZamestnavatel[6] = document.getElementById("tretiDospelyDruhyZamestnavatelRuzovyPapir").value;
+	tretiDospelyDruhyZamestnavatel[5] = JSON.parse(document.getElementById("tretiDospelyDruhyZamestnavatelDPPZdravotni").value);
+	tretiDospelyDruhyZamestnavatel[6] = JSON.parse(document.getElementById("tretiDospelyDruhyZamestnavatelRuzovyPapir").value);
 	tretiDospelyDruhyZamestnavatel[7] = parseFloat(document.getElementById("tretiDospelyDruhyZamestnavatelVyzivovaneDeti").value);
 
 	tretiDospelyTretiZamestnavatel[0] = parseFloat(document.getElementById("tretiDospelyTretiZamestnavatelHPPPrijem").value);
-	tretiDospelyTretiZamestnavatel[1] = document.getElementById("tretiDospelyTretiZamestnavatelHPPVyjimka").value;
+	tretiDospelyTretiZamestnavatel[1] = JSON.parse(document.getElementById("tretiDospelyTretiZamestnavatelHPPVyjimka").value);
 	tretiDospelyTretiZamestnavatel[2] = parseFloat(document.getElementById("tretiDospelyTretiZamestnavatelDPCPrijem").value);
-	tretiDospelyTretiZamestnavatel[3] = document.getElementById("tretiDospelyTretiZamestnavatelDPCZdravotni").value;
+	tretiDospelyTretiZamestnavatel[3] = JSON.parse(document.getElementById("tretiDospelyTretiZamestnavatelDPCZdravotni").value);
 	tretiDospelyTretiZamestnavatel[4] = parseFloat(document.getElementById("tretiDospelyTretiZamestnavatelDPPPrijem").value);
-	tretiDospelyTretiZamestnavatel[5] = document.getElementById("tretiDospelyTretiZamestnavatelDPPZdravotni").value;
-	tretiDospelyTretiZamestnavatel[6] = document.getElementById("tretiDospelyTretiZamestnavatelRuzovyPapir").value;
+	tretiDospelyTretiZamestnavatel[5] = JSON.parse(document.getElementById("tretiDospelyTretiZamestnavatelDPPZdravotni").value);
+	tretiDospelyTretiZamestnavatel[6] = JSON.parse(document.getElementById("tretiDospelyTretiZamestnavatelRuzovyPapir").value);
 	tretiDospelyTretiZamestnavatel[7] = parseFloat(document.getElementById("tretiDospelyTretiZamestnavatelVyzivovaneDeti").value);
 
 	slozeniDomacnosti[0] = parseFloat(document.getElementById("pocetDospelych").value);
@@ -983,7 +999,7 @@ function prepisFormular() {
 	slozeniDomacnosti[4] = parseFloat(document.getElementById("pocetClenuDomacnosti").value);
 
 	socialOptional[0] = parseFloat(document.getElementById("snizeneMinimum").value);
-	socialOptional[1] = document.getElementById("vyssiDavkyNaDeti").value;
+	socialOptional[1] = JSON.parse(document.getElementById("vyssiDavkyNaDeti").value);
 
 	dalsiPrijmy[0] = parseFloat(document.getElementById("duchody").value);
 	dalsiPrijmy[1] = parseFloat(document.getElementById("rodicovska").value);
@@ -991,16 +1007,16 @@ function prepisFormular() {
 
 	bydleni[0] = parseFloat(document.getElementById("najem").value);
 	bydleni[1] = parseFloat(document.getElementById("poplatky").value);
-	bydleni[2] = document.getElementById("vlastniByt").value;
-	bydleni[3] = document.getElementById("ubytovna").value;
+	bydleni[2] = JSON.parse(document.getElementById("vlastniByt").value);
+	bydleni[3] = JSON.parse(document.getElementById("ubytovna").value);
 	bydleni[4] = parseFloat(document.getElementById("velikostObce").value);
 	bydleni[5] = parseFloat(document.getElementById("obvykleNaklady").value);
 
 	var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
 
-	var text = "<p>Čistý příjem prvního dospělého: " + prijmyAVydajeRodinyPoZapocteniDavek[0][0] + " Kč.</p>";
-		text += "<p>Čistý příjem druhého dospělého: " + prijmyAVydajeRodinyPoZapocteniDavek[1][0] + " Kč.</p>";
-		text += "<p>Čistý příjem třetího dospělého: " + prijmyAVydajeRodinyPoZapocteniDavek[2][0] + " Kč.</p>";
+	var text = "<p>Příjem prvního dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[0][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[0][1] + " Kč.</p>";
+		text += "<p>Příjem druhého dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[1][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[1][1] + " Kč.</p>";
+		text += "<p>Příjem třetího dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[2][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[2][1] + " Kč.</p>";
 		text += "<p>Čistý příjem domácnosti před zaplacením nájmu: " + prijmyAVydajeRodinyPoZapocteniDavek[3] + " Kč.</p>";
 		text += "<p>Čistý příjem domácnosti po zaplacení nájmu: " + prijmyAVydajeRodinyPoZapocteniDavek[4] + " Kč.</p>";
 		text += "<p>(<font color=\"green\">Důchod " + prijmyAVydajeRodinyPoZapocteniDavek[5] + " Kč.</font></p>";
