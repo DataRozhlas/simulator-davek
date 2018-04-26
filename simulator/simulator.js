@@ -1,5 +1,18 @@
 // dynamický model
+
 // spocitejExekuce (https://docs.google.com/document/d/1r5N8h91YaMELoLgjPSp0-PzkC--nZpwEP6wHTqQ7VFI/edit#)
+
+// další iterace:
+
+// Vypadá to, že je možné podepsat růžový papír u více zaměstnavatelů
+
+// Nešlo by některé věcí vyplňovat ne u zaměstnání, ale u zaměstnávané osoby
+// - počet dětí (a pak by se přiřadilo k tomu, kde podepsal růžový papír?)
+// - výjimka z minimálního základu
+
+// Nejsem si jistá otázkou "platí zdravotní jinde" - to myslím běžně člověk nebude vědět - šlo by to nějak zautomatizovat? Např nastavit, min, zdravotní tam, kde má člověk nejvyšší příjem)?
+
+// zjednodušit zadávání dětí
 
 
 
@@ -16,14 +29,19 @@ var prvniDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, false, 0],
 	tretiDospelyDruhyZamestnavatel = [0, false, 0, false, 0, false, false, 0],
 	tretiDospelyTretiZamestnavatel = [0, false, 0, false, 0, false, false, 0],
 
-// počet dospělých, počet dětí pod 6 let, počet dětí 6 až 15 let, počet dětí 15 až 26 let, počet členů domácnosti
-	slozeniDomacnosti = [0, 0, 0, 0, 0],
+// počet přednostních exekucí, počet nepřednostních exekucí, počet dalších vyživovaných osob
+	prvniDospelyExekuce = [0, 0, 0],
+	druhyDospelyExekuce = [0, 0, 0],
+	tretiDospelyExekuce = [0, 0, 0],
+
+// počet dospělých, počet dětí pod 6 let, počet dětí 6 až 15 let, počet nezaopatřených dětí 15 až 26 let, počet členů domácnosti, počet členů domácnosti s trvalým bydlištěm jinde
+	slozeniDomacnosti = [0, 0, 0, 0, 0, 0],
 
 // kolik členů domácnosti má snížené minimum na existenční, má rodina nárok na vyšší dávky na děti (pobírá rodičovskou, mateřskou, nebo podporu v nezaměstnanosti)?
 	socialOptional = [0, false],
 
-// výše důchodů, výše rodičovské, výše ostatních příjmů
-	dalsiPrijmy = [0, 0, 0],
+// výše důchodů, výše rodičovské, výše podpory v nezaměstnanosti, výše ostatních příjmů
+	dalsiPrijmy = [0, 0, 0, 0],
 
 // nájem, poplatky, bydlí ve vlastním nebo družstevním bytě?, bydlí na ubytovně, chatě nebo v podnájmu?,
 // velikost obce (1 = Praha, 2 = nad 100 000, 3 = nad 50 000, 4 = nad 10 000, 5 = pod 10 000), místně obvyklé náklady stanovené úřadem práce
@@ -425,7 +443,7 @@ function spocitejPridavkyNaDeti(cistyPrijemDomacnosti = [0, 0], prijemPrvnihoDos
 
 
 
-// výpočet nákladů za bydlení
+// výpočet nákladů za bydlení pro SSP
 // aktualizace: 15.3.2018
 // zdroj: http://portal.mpsv.cz/soc/ssp/obcane/prisp_na_bydleni
 // vstupy:
@@ -436,21 +454,25 @@ function spocitejPridavkyNaDeti(cistyPrijemDomacnosti = [0, 0], prijemPrvnihoDos
 //		bydlí na ubytovně, na chatě nebo v podnájmu? (ubytovna, boolean)
 //		velikost obce, kde rodina žije (velikostObce, 1 = Praha, 2 = nad 100 000, 3 = nad 50 000, 4 = nad 10 000, 5 = pod 10 000)
 //		místně obvyklé náklady, určené místním pracákem (mistneObvykleNaklady, 0 = nestanovené)
+//		pocetClenuDomacnostiSTrvalymPobytemJinde
 // výstupy:
 //		uznatelné náklady na bydlení pro dávky SSP (integer)
-//		uznatelné náklady na bydlení pro dávky HN (integer)
-//		normativ nákladů na bydlení (integer)
+//		normativ nákladů na bydlení pro dávky SSP (integer)
 
-function spocitejNakladyNaBydleni(najem = 0, poplatky = 0, pocetClenuDomacnosti = 0, vlastniBydleni = false, ubytovna = false, velikostObce = 1, mistneObvykleNaklady = 0) {
+function spocitejNakladyNaBydleniProSSP(najem = 0, poplatky = 0, pocetClenuDomacnosti = 0, pocetClenuDomacnostiSTrvalymPobytemJinde = 0, vlastniBydleni = false, velikostObce = 1) {
 
 	var skutecneNakladyNaBydleni = 0,
 		normativniNakladyNaBydleni = 0,
-		uznatelneNakladyNaBydleniProSSP = 0,
-		uznatelneNakladyNaBydleniProHN = 0;
+		uznatelneNakladyNaBydleni = 0,
+		pocetClenuDomacnostiProDavky = 0,
+		najem = 0;
 
-	// u vlastního bytu se místo nájmu počítá normativní nájem
+	// u SSP se do společné domácnosti nepočítají členové domácnosti s trvalým pobytem jinde
+	pocetClenuDomacnostiProDavky = pocetClenuDomacnosti - pocetClenuDomacnostiSTrvalymPobytemJinde;
+
+	// u vlastního bytu se místo nájmu počítá normativ
 	if (vlastniBydleni) {
-		switch(pocetClenuDomacnosti) {
+		switch(pocetClenuDomacnostiProDavky) {
 			case 1: najem = 1988; break;
 			case 2: najem = 2721; break;
 			case 3: najem = 3558; break;
@@ -463,7 +485,7 @@ function spocitejNakladyNaBydleni(najem = 0, poplatky = 0, pocetClenuDomacnosti 
 
 	// normativní náklady, pokud bydlí ve vlastním
 	if (vlastniBydleni) {
-		switch(pocetClenuDomacnosti) {
+		switch(pocetClenuDomacnostiProDavky) {
 			case 1: normativniNakladyNaBydleni = 4420; break;
 			case 2: normativniNakladyNaBydleni = 6489; break;
 			case 3: normativniNakladyNaBydleni = 8939; break;
@@ -473,35 +495,35 @@ function spocitejNakladyNaBydleni(najem = 0, poplatky = 0, pocetClenuDomacnosti 
 	// normativní náklady, pokud bydlí v nájmu
 	} else {
 		if (velikostObce == 1) {
-				switch (pocetClenuDomacnosti) {
+				switch (pocetClenuDomacnostiProDavky) {
 					case 1: normativniNakladyNaBydleni = 7870; break;
 					case 2: normativniNakladyNaBydleni = 11186; break;
 					case 3: normativniNakladyNaBydleni = 15116; break;
 					default: normativniNakladyNaBydleni = 18827;
 				}
 			} else if (velikostObce == 2) {
-				switch (pocetClenuDomacnosti) {
+				switch (pocetClenuDomacnostiProDavky) {
 					case 1: normativniNakladyNaBydleni = 6227; break;
 					case 2: normativniNakladyNaBydleni = 8938; break;
 					case 3: normativniNakladyNaBydleni = 12176; break;
 					default: normativniNakladyNaBydleni = 15282;
 				}
 			} else if (velikostObce == 3) {
-				switch (pocetClenuDomacnosti) {
+				switch (pocetClenuDomacnostiProDavky) {
 					case 1: normativniNakladyNaBydleni = 5928; break;
 					case 2: normativniNakladyNaBydleni = 8530; break;
 					case 3: normativniNakladyNaBydleni = 11642; break;
 					default: normativniNakladyNaBydleni = 14639;
 				}
 			} else if (velikostObce == 4) {
-				switch (pocetClenuDomacnosti) {
+				switch (pocetClenuDomacnostiProDavky) {
 					case 1: normativniNakladyNaBydleni = 5036; break;
 					case 2: normativniNakladyNaBydleni = 7308; break;
 					case 3: normativniNakladyNaBydleni = 10045; break;
 					default: normativniNakladyNaBydleni = 12712;
 				}
 			} else {
-				switch (pocetClenuDomacnosti) {
+				switch (pocetClenuDomacnostiProDavky) {
 					case 1: normativniNakladyNaBydleni = 4844; break;
 					case 2: normativniNakladyNaBydleni = 7046; break;
 					case 3: normativniNakladyNaBydleni = 9702; break;
@@ -510,22 +532,116 @@ function spocitejNakladyNaBydleni(najem = 0, poplatky = 0, pocetClenuDomacnosti 
 			}
 		}
 
-	// U SSP se počítá se 100 % normativu
-	uznatelneNakladyNaBydleniProSSP = Math.min(skutecneNakladyNaBydleni, normativniNakladyNaBydleni);
+	// skutečné náklady na bydlení nesmí být vyšší než normativ
+	uznatelneNakladyNaBydleni = Math.min(skutecneNakladyNaBydleni, normativniNakladyNaBydleni);
 
-	// U HN se počítá se 100 % normativu, s výjimkou ubytoven, podnájmů a chat, kde je to 80 % normativu
-	if (ubytovna) {
-		uznatelneNakladyNaBydleniProHN = Math.min(skutecneNakladyNaBydleni, 0.8 * normativniNakladyNaBydleni);
+	return([uznatelneNakladyNaBydleni, normativniNakladyNaBydleni]);
+}
+
+
+
+// výpočet nákladů za bydlení pro HN
+// aktualizace: 15.3.2018
+// zdroj: http://portal.mpsv.cz/soc/ssp/obcane/prisp_na_bydleni
+// vstupy:
+//		nájem, u vlastního bydlení nehraje roli (najem, integer)
+//		výdaje za energie a ostatní poplatky spojené s bydlením (poplatky, integer)
+//		počet členů domácnosti (pocetClenuDomacnosti, integer)
+//		bydlí ve vlastním nebo družstevním bytě? (vlastniBydlení, boolean)
+//		bydlí na ubytovně, na chatě nebo v podnájmu? (ubytovna, boolean)
+//		velikost obce, kde rodina žije (velikostObce, 1 = Praha, 2 = nad 100 000, 3 = nad 50 000, 4 = nad 10 000, 5 = pod 10 000)
+//		místně obvyklé náklady, určené místním pracákem (mistneObvykleNaklady, 0 = nestanovené)
+//		pocetClenuDomacnostiSTrvalymPobytemJinde
+// výstupy:
+//		uznatelné náklady na bydlení pro dávky SSP (integer)
+//		normativ nákladů na bydlení pro dávky SSP (integer)
+
+function spocitejNakladyNaBydleniProHN(najem = 0, poplatky = 0, pocetClenuDomacnosti = 0, vlastniBydleni = false, ubytovna = false, velikostObce = 1, mistneObvykleNaklady = 0) {
+
+	var skutecneNakladyNaBydleni = 0,
+		normativniNakladyNaBydleni = 0,
+		uznatelneNakladyNaBydleni = 0,
+		pocetClenuDomacnostiProDavky = 0,
+		najem = 0;
+
+	// u HN se do společné domácnosti počítají i členové domácnosti s trvalým pobytem jinde, takže netřeba brát v úvahu
+	pocetClenuDomacnostiProDavky = pocetClenuDomacnosti;
+
+	// u vlastního bytu se místo nájmu počítá normativní nájem
+	if (vlastniBydleni) {
+		switch(pocetClenuDomacnostiProDavky) {
+			case 1: najem = 1988; break;
+			case 2: najem = 2721; break;
+			case 3: najem = 3558; break;
+			default: najem = 4291;
+		}
+	}
+
+	// náklady na bydlení
+	skutecneNakladyNaBydleni = najem + poplatky;
+
+	// normativní náklady, pokud bydlí ve vlastním
+	if (vlastniBydleni) {
+		switch(pocetClenuDomacnostiProDavky) {
+			case 1: normativniNakladyNaBydleni = 4420; break;
+			case 2: normativniNakladyNaBydleni = 6489; break;
+			case 3: normativniNakladyNaBydleni = 8939; break;
+			default: normativniNakladyNaBydleni = 11298;
+		}
+
+	// normativní náklady, pokud bydlí v nájmu
 	} else {
-		uznatelneNakladyNaBydleniProHN = Math.min(skutecneNakladyNaBydleni, normativniNakladyNaBydleni);
+		if (velikostObce == 1) {
+				switch (pocetClenuDomacnostiProDavky) {
+					case 1: normativniNakladyNaBydleni = 7870; break;
+					case 2: normativniNakladyNaBydleni = 11186; break;
+					case 3: normativniNakladyNaBydleni = 15116; break;
+					default: normativniNakladyNaBydleni = 18827;
+				}
+			} else if (velikostObce == 2) {
+				switch (pocetClenuDomacnostiProDavky) {
+					case 1: normativniNakladyNaBydleni = 6227; break;
+					case 2: normativniNakladyNaBydleni = 8938; break;
+					case 3: normativniNakladyNaBydleni = 12176; break;
+					default: normativniNakladyNaBydleni = 15282;
+				}
+			} else if (velikostObce == 3) {
+				switch (pocetClenuDomacnostiProDavky) {
+					case 1: normativniNakladyNaBydleni = 5928; break;
+					case 2: normativniNakladyNaBydleni = 8530; break;
+					case 3: normativniNakladyNaBydleni = 11642; break;
+					default: normativniNakladyNaBydleni = 14639;
+				}
+			} else if (velikostObce == 4) {
+				switch (pocetClenuDomacnostiProDavky) {
+					case 1: normativniNakladyNaBydleni = 5036; break;
+					case 2: normativniNakladyNaBydleni = 7308; break;
+					case 3: normativniNakladyNaBydleni = 10045; break;
+					default: normativniNakladyNaBydleni = 12712;
+				}
+			} else {
+				switch (pocetClenuDomacnostiProDavky) {
+					case 1: normativniNakladyNaBydleni = 4844; break;
+					case 2: normativniNakladyNaBydleni = 7046; break;
+					case 3: normativniNakladyNaBydleni = 9702; break;
+					default: normativniNakladyNaBydleni = 12299;
+				}
+			}
+		}
+
+	// skutečné náklady na bydlení nesmí být vyšší než normativ; počítá se 100 % normativu, s výjimkou ubytoven, podnájmů a chat, kde je to 80 % normativu
+	if (ubytovna) {
+		uznatelneNakladyNaBydleni = Math.min(skutecneNakladyNaBydleni, 0.8 * normativniNakladyNaBydleni);
+	} else {
+		uznatelneNakladyNaBydleni = Math.min(skutecneNakladyNaBydleni, normativniNakladyNaBydleni);
 	}
 
-	// U HN ještě úřad zastřešuje uznatelné náklady místně obvyklými náklady (+ speciální postup na výpočet energií, ten zatím neřešíme)
+	// U HN úřad zastřešuje uznatelné náklady místně obvyklými náklady (+ speciální postup na výpočet energií, ten zatím neřešíme)
 	if (mistneObvykleNaklady > 0) {
-		uznatelneNakladyNaBydleniProHN = Math.min(uznatelneNakladyNaBydleniProHN, mistneObvykleNaklady);
+		uznatelneNakladyNaBydleni = Math.min(uznatelneNakladyNaBydleni, mistneObvykleNaklady);
 	}
 
-	return([uznatelneNakladyNaBydleniProSSP, uznatelneNakladyNaBydleniProHN, normativniNakladyNaBydleni]);
+	return([uznatelneNakladyNaBydleni, normativniNakladyNaBydleni]);
 }
 
 
@@ -540,14 +656,15 @@ function spocitejNakladyNaBydleni(najem = 0, poplatky = 0, pocetClenuDomacnosti 
 //		výše důchodů (duchody, integer)
 //		rodičovská (rodicovska, integer)
 //		přídavky na děti (pridavkyNaDeti, integer)
+// 		podporaVNezamestnanosti,
 //		ostatní příjmy (ostatniPrijmy, integer)
 //		velikost obce, kde rodina žije (velikostObce, 1 = Praha, 2 = nad 100 000, 3 = nad 50 000, 4 = nad 10 000, 5 = pod 10 000)
 //		pobyt na ubytovně (ubytovna, boolean)
 // výstupy:
 //		příspěvek na bydlení (integer)
 
-function spocitejPrispevekNaBydleni(cistyPrijemDomacnosti = [0, 0], nakladyNaBydleni = [0, 0, 0], zivotniMinimum = [0, 0], duchody = 0, rodicovska = 0, pridavkyNaDeti = 0,
-	ostatniPrijmy = 0, velikostObce = 1, ubytovna = false) {
+function spocitejPrispevekNaBydleni(cistyPrijemDomacnosti = [0, 0], nakladyNaBydleniProSSP = [0, 0], zivotniMinimum = [0, 0], duchody = 0, rodicovska = 0, pridavkyNaDeti = 0,
+	podporaVNezamestnanosti = 0, ostatniPrijmy = 0, velikostObce = 1, ubytovna = false) {
 
 	var koeficientNakladu = 0,
 		rozhodnyPrijem = 0,
@@ -563,7 +680,7 @@ function spocitejPrispevekNaBydleni(cistyPrijemDomacnosti = [0, 0], nakladyNaByd
 	zivotniMinimumProSSP = zivotniMinimum[0];
 
 	// náklady na bydlení pro SSP
-	uznatelneNakladyProSSP = nakladyNaBydleni[0];
+	uznatelneNakladyProSSP = nakladyNaBydleniProSSP[0];
 
 	// pro příspěvek na bydlení se počítá čistý příjem domácnosti bez bonusu na děti
 	cistyPrijemBezBonusuNaDeti = cistyPrijemDomacnosti[1];
@@ -576,7 +693,7 @@ function spocitejPrispevekNaBydleni(cistyPrijemDomacnosti = [0, 0], nakladyNaByd
 	}
 
 	// rozhodný příjem pro bydlení je součet čistých příjmů bez bonusu na děti, důchodů a dávek ssp; nejméně ale životní minimum
-	rozhodnyPrijem = Math.max(zivotniMinimumProSSP, cistyPrijemBezBonusuNaDeti + duchody + rodicovska + pridavkyNaDeti + ostatniPrijmy);
+	rozhodnyPrijem = Math.max(zivotniMinimumProSSP, cistyPrijemBezBonusuNaDeti + duchody + rodicovska + pridavkyNaDeti + podporaVNezamestnanosti + ostatniPrijmy);
 
 	// nárok na příspěvek na bydlení vzniká, když jsou náklady na bydlení vyšší než 30 % rozhodného příjmu ...
 	if (uznatelneNakladyProSSP > (koeficientNakladu * rozhodnyPrijem)) {
@@ -607,6 +724,8 @@ return(prispevekNaBydleni);
 //		výše důchodů (duchody, integer)
 //		rodičovská (rodicovska, integer)
 //		přídavky na děti (pridavkyNaDeti, integer)
+//		podporaVNezamestnanosti
+//		ostatní příjmy
 // výstupy:
 //		příspěvek na živobytí (integer)
 // otázky:
@@ -614,7 +733,8 @@ return(prispevekNaBydleni);
 //		existenční minimum je potřeba aplikovat u výpočtu životního minima? Ale jak pak počítám s osamělým, první, atd. dospělým?
 //		u nákladu na bydlení pro příspěvek na živobytí jsem předtím počítal se sníženým normativem (koeficient 0,75), ale to nikde nemůžu najít
 
-function spocitejPrispevekNaZivobyti(cistyPrijemDomacnosti = [0, 0], nakladyNaBydleni = [0, 0, 0], zivotniMinimum = [0, 0], duchody = 0, rodicovska = 0, pridavkyNaDeti = 0, ostatniPrijmy = 0) {
+function spocitejPrispevekNaZivobyti(cistyPrijemDomacnosti = [0, 0], nakladyNaBydleniProHN = [0, 0], zivotniMinimum = [0, 0], duchody = 0, rodicovska = 0, pridavkyNaDeti = 0,
+	podporaVNezamestnanosti = 0, ostatniPrijmy = 0) {
 
 	var castkaZivobyti = 0,
 		prispevekNaZivobyti = 0,
@@ -628,7 +748,7 @@ function spocitejPrispevekNaZivobyti(cistyPrijemDomacnosti = [0, 0], nakladyNaBy
 	zivotniMinimumProHN = zivotniMinimum[1];
 
 	// náklady na bydlení pro SSP
-	uznatelneNakladyProHN = nakladyNaBydleni[1];
+	uznatelneNakladyProHN = nakladyNaBydleniProHN[0];
 
 	// pro příspěvek na živobytí se počítá čistý příjem domácnosti bez bonusu na děti
 	cistyPrijemBezBonusuNaDeti = cistyPrijemDomacnosti[1];
@@ -636,7 +756,7 @@ function spocitejPrispevekNaZivobyti(cistyPrijemDomacnosti = [0, 0], nakladyNaBy
 	castkaZivobyti = zivotniMinimumProHN;
 
 	// rozhodný příjem pro příspěvek na živobytí je součet 70 % čistých příjmů bez bonusu na děti, 80 % důchodů a pojistných dávek, 100 % ostatních příjmů, ale ne příspěvek na bydlení
-	rozhodnyPrijem = 0.7 * cistyPrijemBezBonusuNaDeti + 0.8 * duchody + rodicovska + pridavkyNaDeti + ostatniPrijmy;
+	rozhodnyPrijem = 0.7 * cistyPrijemBezBonusuNaDeti + 0.8 * duchody + 0.8 * podporaVNezamestnanosti + rodicovska + pridavkyNaDeti + ostatniPrijmy;
 
 	// od rozhodného příjmu se pro výpočet odečte 30 procent reálných nákladů na bydlení
 	rozhodnyPrijem -= Math.min(0.3 * rozhodnyPrijem, uznatelneNakladyProHN)
@@ -665,6 +785,8 @@ function spocitejPrispevekNaZivobyti(cistyPrijemDomacnosti = [0, 0], nakladyNaBy
 //		výše důchodů (duchody, integer)
 //		rodičovská (rodicovska, integer)
 //		přídavky na děti (pridavkyNaDeti, integer)
+//		podporaVNezamestnanosti
+//		ostatní příjmy
 // výstupy:
 //		příspěvek na živobytí (integer)
 // otázky:
@@ -672,8 +794,8 @@ function spocitejPrispevekNaZivobyti(cistyPrijemDomacnosti = [0, 0], nakladyNaBy
 //		existenční minimum je potřeba aplikovat u výpočtu životního minima? Ale jak pak počítám s osamělým, první, atd. dospělým?
 //		u nákladu na bydlení pro příspěvek na živobytí jsem předtím počítal se sníženým normativem (koeficient 0,75), ale to nikde nemůžu najít
 
-function spocitejDoplatekNaBydleni(cistyPrijemDomacnosti = [0, 0], nakladyNaBydleni = [0, 0, 0], zivotniMinimum = [0, 0], prispevekNaZivobyti = 0, prispevekNaBydleni = 0, duchody = 0,
-	rodicovska = 0, pridavkyNaDeti = 0, ostatniPrijmy = 0) {
+function spocitejDoplatekNaBydleni(cistyPrijemDomacnosti = [0, 0], nakladyNaBydleniProHN = [0, 0], zivotniMinimum = [0, 0], prispevekNaZivobyti = 0, prispevekNaBydleni = 0, duchody = 0,
+	rodicovska = 0, pridavkyNaDeti = 0, podporaVNezamestnanosti = 0, ostatniPrijmy = 0) {
 
 	var castkaZivobyti = 0,
 		doplatekNaBydleni = 0,
@@ -686,7 +808,7 @@ function spocitejDoplatekNaBydleni(cistyPrijemDomacnosti = [0, 0], nakladyNaBydl
 	zivotniMinimumProHN = zivotniMinimum[1];
 
 	// náklady na bydlení pro SSP
-	uznatelneNakladyProHN = nakladyNaBydleni[1];
+	uznatelneNakladyProHN = nakladyNaBydleniProHN[0];
 
 	// pro doplatek na bydlení se počítá čistý příjem domácnosti bez bonusu na děti
 	cistyPrijemBezBonusuNaDeti = cistyPrijemDomacnosti[1];
@@ -694,7 +816,7 @@ function spocitejDoplatekNaBydleni(cistyPrijemDomacnosti = [0, 0], nakladyNaBydl
 	castkaZivobyti = zivotniMinimumProHN;
 
 	// rozhodný příjem pro doplatek na bydlení je součet 70 % čistých příjmů bez bonusu na děti, 80 % důchodů a pojistných dávek a 100 % ostatních příjmů
-	rozhodnyPrijem = 0.7 * cistyPrijemBezBonusuNaDeti + 0.8 * duchody + rodicovska + pridavkyNaDeti + prispevekNaBydleni + prispevekNaZivobyti + ostatniPrijmy;
+	rozhodnyPrijem = 0.7 * cistyPrijemBezBonusuNaDeti + 0.8 * duchody + 0.8 * podporaVNezamestnanosti + rodicovska + pridavkyNaDeti + prispevekNaBydleni + prispevekNaZivobyti + ostatniPrijmy;
 
 	// nárok na doplatek na bydlení má vlastník bytu, který jej užívá, nebo jiná osoba, která užívá byt na základě smlouvy, jestliže by po úhradě odůvodněných nákladů na bydlení snížených o příspěvek na bydlení podle jiného právního předpisu
 	if ( (rozhodnyPrijem - uznatelneNakladyProHN) < castkaZivobyti) {
@@ -710,6 +832,80 @@ function spocitejDoplatekNaBydleni(cistyPrijemDomacnosti = [0, 0], nakladyNaBydl
 	}
 
 	return(doplatekNaBydleni);
+}
+
+
+
+// výpočet příjmů po exekuci
+// aktualizace: 25.4.2018
+// zdroj: -
+// vstupy:
+//		čistý příjem z první práce (prijemPrace1, [čistý příjem, čistý příjem bez bonusu na děti, sociální pojištění, zdravotní pojištění, záloha na daň])
+// výstupy:
+//		čistý příjem (integer)
+
+function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], prednostniExekuce = 0, neprednostniExekuce = 0, dalsiVyzivovaneOsoby = 0) {
+
+// aplikuje se po spocitejPrijemDospeleho
+// bereme čistý příjem od všech zaměstnavatelů
+
+	var cistyPrijem = 0,
+		cistyPrijemBezBonusuNaDeti = 0,
+		danovyBonusNaDeti = 0,
+		nezabavitelnaCastkaProPrvniOsobu = 6225,
+		nezabavitelnaCastkaProDalsiOsobu = 1556,
+		nezabavitelnaCastka = 0,
+		zbytekCistehoPrijmu = 0,
+		hranicePrijmuPoStrzeniNezabavitelneCastky = 9338;
+
+	cistyPrijem = prijemDospeleho[0];
+	cistyPrijemBezBonusuNaDeti = prijemDospeleho[1];
+	danovyBonusNaDeti = cistyPrijem - cistyPrijemBezBonusuNaDeti;
+
+	nezabavitelnaCastka = nezabavitelnaCastkaProPrvniOsobu + dalsiVyzivovaneOsoby * nezabavitelnaCastkaProDalsiOsobu;
+
+	// pokud je bez exekucí, vrací se vstupy beze změny
+	if( (prednostniExekuce  + neprednostniExekuce ) == 0) {
+		return([cistyPrijem, cistyPrijemBezBonusuNaDeti, socialniPojisteni, zdravotniPojisteni, zalohaNaDan]);
+	}
+
+	// U první exekuce se částka počítá z čisté mzdy bez daňového bonusu na dítě
+	if ( (prednostniExekuce + neprednostniExekuce) == 1 ) {
+
+		// Z čisté mzdy zaměstnance je odečtena základní nezabavitelná částka (minimum). Pokud je rovna nebo vyšší 9338 Kč, počítá se v této fázi s celou částkou 9338 Kč.
+		zbytekCistehoPrijmu = Math.min(cistyPrijemBezBonusuNaDeti - nezabavitelnaCastka, hraniceMzdyPoStrzeniNezabavitelneCastky);
+
+		// Pokud je aspoň jedna přednostní exekuce, může jít srážka až do dvou třetin příjmu po stržení nezabavitelné částky
+		if(prednostniExekuce > 0) {
+			cistyPrijemBezBonusuNaDeti = zbytekCistehoPrijmu / 3;
+
+		// U exekucí pro nepřednostní pohledávky je srážen dluh do výše jedné třetiny příjmů z této částky
+		} else {
+			cistyPrijemBezBonusuNaDeti = 2 * zbytekCistehoPrijmu / 3;
+		}
+
+		cistyPrijem = cistyPrijemBezBonusuNaDeti + danovyBonusNaDeti;
+	}
+
+	// Pokud je ale exekucí víc, může další exekutor zabavit i daňový bonus, tj. do výpočtu vstupuje čistý příjem včetně bonusu
+	if ( (prednostniExekuce + neprednostniExekuce) > 1 ) {
+
+		// Z čisté mzdy zaměstnance je odečtena základní nezabavitelná částka (minimum). Pokud je rovna nebo vyšší 9338 Kč, počítá se v této fázi s celou částkou 9338 Kč.
+		zbytekCistehoPrijmu = Math.min(cistyPrijem - nezabavitelnaCastka, hraniceMzdyPoStrzeniNezabavitelneCastky);
+
+		// Pokud je aspoň jedna přednostní exekuce, může jít srážka až do dvou třetin příjmu po stržení nezabavitelné částky
+		if(prednostniExekuce > 0) {
+			cistyPrijem = zbytekCistehoPrijmu / 3;
+
+		// U exekucí pro nepřednostní pohledávky je srážen dluh do výše jedné třetiny příjmů z této částky
+		} else {
+			cistyPrijem = 2 * zbytekCistehoPrijmu / 3;
+		}
+
+		cistyPrijemBezBonusuNaDeti = cistyPrijem;
+	}
+
+	return([cistyPrijem, cistyPrijemBezBonusuNaDeti, socialniPojisteni, zdravotniPojisteni, zalohaNaDan]);
 }
 
 
@@ -800,10 +996,28 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 			ruzovyPapir = tretiDospelyTretiZamestnavatel[6],
 			pocetVyzivovanychDeti = tretiDospelyTretiZamestnavatel[7]));
 
+	var rodinkaPrijemPrvnihoDospelehoPoExekuci = spocitejPrijemDospelehoPoExekuci(
+		prijemDospeleho = rodinkaPrijemPrvnihoDospeleho,
+		prednostniExekuce = prvniDospelyExekuce[0],
+		neprednostniExekuce = prvniDospelyExekuce[1],
+		dalsiVyzivovaneOsoby = prvniDospelyExekuce[2]);
+
+	var rodinkaPrijemPrvnihoDospelehoPoExekuci = spocitejPrijemDospelehoPoExekuci(
+		prijemDospeleho = rodinkaPrijemDruhehoDospeleho,
+		prednostniExekuce = druhyDospelyExekuce[0],
+		neprednostniExekuce = druhyDospelyExekuce[1],
+		dalsiVyzivovaneOsoby = druhyDospelyExekuce[2]);
+
+	var rodinkaPrijemPrvnihoDospelehoPoExekuci = spocitejPrijemDospelehoPoExekuci(
+		prijemDospeleho = rodinkaPrijemTretihoDospeleho,
+		prednostniExekuce = tretiDospelyExekuce[0],
+		neprednostniExekuce = tretiDospelyExekuce[1],
+		dalsiVyzivovaneOsoby = tretiDospelyExekuce[2]);
+
 	var rodinkaCistyPrijemDomacnosti = spocitejCistyPrijemDomacnosti(
-		prijemPrvnihoDospeleho = rodinkaPrijemPrvnihoDospeleho,
-		prijemDruhehoDospeleho = rodinkaPrijemDruhehoDospeleho,
-		prijemTretihoDospeleho = rodinkaPrijemTretihoDospeleho);
+		prijemPrvnihoDospeleho = rodinkaPrijemPrvnihoDospelehoPoExekuci,
+		prijemDruhehoDospeleho = rodinkaPrijemDruhehoDospelehoPoExekuci,
+		prijemTretihoDospeleho = rodinkaPrijemTretihoDospelehoPoExekuci);
 
 	var rodinkaZivotniMinimum = spocitejZivotniMinimum(
 		pocetDospelych = slozeniDomacnosti[0],
@@ -814,16 +1028,24 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 
 	var rodinkaPridavkyNaDeti = spocitejPridavkyNaDeti(
 		cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
-		prijemPrvnihoDospeleho = rodinkaPrijemPrvnihoDospeleho,
-		prijemDruhehoDospeleho = rodinkaPrijemDruhehoDospeleho,
-		prijemTretihoDospeleho = rodinkaPrijemTretihoDospeleho,
+		prijemPrvnihoDospeleho = rodinkaPrijemPrvnihoDospelehoPoExekuci,
+		prijemDruhehoDospeleho = rodinkaPrijemDruhehoDospelehoPoExekuci,
+		prijemTretihoDospeleho = rodinkaPrijemTretihoDospelehoPoExekuci,
 		zivotniMinimum = rodinkaZivotniMinimum,
 		pocetDetiPod6 = slozeniDomacnosti[1],
 		pocetDeti6az15 = slozeniDomacnosti[2],
 		pocetDeti15az26 = slozeniDomacnosti[3],
 		narokNaVyssiDavky = socialOptional[1]);
 
-	var rodinkaNakladyNaBydleni = spocitejNakladyNaBydleni(
+	var rodinkaNakladyNaBydleniProSSP = spocitejNakladyNaBydleniProSSP(
+		najem = bydleni[0],
+		poplatky = bydleni[1],
+		pocetClenuDomacnosti = slozeniDomacnosti[4],
+		pocetClenuDomacnostiSTrvalymPobytemJinde = slozeniDomacnosti[5],
+		vlastniBydleni = bydleni[2],
+		velikostObce = bydleni[4]);
+
+	var rodinkaNakladyNaBydleniProHN = spocitejNakladyNaBydleniProHN(
 		najem = bydleni[0],
 		poplatky = bydleni[1],
 		pocetClenuDomacnosti = slozeniDomacnosti[4],
@@ -834,73 +1056,80 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 
 	var rodinkaPrispevekNaBydleni = spocitejPrispevekNaBydleni(
 		cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
-		nakladyNaBydleni = rodinkaNakladyNaBydleni,
+		nakladyNaBydleniProSSP = rodinkaNakladyNaBydleniProSSP,
 		zivotniMinimum = rodinkaZivotniMinimum,
 		duchody = dalsiPrijmy[0],
 		rodicovska = dalsiPrijmy[1],
 		pridavkyNaDeti = rodinkaPridavkyNaDeti,
-		ostatniPrijmy = dalsiPrijmy[2],
+		podporaVNezamestnanosti = dalsiPrijmy[2],
+		ostatniPrijmy = dalsiPrijmy[3],
 		velikostObce = bydleni[4],
 		ubytovna = bydleni[3]);
 
 	var rodinkaPrispevekNaZivobyti = spocitejPrispevekNaZivobyti(
 		cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
-		nakladyNaBydleni = rodinkaNakladyNaBydleni,
+		nakladyNaBydleniProHN = rodinkaNakladyNaBydleniProHN,
 		zivotniMinimum = rodinkaZivotniMinimum,
 		duchody = dalsiPrijmy[0],
 		rodicovska = dalsiPrijmy[1],
 		pridavkyNaDeti = rodinkaPridavkyNaDeti,
-		ostatniPrijmy = dalsiPrijmy[2]);
+		podporaVNezamestnanosti = dalsiPrijmy[2],
+		ostatniPrijmy = dalsiPrijmy[3]);
 
 	var rodinkaDoplatekNaBydleni = spocitejDoplatekNaBydleni(
 		cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
-		nakladyNaBydleni = rodinkaNakladyNaBydleni,
+		nakladyNaBydleniProHN = rodinkaNakladyNaBydleniProHN,
 		zivotniMinimum = rodinkaZivotniMinimum,
 		prispevekNaZivobyti = rodinkaPrispevekNaZivobyti,
 		prispevekNaBydleni = rodinkaPrispevekNaBydleni,
 		duchody = dalsiPrijmy[0],
 		rodicovska = dalsiPrijmy[1],
 		pridavkyNaDeti = rodinkaPridavkyNaDeti,
-		ostatniPrijmy = dalsiPrijmy[2]);
+		podporaVNezamestnanosti = dalsiPrijmy[2],
+		ostatniPrijmy = dalsiPrijmy[3]);
 
 	var prijmyAVydajeRodinyPoZapocteniDavek = [0, 0, 0, 0, 0];
 
 	prijmyAVydajeRodinyPoZapocteniDavek[0] = rodinkaPrijemPrvnihoDospeleho;
-	prijmyAVydajeRodinyPoZapocteniDavek[1] = rodinkaPrijemDruhehoDospeleho;
-	prijmyAVydajeRodinyPoZapocteniDavek[2] = rodinkaPrijemTretihoDospeleho;
-	prijmyAVydajeRodinyPoZapocteniDavek[3] = rodinkaCistyPrijemDomacnosti[0];
+	prijmyAVydajeRodinyPoZapocteniDavek[1] = rodinkaPrijemPrvnihoDospelehoPoExekuci;
+	prijmyAVydajeRodinyPoZapocteniDavek[2] = rodinkaPrijemDruhehoDospeleho;
+	prijmyAVydajeRodinyPoZapocteniDavek[3] = rodinkaPrijemDruhehoDospelehoPoExekuci;
+	prijmyAVydajeRodinyPoZapocteniDavek[4] = rodinkaPrijemTretihoDospeleho;
+	prijmyAVydajeRodinyPoZapocteniDavek[5] = rodinkaPrijemTretihoDospelehoPoExekuci;
+	prijmyAVydajeRodinyPoZapocteniDavek[6] = rodinkaCistyPrijemDomacnosti[0];
 
-	// čistý příjem + důchody + rodičovská + přídavky na děti + ostatní příjmy + příspěvek na bydlení + příspěvek na živobytí +	doplatek na bydlení - nájem - poplatky
-	prijmyAVydajeRodinyPoZapocteniDavek[4] = parseFloat(rodinkaCistyPrijemDomacnosti[0]) + parseFloat(dalsiPrijmy[0]) + parseFloat(dalsiPrijmy[1]) +
-	parseFloat(rodinkaPridavkyNaDeti) + parseFloat(dalsiPrijmy[2]) + parseFloat(rodinkaPrispevekNaBydleni) + parseFloat(rodinkaPrispevekNaZivobyti) +
+
+	// čistý příjem + důchody + rodičovská + přídavky na děti + podpora v nezaměstnanosti + ostatní příjmy + příspěvek na bydlení + příspěvek na živobytí +	doplatek na bydlení - nájem - poplatky
+	prijmyAVydajeRodinyPoZapocteniDavek[7] = parseFloat(rodinkaCistyPrijemDomacnosti[0]) + parseFloat(dalsiPrijmy[0]) + parseFloat(dalsiPrijmy[1]) +
+	parseFloat(rodinkaPridavkyNaDeti) + parseFloat(dalsiPrijmy[2]) + parseFloat(dalsiPrijmy[3]) + parseFloat(rodinkaPrispevekNaBydleni) + parseFloat(rodinkaPrispevekNaZivobyti) +
 	parseFloat(rodinkaDoplatekNaBydleni) - parseFloat(bydleni[0]) - parseFloat(bydleni[1]);
 
 	// důchod
-	prijmyAVydajeRodinyPoZapocteniDavek[5] = dalsiPrijmy[0];
+	prijmyAVydajeRodinyPoZapocteniDavek[8] = dalsiPrijmy[0];
 
 	// rodičovská
-	prijmyAVydajeRodinyPoZapocteniDavek[6] = dalsiPrijmy[1];
+	prijmyAVydajeRodinyPoZapocteniDavek[9] = dalsiPrijmy[1];
 
 	// přídavky na děti
-	prijmyAVydajeRodinyPoZapocteniDavek[7] = rodinkaPridavkyNaDeti;
+	prijmyAVydajeRodinyPoZapocteniDavek[10] = rodinkaPridavkyNaDeti;
 
 	// ostatní příjmy
-	prijmyAVydajeRodinyPoZapocteniDavek[8] = dalsiPrijmy[2];
+	prijmyAVydajeRodinyPoZapocteniDavek[11] = dalsiPrijmy[2];
 
 	// příspěvek na bydlení
-	prijmyAVydajeRodinyPoZapocteniDavek[9] = rodinkaPrispevekNaBydleni;
+	prijmyAVydajeRodinyPoZapocteniDavek[12] = rodinkaPrispevekNaBydleni;
 
 	// příspěvek na živobytí
-	prijmyAVydajeRodinyPoZapocteniDavek[10] = rodinkaPrispevekNaZivobyti;
+	prijmyAVydajeRodinyPoZapocteniDavek[13] = rodinkaPrispevekNaZivobyti;
 
 	// doplatek na bydlení
-	prijmyAVydajeRodinyPoZapocteniDavek[11] = rodinkaDoplatekNaBydleni;
+	prijmyAVydajeRodinyPoZapocteniDavek[14] = rodinkaDoplatekNaBydleni;
 
 	// nájem
-	prijmyAVydajeRodinyPoZapocteniDavek[12] = najem;
+	prijmyAVydajeRodinyPoZapocteniDavek[15] = najem;
 
 	// poplatky
-	prijmyAVydajeRodinyPoZapocteniDavek[13] = poplatky;
+	prijmyAVydajeRodinyPoZapocteniDavek[16] = poplatky;
 
 	return(prijmyAVydajeRodinyPoZapocteniDavek);
 }
@@ -992,18 +1221,32 @@ function prepisFormular() {
 	tretiDospelyTretiZamestnavatel[6] = JSON.parse(document.getElementById("tretiDospelyTretiZamestnavatelRuzovyPapir").value);
 	tretiDospelyTretiZamestnavatel[7] = parseFloat(document.getElementById("tretiDospelyTretiZamestnavatelVyzivovaneDeti").value);
 
+	prvniDospelyExekuce[0] = parseFloat(document.getElementById("prvniDospelyPrednostniExekuce").value);
+	prvniDospelyExekuce[1] = parseFloat(document.getElementById("prvniDospelyNerednostniExekuce").value);
+	prvniDospelyExekuce[2] = parseFloat(document.getElementById("prvniDospelyDalsiVyzivovaneOsoby").value);
+
+	druhyDospelyExekuce[0] = parseFloat(document.getElementById("druhyDospelyPrednostniExekuce").value);
+	druhyDospelyExekuce[1] = parseFloat(document.getElementById("druhyDospelyNerednostniExekuce").value);
+	druhyDospelyExekuce[2] = parseFloat(document.getElementById("druhyDospelyDalsiVyzivovaneOsoby").value);
+
+	tretiDospelyExekuce[0] = parseFloat(document.getElementById("tretiDospelyPrednostniExekuce").value);
+	tretiDospelyExekuce[1] = parseFloat(document.getElementById("tretiDospelyNerednostniExekuce").value);
+	tretiDospelyExekuce[2] = parseFloat(document.getElementById("tretiDospelyDalsiVyzivovaneOsoby").value);
+
 	slozeniDomacnosti[0] = parseFloat(document.getElementById("pocetDospelych").value);
 	slozeniDomacnosti[1] = parseFloat(document.getElementById("pocetDetiPod6").value);
 	slozeniDomacnosti[2] = parseFloat(document.getElementById("pocetDeti6Az15").value);
 	slozeniDomacnosti[3] = parseFloat(document.getElementById("pocetDeti15Az26").value);
 	slozeniDomacnosti[4] = parseFloat(document.getElementById("pocetClenuDomacnosti").value);
+	slozeniDomacnosti[5] = parseFloat(document.getElementById("trvaleBydlisteJinde").value);
 
 	socialOptional[0] = parseFloat(document.getElementById("snizeneMinimum").value);
 	socialOptional[1] = JSON.parse(document.getElementById("vyssiDavkyNaDeti").value);
 
 	dalsiPrijmy[0] = parseFloat(document.getElementById("duchody").value);
 	dalsiPrijmy[1] = parseFloat(document.getElementById("rodicovska").value);
-	dalsiPrijmy[2] = parseFloat(document.getElementById("ostatniPrijmy").value);
+	dalsiPrijmy[2] = parseFloat(document.getElementById("podporaVNezamestnanosti").value);
+	dalsiPrijmy[3] = parseFloat(document.getElementById("ostatniPrijmy").value);
 
 	bydleni[0] = parseFloat(document.getElementById("najem").value);
 	bydleni[1] = parseFloat(document.getElementById("poplatky").value);
@@ -1015,19 +1258,22 @@ function prepisFormular() {
 	var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
 
 	var text = "<p>Příjem prvního dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[0][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[0][1] + " Kč.</p>";
-		text += "<p>Příjem druhého dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[1][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[1][1] + " Kč.</p>";
-		text += "<p>Příjem třetího dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[2][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[2][1] + " Kč.</p>";
-		text += "<p>Čistý příjem domácnosti před zaplacením nájmu: " + prijmyAVydajeRodinyPoZapocteniDavek[3] + " Kč.</p>";
-		text += "<p>Čistý příjem domácnosti po zaplacení nájmu: " + prijmyAVydajeRodinyPoZapocteniDavek[4] + " Kč.</p>";
-		text += "<p>(<font color=\"green\">Důchod " + prijmyAVydajeRodinyPoZapocteniDavek[5] + " Kč.</font></p>";
-		text += "<p><font color=\"green\">Rodičovská: " + prijmyAVydajeRodinyPoZapocteniDavek[6] + " Kč.</font></p>";
-		text += "<p><font color=\"green\">Přídavky na děti: " + prijmyAVydajeRodinyPoZapocteniDavek[7] + " Kč.</font></p>";
-		text += "<p><font color=\"green\">Ostatní příjmy: " + prijmyAVydajeRodinyPoZapocteniDavek[8] + " Kč.</font></p>";
-		text += "<p><font color=\"green\">Příspěvek na bydlení: " + prijmyAVydajeRodinyPoZapocteniDavek[9] + " Kč.</font></p>";
-		text += "<p><font color=\"green\">Příspěvek na živobytí: " + prijmyAVydajeRodinyPoZapocteniDavek[10] + " Kč.</font></p>";
-		text += "<p><font color=\"green\">Doplatek na bydlení: " + prijmyAVydajeRodinyPoZapocteniDavek[11] + " Kč.</font></p>";
-		text += "<p><font color=\"red\">Nájem: " + prijmyAVydajeRodinyPoZapocteniDavek[12] + " Kč.</font></p>";
-		text += "<p><font color=\"red\">Poplatky: " + prijmyAVydajeRodinyPoZapocteniDavek[13] + " Kč.</font>)</p>";
+		text += "<p>Příjem prvního dospělého po exekuci (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[1][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[1][1] + " Kč.</p>";
+		text += "<p>Příjem druhého dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[2][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[2][1] + " Kč.</p>";
+		text += "<p>Příjem druhého dospělého po exekuci (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[3][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[3][1] + " Kč.</p>";
+		text += "<p>Příjem třetího dospělého (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[4][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[4][1] + " Kč.</p>";
+		text += "<p>Příjem třetího dospělého po exekuci (hrubý, čistý): " + prijmyAVydajeRodinyPoZapocteniDavek[5][0] + " Kč, " + prijmyAVydajeRodinyPoZapocteniDavek[5][1] + " Kč.</p>";
+		text += "<p>Čistý příjem domácnosti před zaplacením nájmu: " + prijmyAVydajeRodinyPoZapocteniDavek[6] + " Kč.</p>";
+		text += "<p>Čistý příjem domácnosti po zaplacení nájmu: " + prijmyAVydajeRodinyPoZapocteniDavek[7] + " Kč.</p>";
+		text += "<p>(<font color=\"green\">Důchod " + prijmyAVydajeRodinyPoZapocteniDavek[8] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Rodičovská: " + prijmyAVydajeRodinyPoZapocteniDavek[9] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Přídavky na děti: " + prijmyAVydajeRodinyPoZapocteniDavek[10] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Ostatní příjmy: " + prijmyAVydajeRodinyPoZapocteniDavek[11] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Příspěvek na bydlení: " + prijmyAVydajeRodinyPoZapocteniDavek[12] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Příspěvek na živobytí: " + prijmyAVydajeRodinyPoZapocteniDavek[13] + " Kč.</font></p>";
+		text += "<p><font color=\"green\">Doplatek na bydlení: " + prijmyAVydajeRodinyPoZapocteniDavek[14] + " Kč.</font></p>";
+		text += "<p><font color=\"red\">Nájem: " + prijmyAVydajeRodinyPoZapocteniDavek[15] + " Kč.</font></p>";
+		text += "<p><font color=\"red\">Poplatky: " + prijmyAVydajeRodinyPoZapocteniDavek[16] + " Kč.</font>)</p>";
 
 	document.getElementById('results').innerHTML = text;
 
