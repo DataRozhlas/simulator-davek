@@ -2,8 +2,9 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="simulator.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="simulator.js"></script>
 
 </head>
 
@@ -489,13 +490,15 @@
   			<input type="text" id="obvykleNaklady" value="0" style="width: 50px">
 
 			<div>
-				<button type="button" onclick="prepisFormular()" style="margin: 20px; font-size: 30px">Všechno spočítat!</button>
-        <button type="button" onclick="" style="margin: 20px; font-size: 30px">Modelovat příjmy prvního dospělého (zatím to nic nedělá)</button>
+				<button type="button" onclick="statickyModelujRodinu()" style="margin: 20px; font-size: 30px">Všechno spočítat!</button>
+        <button type="button" onclick="dynamickyModelujRodinu()" style="margin: 20px; font-size: 30px">Modelovat příjmy prvního dospělého (už to něco dělá, zatím nevím co)</button>
 			</div>
 
       <h2>Výsledek</h2>
+        <div id="results" style="margin: 20px; font-size: 18px"></div>
 
-      <div id="results" style="margin: 20px; font-size: 18px"></div>
+      <h2>Simulace</h2>
+        <div id="graf" style="margin: 20px; font-size: 18px"></div>
 
   		</form>
 

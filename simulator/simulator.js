@@ -1,7 +1,3 @@
-// dynamický model
-
-// spocitejExekuce (https://docs.google.com/document/d/1r5N8h91YaMELoLgjPSp0-PzkC--nZpwEP6wHTqQ7VFI/edit#)
-
 // další iterace:
 
 // Vypadá to, že je možné podepsat růžový papír u více zaměstnavatelů
@@ -1002,13 +998,13 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 		neprednostniExekuce = prvniDospelyExekuce[1],
 		dalsiVyzivovaneOsoby = prvniDospelyExekuce[2]);
 
-	var rodinkaPrijemPrvnihoDospelehoPoExekuci = spocitejPrijemDospelehoPoExekuci(
+	var rodinkaPrijemDruhehoDospelehoPoExekuci = spocitejPrijemDospelehoPoExekuci(
 		prijemDospeleho = rodinkaPrijemDruhehoDospeleho,
 		prednostniExekuce = druhyDospelyExekuce[0],
 		neprednostniExekuce = druhyDospelyExekuce[1],
 		dalsiVyzivovaneOsoby = druhyDospelyExekuce[2]);
 
-	var rodinkaPrijemPrvnihoDospelehoPoExekuci = spocitejPrijemDospelehoPoExekuci(
+	var rodinkaPrijemTretihoDospelehoPoExekuci = spocitejPrijemDospelehoPoExekuci(
 		prijemDospeleho = rodinkaPrijemTretihoDospeleho,
 		prednostniExekuce = tretiDospelyExekuce[0],
 		neprednostniExekuce = tretiDospelyExekuce[1],
@@ -1088,7 +1084,7 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 		podporaVNezamestnanosti = dalsiPrijmy[2],
 		ostatniPrijmy = dalsiPrijmy[3]);
 
-	var prijmyAVydajeRodinyPoZapocteniDavek = [0, 0, 0, 0, 0];
+	var prijmyAVydajeRodinyPoZapocteniDavek = [];
 
 	prijmyAVydajeRodinyPoZapocteniDavek[0] = rodinkaPrijemPrvnihoDospeleho;
 	prijmyAVydajeRodinyPoZapocteniDavek[1] = rodinkaPrijemPrvnihoDospelehoPoExekuci;
@@ -1222,15 +1218,15 @@ function prepisFormular() {
 	tretiDospelyTretiZamestnavatel[7] = parseFloat(document.getElementById("tretiDospelyTretiZamestnavatelVyzivovaneDeti").value);
 
 	prvniDospelyExekuce[0] = parseFloat(document.getElementById("prvniDospelyPrednostniExekuce").value);
-	prvniDospelyExekuce[1] = parseFloat(document.getElementById("prvniDospelyNerednostniExekuce").value);
+	prvniDospelyExekuce[1] = parseFloat(document.getElementById("prvniDospelyNeprednostniExekuce").value);
 	prvniDospelyExekuce[2] = parseFloat(document.getElementById("prvniDospelyDalsiVyzivovaneOsoby").value);
 
 	druhyDospelyExekuce[0] = parseFloat(document.getElementById("druhyDospelyPrednostniExekuce").value);
-	druhyDospelyExekuce[1] = parseFloat(document.getElementById("druhyDospelyNerednostniExekuce").value);
+	druhyDospelyExekuce[1] = parseFloat(document.getElementById("druhyDospelyNeprednostniExekuce").value);
 	druhyDospelyExekuce[2] = parseFloat(document.getElementById("druhyDospelyDalsiVyzivovaneOsoby").value);
 
 	tretiDospelyExekuce[0] = parseFloat(document.getElementById("tretiDospelyPrednostniExekuce").value);
-	tretiDospelyExekuce[1] = parseFloat(document.getElementById("tretiDospelyNerednostniExekuce").value);
+	tretiDospelyExekuce[1] = parseFloat(document.getElementById("tretiDospelyNeprednostniExekuce").value);
 	tretiDospelyExekuce[2] = parseFloat(document.getElementById("tretiDospelyDalsiVyzivovaneOsoby").value);
 
 	slozeniDomacnosti[0] = parseFloat(document.getElementById("pocetDospelych").value);
@@ -1254,6 +1250,17 @@ function prepisFormular() {
 	bydleni[3] = JSON.parse(document.getElementById("ubytovna").value);
 	bydleni[4] = parseFloat(document.getElementById("velikostObce").value);
 	bydleni[5] = parseFloat(document.getElementById("obvykleNaklady").value);
+
+	return false;
+}
+
+
+
+// nějaký kecy;
+
+function statickyModelujRodinu() {
+
+	prepisFormular();
 
 	var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
 
@@ -1282,22 +1289,107 @@ function prepisFormular() {
 
 
 
-// nějaký kecy; vstupem je nezávislá proměnná (plat 1., 2., 3., výstupem příjmy a výdaje po započtení dávek)
+// nějaký kecy; vstupem je nezávislá proměnná (plat 1. dospělého, výstupem příjmy a výdaje po započtení dávek)
 
-function dynamickyModelujRodinu () {
+function dynamickyModelujRodinu() {
+
+	prepisFormular();
 
 	var temp = prvniDospelyPrvniZamestnavatel[0];
 
-	var polePrijmuAVydaju = [];
+	var simulaceData = [];
 
-	for (i = 0; i < 50; i = i++) {
+	for (i = 0; i <= 30; i++) {
 		prvniDospelyPrvniZamestnavatel[0] = 1000 * i;
-		var nezavislaPromenna = prvniDospelyPrvniZamestnavatel[0];
-		var zavislaPromenna = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
-		polePrijmuAVydaju[i] = [nezavislaPromenna, zavislaPromenna];
+		// tady dopočítat celý příjem z HPP a vzápětí vkládat hrubý?
+		simulaceData.push({x: prvniDospelyPrvniZamestnavatel[0], y: spocitejPrijmyAVydajeRodinyPoZapocteniDavek()[7]});
     }
 
     prvniDospelyPrvniZamestnavatel[0] = temp;
 
-    return(polePrijmuAVydaju);
+    nakresliGraf(simulaceData);
+
+    return false;
+}
+
+
+
+// nějaký kecy; vstupem je nezávislá proměnná (plat 1. dospělého, výstupem příjmy a výdaje po započtení dávek)
+
+function nakresliGraf(lineData = [{x: 0, y: 0}]) {
+
+    var x = lineData.map(function(d) {
+        return d['x']
+    });
+
+    var y = lineData.map(function(d) {
+        return d['y']
+    });
+
+	$("#graf").html("");
+
+	var margin = {top: 20, right: 20, bottom: 40, left: 50},
+		w = 600 - margin.left - margin.right,
+        h = 400 - margin.top - margin.bottom;
+
+	var xScale = d3.scale.linear()
+    		            	.domain(x)
+                    		.range([0, w]);
+
+	var yScale = d3.scale.linear()
+ 	   	                 	.domain(y)
+                    	 	.range([h, 0]);
+
+	var xAxis = d3.svg.axis()
+        	            .scale(xScale)
+      	                .orient("bottom")
+						.ticks(5);
+
+	var yAxis = d3.svg.axis()
+    	                .scale(yScale)
+        	            .orient("left")
+						.ticks(5);
+
+    var lineFunction = d3.svg.line()
+     	                .x(function(d) {
+        	                return xScale(d.x);
+            	        })
+                	    .y(function(d) {
+                    	    return yScale(d.y);
+                    	})
+						.interpolate("linear");
+
+	var svg = d3.select("#graf")
+        			.append("svg")
+                    	.attr("width", w + margin.left + margin.right)
+                    	.attr("height", h + margin.top + margin.bottom)
+                    .append("g")
+                    	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("g")
+	 	    .attr("class", "x axis")
+            .attr("transform", "translate(0," + h + ")")
+            .call(xAxis)
+       .selectAll("text")
+            .attr("x", -21)
+            .attr("y", 0)
+            .attr("transform", "rotate(-70)")
+           	.text("Hrubý příjem prvního rodiče (Kč)");
+
+	svg.append("g")
+    		.attr("class", "y axis")
+           	.call(yAxis)
+		.append("text")
+           	.attr("x", -17)
+            .attr("y", -8)
+        	.text("Disponibilní příjem domácnosti (Kč)");
+
+	svg.append("path")
+			.attr("class", "line")
+			.attr("d", lineFunction(lineData))
+			.style("stroke", "black")
+			.style("stroke-width", 1)
+			.style("fill", "none");
+
+    return false;
 }
