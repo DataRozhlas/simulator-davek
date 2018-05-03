@@ -1,5 +1,11 @@
 // další iterace:
 
+// dynamická simulace: HPP × DPP × DPČ, 1. × 2. dospělý, simulovat náklady na bydlení
+// exekuovatelné dávky: pojistne prijmy (duchody, rodicovska, podporaVNezamestnanosti); ostatniPrijmy;
+//		vstupují do příjmů jedince pro exekuci, ale do výpočtu dávek vstupují taky (jako by nebyly exekuované)
+
+//	vyhodit příjem jednotlivce po exekuci
+
 // Vypadá to, že je možné podepsat růžový papír u více zaměstnavatelů
 
 // Nešlo by některé věcí vyplňovat ne u zaměstnání, ale u zaměstnávané osoby
@@ -1093,7 +1099,6 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	prijmyAVydajeRodinyPoZapocteniDavek[4] = rodinkaPrijemTretihoDospeleho;
 	prijmyAVydajeRodinyPoZapocteniDavek[5] = rodinkaPrijemTretihoDospelehoPoExekuci;
 	prijmyAVydajeRodinyPoZapocteniDavek[6] = rodinkaCistyPrijemDomacnosti[0];
-
 
 	// čistý příjem + důchody + rodičovská + přídavky na děti + podpora v nezaměstnanosti + ostatní příjmy + příspěvek na bydlení + příspěvek na živobytí +	doplatek na bydlení - nájem - poplatky
 	prijmyAVydajeRodinyPoZapocteniDavek[7] = parseFloat(rodinkaCistyPrijemDomacnosti[0]) + parseFloat(dalsiPrijmy[0]) + parseFloat(dalsiPrijmy[1]) +
