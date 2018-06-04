@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-<script type="text/javascript" src="simulator.js"></script>
+<script type="text/javascript" src="simulatortest.js"></script>
 
 </head>
 
@@ -14,7 +14,15 @@
 
   <h1>Simulátor sociálních dávek</h1>
 
-  <h2>Vstupy</h2>
+
+  <div><button type="button" onclick="nastavRodinu1()" style="margin: 20px; font-size: 30px">Rodinka 1</button>
+  Matka s 1 dítětem (8 let) bydlí na ubytovně nebo jinde, kde má podnájemní smlouvu (platí 6000 Kč) v Praze</div>
+
+  <div><button type="button" onclick="nastavRodinu2()" style="margin: 20px; font-size: 30px">Rodinka 2</button>
+  Mladý dospělý bydlí u rodičů, kteří nemají formální příjem (2 dospělí nezaměstnaní, 2 děti 6 až 15 a jedno 18+), nájem 15 tisíc v Praze</div>
+
+  <div><button type="button" onclick="nastavRodinu3()" style="margin: 20px; font-size: 30px">Rodinka 3</button>
+  Domácnost s dvěma dětmi (obě do 6 let), v Praze, kde oba dospělí mají hrubou mzdu na HPP 25 tisíc, nájem 20 tisíc</div>
 
 	<div class="oddil">
 		<h3>Příjmy</h3>
@@ -513,10 +521,12 @@
   			</select>
   			Místně obvyklé náklady (pokud ÚP nestanovil, nevyplňovat)
   			<input type="text" id="obvykleNaklady" value="0" style="width: 50px">
+      </form>
 
 			<div>
-				<button type="button" onclick="statickyModelujRodinu()" style="margin: 20px; font-size: 30px">Všechno spočítat!</button>
-        <button type="button" onclick="dynamickyModelujRodinu(1)" style="margin: 20px; font-size: 30px">Modelovat příjmy prvního dospělého (už to něco dělá, zatím nevím co)</button>
+				<button type="button" onclick="statickyModelujRodinu()" style="margin: 20px; font-size: 30px">Spočítat příjmy</button>
+        <button type="button" onclick="dynamickyModelujRodinu(1)" style="margin: 20px; font-size: 30px">Graf příjmů prvního dospělého</button>
+        <button type="button" onclick="dynamickyModelujRodinu(4)" style="margin: 20px; font-size: 30px">Graf výše nájmu</button>
 			</div>
 
       <h2>Výsledek</h2>
@@ -524,8 +534,6 @@
 
       <h2>Simulace</h2>
         <div id="simulace" style="margin: 20px; font-size: 18px"></div>
-
-  		</form>
 
   	</div>
 </div>

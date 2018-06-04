@@ -1,27 +1,3 @@
-/*
-
-4) dynamická simulace: zeptat se, co a na základě čeho se má spočítat;
-HPP × DPP × DPČ, 1. × 2. dospělý
-simulovat růst nákladů na bydlení
-
-další iterace:
-
-rozhodit UI na víc stránek
-
-Vypadá to, že je možné podepsat růžový papír u více zaměstnavatelů
-
-Nešlo by některé věcí vyplňovat ne u zaměstnání, ale u zaměstnávané osoby
-- počet dětí (a pak by se přiřadilo k tomu, kde podepsal růžový papír?)
-- výjimka z minimálního základu
-
-Nejsem si jistá otázkou "platí zdravotní jinde" - to myslím běžně člověk nebude vědět - šlo by to nějak zautomatizovat? Např nastavit, min, zdravotní tam, kde má člověk nejvyšší příjem)?
-
-zjednodušit zadávání dětí
-
-*/
-
-
-
 // globální proměnné
 
 // hrubý příjem na HPP, výjimka z minimálního základu?, hrubý příjem na DPČ, platí zdravotní jinde?, hrubý příjem na DPP, platí zdravotní jinde?, růžový papír?, počet vyživovaných dětí
@@ -497,8 +473,7 @@ function spocitejNakladyNaBydleniProSSP(najem = 0, poplatky = 0, pocetClenuDomac
 	var skutecneNakladyNaBydleni = 0,
 		normativniNakladyNaBydleni = 0,
 		uznatelneNakladyNaBydleni = 0,
-		pocetClenuDomacnostiProDavky = 0,
-		najem = 0;
+		pocetClenuDomacnostiProDavky = 0;
 
 	// u SSP se do společné domácnosti nepočítají členové domácnosti s trvalým pobytem jinde
 	pocetClenuDomacnostiProDavky = pocetClenuDomacnosti - pocetClenuDomacnostiSTrvalymPobytemJinde;
@@ -597,8 +572,7 @@ function spocitejNakladyNaBydleniProHN(najem = 0, poplatky = 0, pocetClenuDomacn
 	var skutecneNakladyNaBydleni = 0,
 		normativniNakladyNaBydleni = 0,
 		uznatelneNakladyNaBydleni = 0,
-		pocetClenuDomacnostiProDavky = 0,
-		najem = 0;
+		pocetClenuDomacnostiProDavky = 0;
 
 	// u HN se do společné domácnosti počítají i členové domácnosti s trvalým pobytem jinde, takže netřeba brát v úvahu
 	pocetClenuDomacnostiProDavky = pocetClenuDomacnosti;
@@ -951,15 +925,17 @@ spočítej příjem domácnost po exekuci
 */
 
 function spocitejPrijemDomacnostiPoExekuci(prijemPrvnihoDospelehoPoExekuci = [0, 0], prijemDruhehoDospelehoPoExekuci = [0, 0], prijemTretihoDospelehoPoExekuci = [0, 0],
-	prispevekNaBydleni = 0, prispevekNaZivobyti = 0, doplatekNaBydleni = 0, najem = 0, poplatky = 0) {
+	pridavkyNaDeti = 0, prispevekNaBydleni = 0, prispevekNaZivobyti = 0, doplatekNaBydleni = 0, najem = 0, poplatky = 0) {
 
 	var prijemDomacnostiPredExekuci = 0,
 		prijemDomacnostiPoExekuci = 0,
 		prijemDomacnostiPredExekuciMinusNajem = 0,
 		prijemDomacnostiPoExekuciMinusNajem = 0;
 
-	prijemDomacnostiPredExekuci = prijemPrvnihoDospelehoPoExekuci[0] + prijemDruhehoDospelehoPoExekuci[0] + prijemTretihoDospelehoPoExekuci[0] + prispevekNaBydleni + prispevekNaZivobyti + doplatekNaBydleni;
-	prijemDomacnostiPoExekuci = prijemPrvnihoDospelehoPoExekuci[1] + prijemDruhehoDospelehoPoExekuci[1] + prijemTretihoDospelehoPoExekuci[1] + prispevekNaBydleni + prispevekNaZivobyti + doplatekNaBydleni;
+	prijemDomacnostiPredExekuci = prijemPrvnihoDospelehoPoExekuci[0] + prijemDruhehoDospelehoPoExekuci[0] + prijemTretihoDospelehoPoExekuci[0] +
+		pridavkyNaDeti + prispevekNaBydleni + prispevekNaZivobyti + doplatekNaBydleni;
+	prijemDomacnostiPoExekuci = prijemPrvnihoDospelehoPoExekuci[1] + prijemDruhehoDospelehoPoExekuci[1] + prijemTretihoDospelehoPoExekuci[1] +
+		pridavkyNaDeti + prispevekNaBydleni + prispevekNaZivobyti + doplatekNaBydleni;
 	prijemDomacnostiPredExekuciMinusNajem = prijemDomacnostiPredExekuci - najem - poplatky;
 	prijemDomacnostiPoExekuciMinusNajem = prijemDomacnostiPoExekuci - najem - poplatky;
 
@@ -1086,9 +1062,9 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 
 	var rodinkaPridavkyNaDeti = spocitejPridavkyNaDeti(
 		cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
-		prijemPrvnihoDospeleho = rodinkaPrijemPrvnihoDospelehoPoExekuci,
-		prijemDruhehoDospeleho = rodinkaPrijemDruhehoDospelehoPoExekuci,
-		prijemTretihoDospeleho = rodinkaPrijemTretihoDospelehoPoExekuci,
+		prijemPrvnihoDospeleho = rodinkaPrijemPrvnihoDospeleho,
+		prijemDruhehoDospeleho = rodinkaPrijemDruhehoDospeleho,
+		prijemTretihoDospeleho = rodinkaPrijemTretihoDospeleho,
 		zivotniMinimum = rodinkaZivotniMinimum,
 		pocetDetiPod6 = slozeniDomacnosti[1],
 		pocetDeti6az15 = slozeniDomacnosti[2],
@@ -1164,8 +1140,8 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 		duchody = prvniDospelyDalsiPrijmy[0],
 		nemocenska = prvniDospelyDalsiPrijmy[3],
 		podporaVNezamestnanosti = prvniDospelyDalsiPrijmy[2],
-		pridavkyNaDeti = rodinkaPridavkyNaDeti,
 		rodicovska = prvniDospelyDalsiPrijmy[1],
+		ostatniPrijmy = prvniDospelyDalsiPrijmy[4],
 		prednostniExekuce = prvniDospelyExekuce[0],
 		neprednostniExekuce = prvniDospelyExekuce[1],
 		dalsiVyzivovaneOsoby = prvniDospelyExekuce[2]);
@@ -1175,19 +1151,19 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 		duchody = druhyDospelyDalsiPrijmy[0],
 		nemocenska = druhyDospelyDalsiPrijmy[3],
 		podporaVNezamestnanosti = druhyDospelyDalsiPrijmy[2],
-		pridavkyNaDeti = rodinkaPridavkyNaDeti,
 		rodicovska = druhyDospelyDalsiPrijmy[1],
+		ostatniPrijmy = prvniDospelyDalsiPrijmy[4],
 		prednostniExekuce = druhyDospelyExekuce[0],
 		neprednostniExekuce = druhyDospelyExekuce[1],
 		dalsiVyzivovaneOsoby = druhyDospelyExekuce[2]);
 
 	var rodinkaPrijemTretihoDospelehoPoExekuci = spocitejPrijemDospelehoPoExekuci(
-		prijemDospeleho = rodinkaPrijemPrvnihoDospeleho,
+		prijemDospeleho = rodinkaPrijemTretihoDospeleho,
 		duchody = tretiDospelyDalsiPrijmy[0],
 		nemocenska = tretiDospelyDalsiPrijmy[3],
 		podporaVNezamestnanosti = tretiDospelyDalsiPrijmy[2],
-		pridavkyNaDeti = rodinkaPridavkyNaDeti,
 		rodicovska = tretiDospelyDalsiPrijmy[1],
+		ostatniPrijmy = prvniDospelyDalsiPrijmy[4],
 		prednostniExekuce = prvniDospelyExekuce[0],
 		neprednostniExekuce = prvniDospelyExekuce[1],
 		dalsiVyzivovaneOsoby = prvniDospelyExekuce[2]);
@@ -1196,6 +1172,7 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 		prijemPrvnihoDospelehoPoExekuci = rodinkaPrijemPrvnihoDospelehoPoExekuci,
 		prijemDruhehoDospelehoPoExekuci = rodinkaPrijemDruhehoDospelehoPoExekuci,
 		prijemTretihoDospelehoPoExekuci = rodinkaPrijemTretihoDospelehoPoExekuci,
+		pridavkyNaDeti = rodinkaPridavkyNaDeti,
 		prispevekNaBydleni = rodinkaPrispevekNaBydleni,
 		prispevekNaZivobyti = rodinkaPrispevekNaZivobyti,
 		doplatekNaBydleni = rodinkaDoplatekNaBydleni);
@@ -1203,61 +1180,61 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	var prijmyAVydajeRodinyPoZapocteniDavek = [];
 
 	// čistý příjem prvního dospělého před exekucí, všechny příjmy vč. dávek před a po exekuci
-	prijmyAVydajeRodinyPoZapocteniDavek[0] = rodinkaPrijemPrvnihoDospeleho[0];
-	prijmyAVydajeRodinyPoZapocteniDavek[1] = rodinkaPrijemPrvnihoDospelehoPoExekuci[0];
-	prijmyAVydajeRodinyPoZapocteniDavek[2] = rodinkaPrijemPrvnihoDospelehoPoExekuci[1];
+	prijmyAVydajeRodinyPoZapocteniDavek[0] = Math.round(rodinkaPrijemPrvnihoDospeleho[0]);
+	prijmyAVydajeRodinyPoZapocteniDavek[1] = Math.round(rodinkaPrijemPrvnihoDospelehoPoExekuci[0]);
+	prijmyAVydajeRodinyPoZapocteniDavek[2] = Math.round(rodinkaPrijemPrvnihoDospelehoPoExekuci[1]);
 
 	// čistý příjem druhého dospělého před exekucí, všechny příjmy vč. dávek před a po exekuci
-	prijmyAVydajeRodinyPoZapocteniDavek[3] = rodinkaPrijemDruhehoDospeleho[0];
-	prijmyAVydajeRodinyPoZapocteniDavek[4] = rodinkaPrijemDruhehoDospelehoPoExekuci[0];
-	prijmyAVydajeRodinyPoZapocteniDavek[5] = rodinkaPrijemDruhehoDospelehoPoExekuci[1];
+	prijmyAVydajeRodinyPoZapocteniDavek[3] = Math.round(rodinkaPrijemDruhehoDospeleho[0]);
+	prijmyAVydajeRodinyPoZapocteniDavek[4] = Math.round(rodinkaPrijemDruhehoDospelehoPoExekuci[0]);
+	prijmyAVydajeRodinyPoZapocteniDavek[5] = Math.round(rodinkaPrijemDruhehoDospelehoPoExekuci[1]);
 
 	// čistý příjem třetího dospělého před exekucí, všechny příjmy vč. dávek před a po exekuci
-	prijmyAVydajeRodinyPoZapocteniDavek[6] = rodinkaPrijemTretihoDospeleho[0];
-	prijmyAVydajeRodinyPoZapocteniDavek[7] = rodinkaPrijemTretihoDospelehoPoExekuci[0];
-	prijmyAVydajeRodinyPoZapocteniDavek[8] = rodinkaPrijemTretihoDospelehoPoExekuci[1];
+	prijmyAVydajeRodinyPoZapocteniDavek[6] = Math.round(rodinkaPrijemTretihoDospeleho[0]);
+	prijmyAVydajeRodinyPoZapocteniDavek[7] = Math.round(rodinkaPrijemTretihoDospelehoPoExekuci[0]);
+	prijmyAVydajeRodinyPoZapocteniDavek[8] = Math.round(rodinkaPrijemTretihoDospelehoPoExekuci[1]);
 
 	// čistý příjem domácnosti před exekucí, všechny příjmy vč. dávek před a po exekuci
-	prijmyAVydajeRodinyPoZapocteniDavek[9] = rodinkaCistyPrijemDomacnosti[0];
-	prijmyAVydajeRodinyPoZapocteniDavek[10] = rodinkaPrijemPoExekuci[0];
-	prijmyAVydajeRodinyPoZapocteniDavek[11] = rodinkaPrijemPoExekuci[1];
+	prijmyAVydajeRodinyPoZapocteniDavek[9] = Math.round(rodinkaCistyPrijemDomacnosti[0]);
+	prijmyAVydajeRodinyPoZapocteniDavek[10] = Math.round(rodinkaPrijemPoExekuci[0]);
+	prijmyAVydajeRodinyPoZapocteniDavek[11] = Math.round(rodinkaPrijemPoExekuci[1]);
 
 	// všechny příjmy domácnosti vč. dávek před a po exekuci mínus náklady na bydlení
-	prijmyAVydajeRodinyPoZapocteniDavek[12] = rodinkaPrijemPoExekuci[2];
-	prijmyAVydajeRodinyPoZapocteniDavek[13] = rodinkaPrijemPoExekuci[3];
+	prijmyAVydajeRodinyPoZapocteniDavek[12] = Math.round(rodinkaPrijemPoExekuci[2] - bydleni[0] - bydleni[1]);
+	prijmyAVydajeRodinyPoZapocteniDavek[13] = Math.round(rodinkaPrijemPoExekuci[3] - bydleni[0] - bydleni[1]);
 
 	// přídavky na děti
-	prijmyAVydajeRodinyPoZapocteniDavek[14] = rodinkaPridavkyNaDeti;
+	prijmyAVydajeRodinyPoZapocteniDavek[14] = Math.round(rodinkaPridavkyNaDeti);
 
 	// příspěvek na bydlení
-	prijmyAVydajeRodinyPoZapocteniDavek[15] = rodinkaPrispevekNaBydleni;
+	prijmyAVydajeRodinyPoZapocteniDavek[15] = Math.round(rodinkaPrispevekNaBydleni);
 
 	// příspěvek na živobytí
-	prijmyAVydajeRodinyPoZapocteniDavek[16] = rodinkaPrispevekNaZivobyti;
+	prijmyAVydajeRodinyPoZapocteniDavek[16] = Math.round(rodinkaPrispevekNaZivobyti);
 
 	// doplatek na bydlení
-	prijmyAVydajeRodinyPoZapocteniDavek[17] = rodinkaDoplatekNaBydleni;
+	prijmyAVydajeRodinyPoZapocteniDavek[17] = Math.round(rodinkaDoplatekNaBydleni);
 
 	// důchody
-	prijmyAVydajeRodinyPoZapocteniDavek[18] = rodinkaDuchody;
+	prijmyAVydajeRodinyPoZapocteniDavek[18] = Math.round(rodinkaDuchody);
 
 	// rodičovská
-	prijmyAVydajeRodinyPoZapocteniDavek[19] = rodinkaRodicovska;
+	prijmyAVydajeRodinyPoZapocteniDavek[19] = Math.round(rodinkaRodicovska);
 
 	// podpora v nezaměstnanosti
-	prijmyAVydajeRodinyPoZapocteniDavek[20] = rodinkaPodporaVNezamestnanosti;
+	prijmyAVydajeRodinyPoZapocteniDavek[20] = Math.round(rodinkaPodporaVNezamestnanosti);
 
 	// nemocenská
-	prijmyAVydajeRodinyPoZapocteniDavek[21] = rodinkaNemocenska;
+	prijmyAVydajeRodinyPoZapocteniDavek[21] = Math.round(rodinkaNemocenska);
 
 	// ostatní příjmy
-	prijmyAVydajeRodinyPoZapocteniDavek[22] = rodinkaOstatniPrijmy;
+	prijmyAVydajeRodinyPoZapocteniDavek[22] = Math.round(rodinkaOstatniPrijmy);
 
 	// nájem
-	prijmyAVydajeRodinyPoZapocteniDavek[23] = bydleni[0];
+	prijmyAVydajeRodinyPoZapocteniDavek[23] = Math.round(bydleni[0]);
 
 	// poplatky
-	prijmyAVydajeRodinyPoZapocteniDavek[24] = bydleni[1];
+	prijmyAVydajeRodinyPoZapocteniDavek[24] = Math.round(bydleni[1]);
 
 	return(prijmyAVydajeRodinyPoZapocteniDavek);
 }
@@ -1305,18 +1282,6 @@ function prepisFormular() {
 	prvniDospelyDalsiPrijmy[3] = parseFloat(document.getElementById("prvniDospelyNemocenska").value);
 	prvniDospelyDalsiPrijmy[4] = parseFloat(document.getElementById("prvniDospelyOstatniPrijmy").value);
 
-	druhyDospelyDalsiPrijmy[0] = parseFloat(document.getElementById("druhyDospelyDuchody").value);
-	druhyDospelyDalsiPrijmy[1] = parseFloat(document.getElementById("druhyDospelyRodicovska").value);
-	druhyDospelyDalsiPrijmy[2] = parseFloat(document.getElementById("druhyDospelyPodporaVNezamestnanosti").value);
-	druhyDospelyDalsiPrijmy[3] = parseFloat(document.getElementById("druhyDospelyNemocenska").value);
-	druhyDospelyDalsiPrijmy[4] = parseFloat(document.getElementById("druhyDospelyOstatniPrijmy").value);
-
-	tretiDospelyDalsiPrijmy[0] = parseFloat(document.getElementById("tretiDospelyDuchody").value);
-	tretiDospelyDalsiPrijmy[1] = parseFloat(document.getElementById("tretiDospelyRodicovska").value);
-	tretiDospelyDalsiPrijmy[2] = parseFloat(document.getElementById("tretiDospelyPodporaVNezamestnanosti").value);
-	tretiDospelyDalsiPrijmy[3] = parseFloat(document.getElementById("tretiDospelyNemocenska").value);
-	tretiDospelyDalsiPrijmy[4] = parseFloat(document.getElementById("tretiDospelyOstatniPrijmy").value);
-
 	druhyDospelyPrvniZamestnavatel[0] = parseFloat(document.getElementById("druhyDospelyPrvniZamestnavatelHPPPrijem").value);
 	druhyDospelyPrvniZamestnavatel[1] = JSON.parse(document.getElementById("druhyDospelyPrvniZamestnavatelHPPVyjimka").value);
 	druhyDospelyPrvniZamestnavatel[2] = parseFloat(document.getElementById("druhyDospelyPrvniZamestnavatelDPCPrijem").value);
@@ -1344,6 +1309,12 @@ function prepisFormular() {
 	druhyDospelyTretiZamestnavatel[6] = JSON.parse(document.getElementById("druhyDospelyTretiZamestnavatelRuzovyPapir").value);
 	druhyDospelyTretiZamestnavatel[7] = parseFloat(document.getElementById("druhyDospelyTretiZamestnavatelVyzivovaneDeti").value);
 
+	druhyDospelyDalsiPrijmy[0] = parseFloat(document.getElementById("druhyDospelyDuchody").value);
+	druhyDospelyDalsiPrijmy[1] = parseFloat(document.getElementById("druhyDospelyRodicovska").value);
+	druhyDospelyDalsiPrijmy[2] = parseFloat(document.getElementById("druhyDospelyPodporaVNezamestnanosti").value);
+	druhyDospelyDalsiPrijmy[3] = parseFloat(document.getElementById("druhyDospelyNemocenska").value);
+	druhyDospelyDalsiPrijmy[4] = parseFloat(document.getElementById("druhyDospelyOstatniPrijmy").value);
+
 	tretiDospelyPrvniZamestnavatel[0] = parseFloat(document.getElementById("tretiDospelyPrvniZamestnavatelHPPPrijem").value);
 	tretiDospelyPrvniZamestnavatel[1] = JSON.parse(document.getElementById("tretiDospelyPrvniZamestnavatelHPPVyjimka").value);
 	tretiDospelyPrvniZamestnavatel[2] = parseFloat(document.getElementById("tretiDospelyPrvniZamestnavatelDPCPrijem").value);
@@ -1370,6 +1341,12 @@ function prepisFormular() {
 	tretiDospelyTretiZamestnavatel[5] = JSON.parse(document.getElementById("tretiDospelyTretiZamestnavatelDPPZdravotni").value);
 	tretiDospelyTretiZamestnavatel[6] = JSON.parse(document.getElementById("tretiDospelyTretiZamestnavatelRuzovyPapir").value);
 	tretiDospelyTretiZamestnavatel[7] = parseFloat(document.getElementById("tretiDospelyTretiZamestnavatelVyzivovaneDeti").value);
+
+	tretiDospelyDalsiPrijmy[0] = parseFloat(document.getElementById("tretiDospelyDuchody").value);
+	tretiDospelyDalsiPrijmy[1] = parseFloat(document.getElementById("tretiDospelyRodicovska").value);
+	tretiDospelyDalsiPrijmy[2] = parseFloat(document.getElementById("tretiDospelyPodporaVNezamestnanosti").value);
+	tretiDospelyDalsiPrijmy[3] = parseFloat(document.getElementById("tretiDospelyNemocenska").value);
+	tretiDospelyDalsiPrijmy[4] = parseFloat(document.getElementById("tretiDospelyOstatniPrijmy").value);
 
 	prvniDospelyExekuce[0] = parseFloat(document.getElementById("prvniDospelyPrednostniExekuce").value);
 	prvniDospelyExekuce[1] = parseFloat(document.getElementById("prvniDospelyNeprednostniExekuce").value);
@@ -1421,7 +1398,7 @@ function statickyModelujRodinu() {
 		prijmyAVydajeRodinyPoZapocteniDavek[8] + " Kč</p>";
 		text += "<p>Rodina bez nákladů na bydlení: čistý příjem " + prijmyAVydajeRodinyPoZapocteniDavek[9] + " Kč, včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[10] + " Kč, po exekuci " +
 		prijmyAVydajeRodinyPoZapocteniDavek[11] + " Kč</p>";
-		text += "<p>Rodina po započtení nákladů na bydlení: včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[12] + " Kč, po exekuci " + prijmyAVydajeRodinyPoZapocteniDavek[13] + " Kč</p>";
+		text += "<p><strong>Rodina po započtení nákladů na bydlení: včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[12] + " Kč, po exekuci " + prijmyAVydajeRodinyPoZapocteniDavek[13] + " Kč</strong></p>";
 		text += "<p><font color=\"green\">Přídavky na děti: " + prijmyAVydajeRodinyPoZapocteniDavek[14] + " Kč.</font></p>";
 		text += "<p><font color=\"green\">Příspěvek na bydlení: " + prijmyAVydajeRodinyPoZapocteniDavek[15] + " Kč.</font></p>";
 		text += "<p><font color=\"green\">Příspěvek na živobytí: " + prijmyAVydajeRodinyPoZapocteniDavek[16] + " Kč.</font></p>";
@@ -1446,6 +1423,8 @@ function statickyModelujRodinu() {
 */
 
 function dynamickyModelujRodinu(simulace = 0) {
+
+	prepisFormular();
 
 	/* simulace:
 
@@ -1547,7 +1526,7 @@ function nakresliGraf(x = [], y = [], nazev = '') {
 		xAxis: {
 			categories: x,
 			title: {
-				text: 'příjem prvního dospělého na HPP'
+				text: nazev
 			},
 		},
 		yAxis: {
@@ -1582,4 +1561,70 @@ function nakresliGraf(x = [], y = [], nazev = '') {
 	});
 
 	return false;
+}
+
+
+
+/*
+
+*/
+
+function nastavRodinu1() {
+
+	document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDeti").value = "1";
+	document.getElementById("prvniDospelyPrvniZamestnavatelHPPPrijem").value = "0";
+	document.getElementById("druhyDospelyPrvniZamestnavatelHPPPrijem").value = "0";
+	document.getElementById("pocetDospelych").value = "1";
+	document.getElementById("pocetDetiPod6").value = "0";
+	document.getElementById("pocetDeti6Az15").value = "1";
+	document.getElementById("pocetDeti15Az26").value = "0";
+	document.getElementById("pocetClenuDomacnosti").value = "2";
+	document.getElementById("najem").value = "6000";
+	document.getElementById("ubytovna").value = true;
+	document.getElementById("velikostObce").value = "1";
+
+}
+
+
+
+/*
+
+*/
+
+function nastavRodinu2() {
+
+	document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDeti").value = "0";
+	document.getElementById("prvniDospelyPrvniZamestnavatelHPPPrijem").value = "0";
+	document.getElementById("druhyDospelyPrvniZamestnavatelHPPPrijem").value = "0";
+	document.getElementById("pocetDospelych").value = "2";
+	document.getElementById("pocetDetiPod6").value = "0";
+	document.getElementById("pocetDeti6Az15").value = "2";
+	document.getElementById("pocetDeti15Az26").value = "1";
+	document.getElementById("pocetClenuDomacnosti").value = "5";
+	document.getElementById("najem").value = "15000";
+	document.getElementById("ubytovna").value = false;
+	document.getElementById("velikostObce").value = "1";
+
+}
+
+
+
+/*
+
+*/
+
+function nastavRodinu3() {
+
+	document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDeti").value = "2";
+	document.getElementById("prvniDospelyPrvniZamestnavatelHPPPrijem").value = "25000";
+	document.getElementById("druhyDospelyPrvniZamestnavatelHPPPrijem").value = "25000";
+	document.getElementById("pocetDospelych").value = "2";
+	document.getElementById("pocetDetiPod6").value = "2";
+	document.getElementById("pocetDeti6Az15").value = "0";
+	document.getElementById("pocetDeti15Az26").value = "0";
+	document.getElementById("pocetClenuDomacnosti").value = "4";
+	document.getElementById("najem").value = "20000";
+	document.getElementById("ubytovna").value = false;
+	document.getElementById("velikostObce").value = "1";
+
 }
