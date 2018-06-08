@@ -58,7 +58,7 @@ function spocitejSlozkyNaHPP(hrubyPrijem = 0, vyjimkaMinimalniZaklad = false) {
 		minimalniMzda = 12200;
 
 	// u nulového příjmu vrací nulové všechny složky
-	if (hrubyPrijem == 0) {
+	if (hrubyPrijem < minimalniMzda) {
 		return([0, 0, 0, 0, 0])
 	}
 
@@ -1382,7 +1382,9 @@ function prepisFormular() {
 
 
 
-// nějaký kecy;
+/*
+
+*/
 
 function statickyModelujRodinu() {
 
@@ -1443,50 +1445,106 @@ function dynamickyModelujRodinu(simulace = 0) {
 
 	// spodní a horní hranice nezávislé proměnné pro simulaci
 		intervalMin,
-		intervalMax;
+		intervalMax,
+
+	// pro ukládání výsledků
+		nezavisla = [],
+		prijemRodiny = [],
+		prvniDospelyPoExekuci = [],
+		druhyDospelyPoExekuci = [],
+		tretiDospelyPoExekuci = [],
+		pridavkyNaDeti = [],
+		prispevekNaBydleni = [],
+		prispevekNaZivobyti = [],
+		doplatekNaBydleni = [],
+		duchody = [],
+		rodicovska = [],
+		podporaVNezamestnanosti = [],
+		nemocenska = [],
+		ostatniPrijmy = [],
+		najem = [],
+		poplatky = [];
 
 	if (simulace == 1) {
 		nazevNezavislePromenne = 'příjem prvního dospělého na HPP';
 		backup = prvniDospelyPrvniZamestnavatel[0];
-		intervalMin = 13;
-		intervalMax = 30;
+		intervalMin = 13000;
+		intervalMax = 30000;
 	} else if (simulace == 2) {
 		nazevNezavislePromenne = 'příjem prvního dospělého na DPČ';
 		backup = prvniDospelyPrvniZamestnavatel[2];
 		intervalMin = 0;
-		intervalMax = 10;
+		intervalMax = 10000;
 	} else if (simulace == 3) {
 		nazevNezavislePromenne = 'příjem prvního dospělého na DPP';
 		backup = prvniDospelyPrvniZamestnavatel[4];
 		intervalMin = 0;
-		intervalMax = 10;
+		intervalMax = 10000;
 	} else if (simulace == 4) {
 		nazevNezavislePromenne = 'nájem';
 		backup = bydleni[0];
 		intervalMin = 0;
-		intervalMax = 20;
+		intervalMax = 20000;
 	}
 
-	// pro ukládání výsledků
-	var nezavisla = [],
-		zavisla = [];
+	// u HPP nejdřív spočítat situaci s nulovou a minimální mzdou
+	if (simulace == 1) {
+		for (i = 0; i <= 12200; i = i + 12200) {
+			prvniDospelyPrvniZamestnavatel[0] = i;
+			nezavisla.push(i)
 
-	// výpočet hodnot nezávislé a závislé proměnné
-	for (i = intervalMin; i <= intervalMax; i++) {
+			var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
+			prijemRodiny.push(prijmyAVydajeRodinyPoZapocteniDavek[13])
+			prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2]),
+			druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5]),
+			tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8]),
+			pridavkyNaDeti.push(prijmyAVydajeRodinyPoZapocteniDavek[14]),
+			prispevekNaBydleni.push(prijmyAVydajeRodinyPoZapocteniDavek[15]),
+			prispevekNaZivobyti.push(prijmyAVydajeRodinyPoZapocteniDavek[16]),
+			doplatekNaBydleni.push(prijmyAVydajeRodinyPoZapocteniDavek[17]),
+			duchody.push(prijmyAVydajeRodinyPoZapocteniDavek[18]),
+			rodicovska.push(prijmyAVydajeRodinyPoZapocteniDavek[19]),
+			podporaVNezamestnanosti.push(prijmyAVydajeRodinyPoZapocteniDavek[20]),
+			nemocenska.push(prijmyAVydajeRodinyPoZapocteniDavek[21]),
+			ostatniPrijmy.push(prijmyAVydajeRodinyPoZapocteniDavek[22]),
+			najem.push(-prijmyAVydajeRodinyPoZapocteniDavek[23]),
+			poplatky.push(-prijmyAVydajeRodinyPoZapocteniDavek[24]);
+		}
+	}
+
+	// výpočet hodnot nezávislé proměnné a příjmu rodiny
+	for (i = intervalMin; i <= intervalMax; i = i + 1000) {
 
 		// nahrazení globální proměnné pro výpočet
 		if (simulace == 1) {
-			prvniDospelyPrvniZamestnavatel[0] = i * 1000;
+			prvniDospelyPrvniZamestnavatel[0] = i;
 		} else if (simulace == 2) {
-			prvniDospelyPrvniZamestnavatel[2] = i * 1000;
+			prvniDospelyPrvniZamestnavatel[2] = i;
 		} else if (simulace == 3) {
-			prvniDospelyPrvniZamestnavatel[4] = i * 1000;
+			prvniDospelyPrvniZamestnavatel[4] = i;
 		} else if (simulace == 4) {
-			bydleni[0] = i * 1000;
+			bydleni[0] = i;
 		}
 
-		nezavisla.push(i * 1000)
-		zavisla.push(spocitejPrijmyAVydajeRodinyPoZapocteniDavek()[13])
+		nezavisla.push(i)
+
+		var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
+		prijemRodiny.push(prijmyAVydajeRodinyPoZapocteniDavek[13])
+
+		prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2]),
+		druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5]),
+		tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8]),
+		pridavkyNaDeti.push(prijmyAVydajeRodinyPoZapocteniDavek[14]),
+		prispevekNaBydleni.push(prijmyAVydajeRodinyPoZapocteniDavek[15]),
+		prispevekNaZivobyti.push(prijmyAVydajeRodinyPoZapocteniDavek[16]),
+		doplatekNaBydleni.push(prijmyAVydajeRodinyPoZapocteniDavek[17]),
+		duchody.push(prijmyAVydajeRodinyPoZapocteniDavek[18]),
+		rodicovska.push(prijmyAVydajeRodinyPoZapocteniDavek[19]),
+		podporaVNezamestnanosti.push(prijmyAVydajeRodinyPoZapocteniDavek[20]),
+		nemocenska.push(prijmyAVydajeRodinyPoZapocteniDavek[21]),
+		ostatniPrijmy.push(prijmyAVydajeRodinyPoZapocteniDavek[22]),
+		najem.push(-prijmyAVydajeRodinyPoZapocteniDavek[23]),
+		poplatky.push(-prijmyAVydajeRodinyPoZapocteniDavek[24]);
 	}
 
 	// vrácení původních hodnot do globální proměnné
@@ -1500,7 +1558,8 @@ function dynamickyModelujRodinu(simulace = 0) {
 		bydleni[0] = backup;
 	}
 
-	nakresliGraf(nezavisla, zavisla, nazevNezavislePromenne);
+	nakresliGraf(nezavisla, nazevNezavislePromenne, prijemRodiny, prvniDospelyPoExekuci, druhyDospelyPoExekuci, tretiDospelyPoExekuci, pridavkyNaDeti, prispevekNaBydleni, prispevekNaZivobyti,
+		doplatekNaBydleni, duchody, rodicovska, podporaVNezamestnanosti, nemocenska, ostatniPrijmy, najem, poplatky)
 
 	return false;
 }
@@ -1511,11 +1570,12 @@ function dynamickyModelujRodinu(simulace = 0) {
 
 */
 
-function nakresliGraf(x = [], y = [], nazev = '') {
+function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExekuci = [], druhyDospelyPoExekuci = [], tretiDospelyPoExekuci = [], pridavkyNaDeti = [], prispevekNaBydleni = [], prispevekNaZivobyti,
+		doplatekNaBydleni = [], duchody = [], rodicovska = [], podporaVNezamestnanosti = [], nemocenska = [], ostatniPrijmy = [], najem = [], poplatky = []) {
 
 	Highcharts.chart('simulace', {
 		chart: {
-			type: 'line'
+			type: 'column'
 		},
 		title: {
 			text: 'Simulace příjmů rodiny'
@@ -1530,7 +1590,6 @@ function nakresliGraf(x = [], y = [], nazev = '') {
 			},
 		},
 		yAxis: {
-			min: 0,
 			title: {
 				text: 'celkové příjmy rodiny'
 			},
@@ -1540,8 +1599,22 @@ function nakresliGraf(x = [], y = [], nazev = '') {
 		},
 		tooltip: {
 			formatter: function () {
-				return nazev + ': <b>' + this.x + ' Kč</b><br/>' + this.series.name + ': <b>' + this.y + ' Kč</b>';
-			}
+				var s = '<b>' + nazev + ': ' + this.x + ' Kč</b>',
+					celkem = 0;
+
+				$.each(this.points, function () {
+					if (this.series.name != 'příjmy rodiny') {
+						s += '<br/><span style="color:' + this.color +'">' + this.series.name + '</span>: ' +
+							this.y + ' Kč';
+						celkem += this.y;
+					}
+				});
+
+				s += '<br/><b>celkový příjem rodiny: ' + celkem + ' Kč</b>';
+
+				return s;
+			},
+			shared: true
 		},
 		exporting: {
 			enabled: false
@@ -1551,13 +1624,61 @@ function nakresliGraf(x = [], y = [], nazev = '') {
 			text: ''
 		},
 		legend: {
-			enabled: false
+			enabled: true
+		},
+		plotOptions: {
+			series: {
+				stacking: 'stacked'
+			}
 		},
 		series: [{
-			name: 'celkové příjmy rodiny',
-			data: y,
-			color: 'red'
-		}]
+			name: 'čistý příjem 1. dospělého',
+			data: prvniDospelyPoExekuci
+		}, {
+			name: 'čistý příjem 2. dospělého',
+			data: druhyDospelyPoExekuci
+		}, {
+			name: 'čistý příjem 3. dospělého',
+			data: tretiDospelyPoExekuci
+		}, {
+			name: 'přídavky na děti',
+			data: pridavkyNaDeti
+		}, {
+			name: 'příspěvek na bydlení',
+			data: prispevekNaBydleni
+		}, {
+			name: 'příspěvek na živobytí',
+			data: prispevekNaZivobyti
+		}, {
+			name: 'doplatek na bydlení',
+			data: doplatekNaBydleni
+		}, {
+			name: 'důchody',
+			data: duchody
+		}, {
+			name: 'rodičovská',
+			data: rodicovska
+		}, {
+			name: 'podpora v nezaměstnanosti',
+			data: podporaVNezamestnanosti
+		}, {
+			name: 'nemocenská',
+			data: nemocenska
+		}, {
+			name: 'ostatní příjmy',
+			data: ostatniPrijmy
+		}, {
+			name: 'nájem',
+			data: najem
+		}, {
+			name: 'poplatky',
+			data: poplatky
+		}, {
+        	name: 'příjmy rodiny',
+        	type: 'spline',
+        	data: prijemRodiny,
+        	color: 'black'
+        }]
 	});
 
 	return false;
