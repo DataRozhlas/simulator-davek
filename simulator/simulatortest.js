@@ -440,8 +440,10 @@ function spocitejPridavkyNaDeti(cistyPrijemDomacnosti = [0, 0], prijemPrvnihoDos
 	}
 
 	// zvýšení dávky (pro každé dítě) o 300 Kč/měsíc, pokud měla alespoň jedna osoba v domácnosti příjem alespoň ve výší ŽM jednotlivce (3410) nebo má rodičovskou/mateřskou/podporu v nezaměstnanosti/příspěvek na péči
-	if ( (narokNaVyssiDavky) || (prijemPrvnihoDospeleho[0] > osamelyDospely) || (prijemDruhehoDospeleho[0] > osamelyDospely) ) {
-		pridavkyNaDeti += (pocetDetiPod6 + pocetDeti6az15 + pocetDeti15az26) * 300;
+	if (pridavkyNaDeti > 0) {
+		if (narokNaVyssiDavky || (prijemPrvnihoDospeleho[0] > osamelyDospely) || (prijemDruhehoDospeleho[0] > osamelyDospely)) {
+			pridavkyNaDeti = pridavkyNaDeti + (pocetDetiPod6 + pocetDeti6az15 + pocetDeti15az26) * 300;
+		}
 	}
 
 	return(pridavkyNaDeti)
@@ -876,7 +878,8 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], duc
 		nezabavitelnaCastkaProDalsiOsobu = 1556,
 		nezabavitelnaCastka = 0,
 		zakladPrijmuProExekuci = 0,
-		hranicePrijmuPoStrzeniNezabavitelneCastky = 9338;
+		zakladniNezabavitelnaCastka = 9338,
+		exekuce = 0;
 
 	// je potřeba spočítat daňový bonus, ten je později možno exekuovat
 	danovyBonusNaDeti = prijemDospeleho[0] - prijemDospeleho[1];
@@ -889,31 +892,41 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], duc
 
 	// pokud je bez exekucí, příjmy před exekucí a po exekuci se nemění
 	if( (prednostniExekuce + neprednostniExekuce ) == 0) {
-		return([prijmyPredExekuci, prijmyPredExekuci]);
+		return([prijmyPredExekuci, prijmyPredExekuci, 0]);
 	}
 
-	// Z čisté mzdy zaměstnance je odečtena základní nezabavitelná částka (minimum). Pokud je rovna nebo vyšší 9338 Kč, počítá se v této fázi s celou částkou 9338 Kč.
-	zakladPrijmuProExekuci = Math.min(prijmyPredExekuci - nezabavitelnaCastka, hranicePrijmuPoStrzeniNezabavitelneCastky);
+	// Pokud jsou příjmy nižší než nezabavitelná částka, nic se nestrhává
+	if (prijmyPredExekuci < nezabavitelnaCastka) {
+		return([prijmyPredExekuci, prijmyPredExekuci, 0])
 
-	// Pokud je aspoň jedna přednostní exekuce, může jít srážka až do dvou třetin příjmu po stržení nezabavitelné částky
-	if (prednostniExekuce > 0) {
-		prijmyPoExekuci = zakladPrijmuProExekuci / 3;
-
-	// u exekucí pro nepřednostní pohledávky je srážen dluh do výše jedné třetiny příjmů z této částky
 	} else {
-		prijmyPoExekuci = 2 * zakladPrijmuProExekuci / 3;
+
+		// Z čisté mzdy zaměstnance je odečtena základní nezabavitelná částka (minimum). Pokud je rovna nebo vyšší 9338 Kč, počítá se v této fázi s celou částkou 9338 Kč.
+		zakladPrijmuProExekuci = Math.min(prijmyPredExekuci - nezabavitelnaCastka, zakladniNezabavitelnaCastka);
+
+		// Pokud je aspoň jedna přednostní exekuce, může jít srážka až do dvou třetin příjmu po stržení nezabavitelné částky
+		if (prednostniExekuce > 0) {
+			prijmyPoExekuci = zakladPrijmuProExekuci / 3;
+
+		// U exekucí pro nepřednostní pohledávky je srážen dluh do výše jedné třetiny příjmů z této částky
+		} else {
+			prijmyPoExekuci = 2 * zakladPrijmuProExekuci / 3;
+		}
+
+		// u první exekuce se připočte daňový bonus na dítě
+		if ( (prednostniExekuce + neprednostniExekuce) == 1 ) {
+			prijmyPoExekuci = prijmyPoExekuci + nezabavitelnaCastka + danovyBonusNaDeti;
+
+		// pokud je ale exekucí víc, může další exekutor zabavit i daňový bonus, tj. do výpočtu vstupuje čistý příjem včetně bonusu
+		} else {
+			prijmyPoExekuci = prijmyPoExekuci + nezabavitelnaCastka;
+		}
+
 	}
 
-	// u první exekuce se připočte daňový bonus na dítě
-	if ( (prednostniExekuce + neprednostniExekuce) == 1 ) {
-		prijmyPoExekuci = prijmyPoExekuci + nezabavitelnaCastka + danovyBonusNaDeti;
+	exekuce = prijmyPredExekuci - prijmyPoExekuci;
 
-	// pokud je ale exekucí víc, může další exekutor zabavit i daňový bonus, tj. do výpočtu vstupuje čistý příjem včetně bonusu
-	} else {
-		prijmyPoExekuci = prijmyPoExekuci + nezabavitelnaCastka;
-	}
-
-	return([prijmyPredExekuci, prijmyPoExekuci]);
+	return([prijmyPredExekuci, prijmyPoExekuci, exekuce]);
 }
 
 
@@ -924,13 +937,14 @@ spočítej příjem domácnost po exekuci
 
 */
 
-function spocitejPrijemDomacnostiPoExekuci(prijemPrvnihoDospelehoPoExekuci = [0, 0], prijemDruhehoDospelehoPoExekuci = [0, 0], prijemTretihoDospelehoPoExekuci = [0, 0],
+function spocitejPrijemDomacnostiPoExekuci(prijemPrvnihoDospelehoPoExekuci = [0, 0, 0], prijemDruhehoDospelehoPoExekuci = [0, 0, 0], prijemTretihoDospelehoPoExekuci = [0, 0, 0],
 	pridavkyNaDeti = 0, prispevekNaBydleni = 0, prispevekNaZivobyti = 0, doplatekNaBydleni = 0, najem = 0, poplatky = 0) {
 
 	var prijemDomacnostiPredExekuci = 0,
 		prijemDomacnostiPoExekuci = 0,
 		prijemDomacnostiPredExekuciMinusNajem = 0,
-		prijemDomacnostiPoExekuciMinusNajem = 0;
+		prijemDomacnostiPoExekuciMinusNajem = 0,
+		exekuce = 0;
 
 	prijemDomacnostiPredExekuci = prijemPrvnihoDospelehoPoExekuci[0] + prijemDruhehoDospelehoPoExekuci[0] + prijemTretihoDospelehoPoExekuci[0] +
 		pridavkyNaDeti + prispevekNaBydleni + prispevekNaZivobyti + doplatekNaBydleni;
@@ -939,7 +953,9 @@ function spocitejPrijemDomacnostiPoExekuci(prijemPrvnihoDospelehoPoExekuci = [0,
 	prijemDomacnostiPredExekuciMinusNajem = prijemDomacnostiPredExekuci - najem - poplatky;
 	prijemDomacnostiPoExekuciMinusNajem = prijemDomacnostiPoExekuci - najem - poplatky;
 
-	return([prijemDomacnostiPredExekuci, prijemDomacnostiPoExekuci, prijemDomacnostiPredExekuciMinusNajem, prijemDomacnostiPoExekuciMinusNajem]);
+	exekuce = prijemPrvnihoDospelehoPoExekuci[2] + prijemDruhehoDospelehoPoExekuci[2] + prijemTretihoDospelehoPoExekuci[2];
+
+	return([prijemDomacnostiPredExekuci, prijemDomacnostiPoExekuci, prijemDomacnostiPredExekuciMinusNajem, prijemDomacnostiPoExekuciMinusNajem, exekuce]);
 }
 
 
@@ -1152,7 +1168,7 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 		nemocenska = druhyDospelyDalsiPrijmy[3],
 		podporaVNezamestnanosti = druhyDospelyDalsiPrijmy[2],
 		rodicovska = druhyDospelyDalsiPrijmy[1],
-		ostatniPrijmy = prvniDospelyDalsiPrijmy[4],
+		ostatniPrijmy = druhyDospelyDalsiPrijmy[4],
 		prednostniExekuce = druhyDospelyExekuce[0],
 		neprednostniExekuce = druhyDospelyExekuce[1],
 		dalsiVyzivovaneOsoby = druhyDospelyExekuce[2]);
@@ -1163,10 +1179,10 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 		nemocenska = tretiDospelyDalsiPrijmy[3],
 		podporaVNezamestnanosti = tretiDospelyDalsiPrijmy[2],
 		rodicovska = tretiDospelyDalsiPrijmy[1],
-		ostatniPrijmy = prvniDospelyDalsiPrijmy[4],
-		prednostniExekuce = prvniDospelyExekuce[0],
-		neprednostniExekuce = prvniDospelyExekuce[1],
-		dalsiVyzivovaneOsoby = prvniDospelyExekuce[2]);
+		ostatniPrijmy = tretiDospelyDalsiPrijmy[4],
+		prednostniExekuce = tretiDospelyExekuce[0],
+		neprednostniExekuce = tretiDospelyExekuce[1],
+		dalsiVyzivovaneOsoby = tretiDospelyExekuce[2]);
 
 	var rodinkaPrijemPoExekuci = spocitejPrijemDomacnostiPoExekuci(
 		prijemPrvnihoDospelehoPoExekuci = rodinkaPrijemPrvnihoDospelehoPoExekuci,
@@ -1235,6 +1251,12 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 
 	// poplatky
 	prijmyAVydajeRodinyPoZapocteniDavek[24] = Math.round(bydleni[1]);
+
+	// exekuce
+	prijmyAVydajeRodinyPoZapocteniDavek[25] = Math.round(rodinkaPrijemPrvnihoDospelehoPoExekuci[2]);
+	prijmyAVydajeRodinyPoZapocteniDavek[26] = Math.round(rodinkaPrijemDruhehoDospelehoPoExekuci[2]);
+	prijmyAVydajeRodinyPoZapocteniDavek[27] = Math.round(rodinkaPrijemTretihoDospelehoPoExekuci[2]);
+	prijmyAVydajeRodinyPoZapocteniDavek[28] = Math.round(rodinkaPrijemPoExekuci[4]);
 
 	return(prijmyAVydajeRodinyPoZapocteniDavek);
 }
@@ -1393,11 +1415,11 @@ function statickyModelujRodinu() {
 	var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
 
 	var text = "<p>První dospělý: čistý příjem " + prijmyAVydajeRodinyPoZapocteniDavek[0] + " Kč, včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[1] + " Kč, po exekuci " +
-		prijmyAVydajeRodinyPoZapocteniDavek[2] + " Kč</p>";
+		prijmyAVydajeRodinyPoZapocteniDavek[2] + " Kč, exekuce: " + prijmyAVydajeRodinyPoZapocteniDavek[25] + " Kč</p>";
 		text += "<p>Druhý dospělý: čistý příjem " + prijmyAVydajeRodinyPoZapocteniDavek[3] + " Kč, včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[4] + " Kč, po exekuci " +
-		prijmyAVydajeRodinyPoZapocteniDavek[5] + " Kč</p>";
+		prijmyAVydajeRodinyPoZapocteniDavek[5] + " Kč, exekuce: " + prijmyAVydajeRodinyPoZapocteniDavek[26] + " Kč</p>";
 		text += "<p>Třetí dospělý: čistý příjem " + prijmyAVydajeRodinyPoZapocteniDavek[6] + " Kč, včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[7] + " Kč, po exekuci " +
-		prijmyAVydajeRodinyPoZapocteniDavek[8] + " Kč</p>";
+		prijmyAVydajeRodinyPoZapocteniDavek[8] + " Kč, exekuce: " + prijmyAVydajeRodinyPoZapocteniDavek[27] + " Kč</p>";
 		text += "<p>Rodina bez nákladů na bydlení: čistý příjem " + prijmyAVydajeRodinyPoZapocteniDavek[9] + " Kč, včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[10] + " Kč, po exekuci " +
 		prijmyAVydajeRodinyPoZapocteniDavek[11] + " Kč</p>";
 		text += "<p><strong>Rodina po započtení nákladů na bydlení: včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[12] + " Kč, po exekuci " + prijmyAVydajeRodinyPoZapocteniDavek[13] + " Kč</strong></p>";
@@ -1412,6 +1434,7 @@ function statickyModelujRodinu() {
 		text += "<p><font color=\"green\">Ostatní příjmy: " + prijmyAVydajeRodinyPoZapocteniDavek[22] + " Kč.</font></p>";
 		text += "<p><font color=\"red\">Nájem: " + prijmyAVydajeRodinyPoZapocteniDavek[23] + " Kč.</font></p>";
 		text += "<p><font color=\"red\">Poplatky: " + prijmyAVydajeRodinyPoZapocteniDavek[24] + " Kč.</font>)</p>";
+		text += "<p><font color=\"red\">Zaplaceno na exekucích: " + prijmyAVydajeRodinyPoZapocteniDavek[28] + " Kč.</font>)</p>";
 
 	document.getElementById('results').innerHTML = text;
 
@@ -1463,7 +1486,8 @@ function dynamickyModelujRodinu(simulace = 0) {
 		nemocenska = [],
 		ostatniPrijmy = [],
 		najem = [],
-		poplatky = [];
+		poplatky = [],
+		exekuce = [];
 
 	if (simulace == 1) {
 		nazevNezavislePromenne = 'příjem prvního dospělého na HPP';
@@ -1508,7 +1532,8 @@ function dynamickyModelujRodinu(simulace = 0) {
 			nemocenska.push(prijmyAVydajeRodinyPoZapocteniDavek[21]),
 			ostatniPrijmy.push(prijmyAVydajeRodinyPoZapocteniDavek[22]),
 			najem.push(-prijmyAVydajeRodinyPoZapocteniDavek[23]),
-			poplatky.push(-prijmyAVydajeRodinyPoZapocteniDavek[24]);
+			poplatky.push(-prijmyAVydajeRodinyPoZapocteniDavek[24])
+			exekuce.push(prijmyAVydajeRodinyPoZapocteniDavek[28]);
 		}
 	}
 
@@ -1544,7 +1569,8 @@ function dynamickyModelujRodinu(simulace = 0) {
 		nemocenska.push(prijmyAVydajeRodinyPoZapocteniDavek[21]),
 		ostatniPrijmy.push(prijmyAVydajeRodinyPoZapocteniDavek[22]),
 		najem.push(-prijmyAVydajeRodinyPoZapocteniDavek[23]),
-		poplatky.push(-prijmyAVydajeRodinyPoZapocteniDavek[24]);
+		poplatky.push(-prijmyAVydajeRodinyPoZapocteniDavek[24])
+		exekuce.push(prijmyAVydajeRodinyPoZapocteniDavek[28]);
 	}
 
 	// vrácení původních hodnot do globální proměnné
@@ -1559,7 +1585,7 @@ function dynamickyModelujRodinu(simulace = 0) {
 	}
 
 	nakresliGraf(nezavisla, nazevNezavislePromenne, prijemRodiny, prvniDospelyPoExekuci, druhyDospelyPoExekuci, tretiDospelyPoExekuci, pridavkyNaDeti, prispevekNaBydleni, prispevekNaZivobyti,
-		doplatekNaBydleni, duchody, rodicovska, podporaVNezamestnanosti, nemocenska, ostatniPrijmy, najem, poplatky)
+		doplatekNaBydleni, duchody, rodicovska, podporaVNezamestnanosti, nemocenska, ostatniPrijmy, najem, poplatky, exekuce)
 
 	return false;
 }
@@ -1571,17 +1597,18 @@ function dynamickyModelujRodinu(simulace = 0) {
 */
 
 function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExekuci = [], druhyDospelyPoExekuci = [], tretiDospelyPoExekuci = [], pridavkyNaDeti = [], prispevekNaBydleni = [], prispevekNaZivobyti,
-		doplatekNaBydleni = [], duchody = [], rodicovska = [], podporaVNezamestnanosti = [], nemocenska = [], ostatniPrijmy = [], najem = [], poplatky = []) {
-
+		doplatekNaBydleni = [], duchody = [], rodicovska = [], podporaVNezamestnanosti = [], nemocenska = [], ostatniPrijmy = [], najem = [], poplatky = [], exekuce = []) {
+console.log(prvniDospelyPoExekuci)
+console.log(druhyDospelyPoExekuci)
 	Highcharts.chart('simulace', {
 		chart: {
 			type: 'column'
 		},
 		title: {
-			text: 'Simulace příjmů rodiny'
+			text: 'Příjmy domácnosti × ' + nazev
 		},
 		subtitle: {
-			text: 'celkové příjmy rodiny × ' + nazev
+			text: 'Dospělí: <b>' + slozeniDomacnosti[0] + '</b>, děti pod 6: <b>' + slozeniDomacnosti[1] + '</b>, děti 6 až 15: <b>' + slozeniDomacnosti[2] + '</b>, děti 15 až 26: <b>' + slozeniDomacnosti[3] + '</b>'
 		},
 		xAxis: {
 			categories: x,
@@ -1595,7 +1622,14 @@ function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExeku
 			},
 			labels: {
 				format: '{value}'
-			}
+			},
+			plotLines: [{
+				value: 0,
+				color: 'gray',
+				dashStyle: 'shortdash',
+				width: 2
+			}],
+			reversedStacks: false
 		},
 		tooltip: {
 			formatter: function () {
@@ -1674,11 +1708,28 @@ function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExeku
 			name: 'poplatky',
 			data: poplatky
 		}, {
-        	name: 'příjmy rodiny',
-        	type: 'spline',
-        	data: prijemRodiny,
-        	color: 'black'
-        }]
+			type: 'spline',
+			name: 'exekuce',
+			data: exekuce,
+			color: 'red',
+			marker: {
+				lineWidth: 2,
+				lineColor: 'red',
+				fillColor: 'white',
+				symbol: 'circle'
+			}
+		}, {
+			type: 'spline',
+			name: 'příjmy domácnosti',
+			data: prijemRodiny,
+			color: 'black',
+			marker: {
+				lineWidth: 2,
+				lineColor: 'black',
+				fillColor: 'white',
+				symbol: 'circle'
+			}
+		}]
 	});
 
 	return false;
