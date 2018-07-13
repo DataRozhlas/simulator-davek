@@ -646,10 +646,26 @@ function vyplnExekuce() {
 	// vyplnění z globálních proměnných
 	document.getElementById("prvniDospelyPrednostniExekuce").checked = prvniDospelyExekuce[0];
 	document.getElementById("prvniDospelyNeprednostniExekuce").checked = prvniDospelyExekuce[1];
+	document.getElementById("prvniDospelyDalsiVyzivovaneOsoby").value = prvniDospelyExekuce[2];
 	document.getElementById("druhyDospelyPrednostniExekuce").checked = druhyDospelyExekuce[0];
 	document.getElementById("druhyDospelyNeprednostniExekuce").checked = druhyDospelyExekuce[1];
+	document.getElementById("druhyDospelyDalsiVyzivovaneOsoby").value = druhyDospelyExekuce[2];
 	document.getElementById("tretiDospelyPrednostniExekuce").checked = tretiDospelyExekuce[0];
 	document.getElementById("tretiDospelyNeprednostniExekuce").checked = tretiDospelyExekuce[1];
+	document.getElementById("tretiDospelyDalsiVyzivovaneOsoby").value = tretiDospelyExekuce[2];
+
+	// první nastavení formuláře pro počet dětí u exekuce
+	if((prvniDospelyExekuce[0]) || (prvniDospelyExekuce[1])) {
+		document.getElementById("prvniDospelyDalsiVyzivovaneOsobyForm").style.visibility = "visible";
+	}
+
+	if((druhyDospelyExekuce[0]) || (druhyDospelyExekuce[1])) {
+		document.getElementById("druhyDospelyDalsiVyzivovaneOsobyForm").style.visibility = "visible";
+	}
+
+	if((tretiDospelyExekuce[0]) || (tretiDospelyExekuce[1])) {
+		document.getElementById("tretiDospelyDalsiVyzivovaneOsobyForm").style.visibility = "visible";
+	}
 
 	// zapnutí/vypnutí formuláře pro počet vyživovaných osob
 	var prvniDospelyPrednostniExekuceCheck = document.getElementById("prvniDospelyPrednostniExekuce"),
@@ -1138,66 +1154,77 @@ function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExeku
 			enabled: true
 		},
 		plotOptions: {
-			series: {
-				stacking: 'stacked'
-			}
 		},
 		series: [{
 			name: 'čistý příjem 1. dospělého ze zaměstnání (po exekuci)',
 			data: prvniDospelyPoExekuci,
-			color: colors[0]
+			color: colors[0],
+			stacking: 'stacked'
 		}, {
 			name: 'čistý příjem 2. dospělého ze zaměstnání (po exekuci)',
 			data: druhyDospelyPoExekuci,
-			color: colors[1]
+			color: colors[1],
+			stacking: 'stacked'
 		}, {
 			name: 'čistý příjem 3. dospělého ze zaměstnání (po exekuci)',
 			data: tretiDospelyPoExekuci,
-			color: colors[2]
+			color: colors[2],
+			stacking: 'stacked'
 		}, {
 			name: 'přídavky na děti',
 			data: pridavkyNaDeti,
-			color: colors[3]
+			color: colors[3],
+			stacking: 'stacked'
 		}, {
 			name: 'příspěvek na bydlení',
 			data: prispevekNaBydleni,
-			color: colors[4]
+			color: colors[4],
+			stacking: 'stacked'
 		}, {
 			name: 'příspěvek na živobytí',
 			data: prispevekNaZivobyti,
-			color: colors[5]
+			color: colors[5],
+			stacking: 'stacked'
 		}, {
 			name: 'doplatek na bydlení',
 			data: doplatekNaBydleni,
-			color: colors[6]
+			color: colors[6],
+			stacking: 'stacked'
 		}, {
 			name: 'důchody',
 			data: duchody,
-			color: colors[9]
+			color: colors[9],
+			stacking: 'stacked'
 		}, {
 			name: 'rodičovský příspěvek',
 			data: rodicovska,
-			color: colors[10]
+			color: colors[10],
+			stacking: 'stacked'
 		}, {
 			name: 'podpora v nezaměstnanosti',
 			data: podporaVNezamestnanosti,
-			color: colors[11]
+			color: colors[11],
+			stacking: 'stacked'
 		}, {
 			name: 'nemocenská',
 			data: nemocenska,
-			color: colors[12]
+			color: colors[12],
+			stacking: 'stacked'
 		}, {
 			name: 'ostatní příjmy',
 			data: ostatniPrijmy,
-			color: colors[13]
+			color: colors[13],
+			stacking: 'stacked'
 		}, {
 			name: 'nájem',
 			data: najem,
-			color: colors[8]
+			color: colors[8],
+			stacking: 'stacked'
 		}, {
 			name: 'poplatky',
 			data: poplatky,
-			color: colors[7]
+			color: colors[7],
+			stacking: 'stacked'
 		}, {
 			type: 'spline',
 			name: 'srážky ze mzdy',
@@ -2398,6 +2425,7 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 
 	// všechny příjmy domácnosti vč. dávek před a po exekuci mínus náklady na bydlení
 	prijmyAVydajeRodinyPoZapocteniDavek[12] = Math.round(rodinkaPrijemPoExekuci[2] - bydleni[0] - bydleni[1]);
+
 	prijmyAVydajeRodinyPoZapocteniDavek[13] = Math.round(rodinkaPrijemPoExekuci[3] - bydleni[0] - bydleni[1]);
 
 	// přídavky na děti
@@ -2565,6 +2593,44 @@ function nastavRodinu3() {
 // nájem, poplatky, bydlí ve vlastním nebo družstevním bytě?, bydlí na ubytovně, chatě nebo v podnájmu?,
 // velikost obce (1 = Praha, 2 = nad 100 000, 3 = nad 50 000, 4 = nad 10 000, 5 = pod 10 000), místně obvyklé náklady stanovené úřadem práce
 	bydleni = [20000, 0, false, false, 1, 0];
+
+	vyplnSlozeniDomacnosti()
+}
+
+
+
+function nastavRodinu4() {
+
+	// pokud je v hlavním okně otevřené nastavení rodiny, nepřepsalo by se; proto nejdřív vyčištění okna
+	document.getElementById("mainwindow").innerHTML = "<div></div>";
+
+// hrubý příjem na HPP, výjimka z minimálního základu?, hrubý příjem na DPČ, platí zdravotní jinde?, hrubý příjem na DPP, platí zdravotní jinde?, růžový papír?, počet vyživovaných dětí
+	prvniDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, true, 1],
+	prvniDospelyDruhyZamestnavatel = [0, false, 0, false, 0, false, false, 0],
+	druhyDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, false, 0],
+	druhyDospelyDruhyZamestnavatel = [0, false, 0, false, 0, false, false, 0],
+	tretiDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, false, 0],
+	tretiDospelyDruhyZamestnavatel = [0, false, 0, false, 0, false, false, 0],
+
+// důchody, rodičovský příspěvek, podpora v nezaměstnanosti, nemocenská, ostatní příjmy
+	prvniDospelyDalsiPrijmy = [0, 0, 0, 0, 0],
+	druhyDospelyDalsiPrijmy = [0, 0, 0, 0, 0],
+	tretiDospelyDalsiPrijmy = [0, 0, 0, 0, 0],
+
+// počet přednostních exekucí, počet nepřednostních exekucí, počet dalších vyživovaných osob
+	prvniDospelyExekuce = [1, 0, 1],
+	druhyDospelyExekuce = [0, 0, 0],
+	tretiDospelyExekuce = [0, 0, 0],
+
+// počet dospělých, počet dětí pod 6 let, počet dětí 6 až 15 let, počet nezaopatřených dětí 15 až 26 let, počet členů domácnosti, počet členů domácnosti s trvalým bydlištěm jinde
+	slozeniDomacnosti = [1, 1, 0, 0, 2, 0],
+
+// kolik členů domácnosti má snížené minimum na existenční, má rodina nárok na vyšší dávky na děti (pobírá rodičovskou, mateřskou, nebo podporu v nezaměstnanosti)?
+	socialOptional = [0, false],
+
+// nájem, poplatky, bydlí ve vlastním nebo družstevním bytě?, bydlí na ubytovně, chatě nebo v podnájmu?,
+// velikost obce (1 = Praha, 2 = nad 100 000, 3 = nad 50 000, 4 = nad 10 000, 5 = pod 10 000), místně obvyklé náklady stanovené úřadem práce
+	bydleni = [6000, 0, false, true, 3, 0];
 
 	vyplnSlozeniDomacnosti()
 }
