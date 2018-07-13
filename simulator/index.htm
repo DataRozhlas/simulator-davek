@@ -4,540 +4,69 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-<script type="text/javascript" src="simulatortest.js"></script>
+<script type="text/javascript" src="simulator.js"></script>
+<link rel="stylesheet" type="text/css" href="styles.css">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 </head>
 
 <body>
 
-<div class="kalkulacka">
+<div id="container">
 
-  <h1>Simulátor sociálních dávek</h1>
+  <div id="title">Simulátor sociálních dávek</div>
+
+  <div id="upperwindow">Konfigurace domácností pro testování
+
+    <button class="uw-button" type="button" onclick="nastavRodinu1()">Domácnost 1<sup><div class="tooltip">?<span class="tooltiptext">Matka s 1 dítětem (8 let) bydlí na ubytovně nebo jinde, kde má podnájemní smlouvu (platí 6000 Kč) v Praze</span></div></sup></button>
+    <button class="uw-button" type="button" onclick="nastavRodinu2()">Domácnost 2<sup><div class="tooltip">?<span class="tooltiptext">Mladý dospělý bydlí u rodičů, kteří nemají formální příjem (2 dospělí nezaměstnaní, 2 děti 6 až 15 a jedno 18+), nájem 15 tisíc v Praze</span></div></sup></button>
+    <button class="uw-button" type="button" onclick="nastavRodinu3()">Domácnost 3<sup><div class="tooltip">?<span class="tooltiptext">Domácnost s dvěma dětmi (obě do 6 let), v Praze, kde oba dospělí mají hrubou mzdu na HPP 25 tisíc, nájem 20 tisíc</span></div></sup></button>
+  </div>
 
 
-  <div><button type="button" onclick="nastavRodinu1()" style="margin: 20px; font-size: 30px">Rodinka 1</button>
-  Matka s 1 dítětem (8 let) bydlí na ubytovně nebo jinde, kde má podnájemní smlouvu (platí 6000 Kč) v Praze</div>
+  <div id="middlewindowgroup">
 
-  <div><button type="button" onclick="nastavRodinu2()" style="margin: 20px; font-size: 30px">Rodinka 2</button>
-  Mladý dospělý bydlí u rodičů, kteří nemají formální příjem (2 dospělí nezaměstnaní, 2 děti 6 až 15 a jedno 18+), nájem 15 tisíc v Praze</div>
+    <div id="buttonwindowgroup">
 
-  <div><button type="button" onclick="nastavRodinu3()" style="margin: 20px; font-size: 30px">Rodinka 3</button>
-  Domácnost s dvěma dětmi (obě do 6 let), v Praze, kde oba dospělí mají hrubou mzdu na HPP 25 tisíc, nájem 20 tisíc</div>
+      <div id="upperbuttonwindow">
 
-	<div class="oddil">
-		<h3>Příjmy</h3>
+        <h2 id="bw-title">Nastavení domácnosti</h2>
 
-		<form class="form-inline">
- 			<h4>První dospělý, první zaměstnavatel</h4>
-  			Příjem na HPP
-  			<input type="text" id="prvniDospelyPrvniZamestnavatelHPPPrijem" value="0" style="width: 50px">
-  			Má výjimku z minimálního základu?
-  			<select type="text" id="prvniDospelyPrvniZamestnavatelHPPVyjimka">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPČ
-  			<input type="text" id="prvniDospelyPrvniZamestnavatelDPCPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="prvniDospelyPrvniZamestnavatelDPCZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPP
-  			<input type="text" id="prvniDospelyPrvniZamestnavatelDPPPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="prvniDospelyPrvniZamestnavatelDPPZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Podepsal <font color="pink">růžový</font> papír?
-  			<select type="text" id="prvniDospelyPrvniZamestnavatelRuzovyPapir">
-  				<option value="true" selected="selected">ANO</option>
-  				<option value="false">NE</option>
-  			</select>
-  			Počet vyživovaných nezaopatřených dětí
-  			<select type="text" id="prvniDospelyPrvniZamestnavatelVyzivovaneDeti">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  			</select>
+        <button class="bw-button" type="button" onclick="vyplnSlozeniDomacnosti()">Složení domácnosti <sup><div class="tooltip">?<span class="tooltiptext">Pro přídavky na děti a náklady na bydlení</span></div></sup></button>
+        <button class="bw-button" type="button" onclick="vyplnPrijmyPrvnihoDospeleho()">Příjmy 1. dospělého</button>
+        <button class="bw-button" type="button" onclick="vyplnPrijmyDruhehoDospeleho()">Příjmy 2. dospělého</button>
+        <button class="bw-button" type="button" onclick="vyplnPrijmyTretihoDospeleho()">Příjmy 3. dospělého</button>
+        <button class="bw-button" type="button" onclick="vyplnExekuce()">Exekuce</button>
+        <button class="bw-button" type="button" onclick="vyplnNakladyNaBydleni()">Náklady na bydlení</button>
 
- 			<h4>První dospělý, druhý zaměstnavatel</h4>
-  			Příjem na HPP
-  			<input type="text" id="prvniDospelyDruhyZamestnavatelHPPPrijem" value="0" style="width: 50px">
-  			Má výjimku z minimálního základu?
-  			<select type="text" id="prvniDospelyDruhyZamestnavatelHPPVyjimka">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPČ
-  			<input type="text" id="prvniDospelyDruhyZamestnavatelDPCPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="prvniDospelyDruhyZamestnavatelDPCZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPP
-  			<input type="text" id="prvniDospelyDruhyZamestnavatelDPPPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="prvniDospelyDruhyZamestnavatelDPPZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Podepsal <font color="pink">růžový</font> papír?
-  			<select type="text" id="prvniDospelyDruhyZamestnavatelRuzovyPapir">
-  				<option value="true" selected="selected">ANO</option>
-  				<option value="false">NE</option>
-  			</select>
-  			Počet vyživovaných nezaopatřených dětí
-  			<select type="text" id="prvniDospelyDruhyZamestnavatelVyzivovaneDeti">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  			</select>
+      </div>
 
- 			<h4>První dospělý, třetí zaměstnavatel</h4>
-  			Příjem na HPP
-  			<input type="text" id="prvniDospelyTretiZamestnavatelHPPPrijem" value="0" style="width: 50px">
-  			Má výjimku z minimálního základu?
-  			<select type="text" id="prvniDospelyTretiZamestnavatelHPPVyjimka">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPČ
-  			<input type="text" id="prvniDospelyTretiZamestnavatelDPCPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="prvniDospelyTretiZamestnavatelDPCZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPP
-  			<input type="text" id="prvniDospelyTretiZamestnavatelDPPPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="prvniDospelyTretiZamestnavatelDPPZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Podepsal <font color="pink">růžový</font> papír?
-  			<select type="text" id="prvniDospelyTretiZamestnavatelRuzovyPapir">
-  				<option value="true" selected="selected">ANO</option>
-  				<option value="false">NE</option>
-  			</select>
-  			Počet vyživovaných nezaopatřených dětí
-  			<select type="text" id="prvniDospelyTretiZamestnavatelVyzivovaneDeti">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  			</select>
+      <div id="lowerbuttonwindow">
 
-      <h4>První dospělý, další příjmy</h4>
-        Důchod
-        <input type="text" id="prvniDospelyDuchody" value="0" style="width: 50px">
-        Rodičovská
-        <input type="text" id="prvniDospelyRodicovska" value="0" style="width: 50px">
-        Podpora v nezaměstnanosti
-        <input type="text" id="prvniDospelyPodporaVNezamestnanosti" value="0" style="width: 50px">
-        Nemocenská
-        <input type="text" id="prvniDospelyNemocenska" value="0" style="width: 50px">
-        Ostatní příjmy
-        <input type="text" id="prvniDospelyOstatniPrijmy" value="0" style="width: 50px">
+        <h2 id="bw-title">Výpočet</h2>
 
- 			<h4>Druhý dospělý, první zaměstnavatel</h4>
-  			Příjem na HPP
-  			<input type="text" id="druhyDospelyPrvniZamestnavatelHPPPrijem" value="0" style="width: 50px">
-  			Má výjimku z minimálního základu?
-  			<select type="text" id="druhyDospelyPrvniZamestnavatelHPPVyjimka">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPČ
-  			<input type="text" id="druhyDospelyPrvniZamestnavatelDPCPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="druhyDospelyPrvniZamestnavatelDPCZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPP
-  			<input type="text" id="druhyDospelyPrvniZamestnavatelDPPPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="druhyDospelyPrvniZamestnavatelDPPZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Podepsal <font color="pink">růžový</font> papír?
-  			<select type="text" id="druhyDospelyPrvniZamestnavatelRuzovyPapir">
-  				<option value="true" selected="selected">ANO</option>
-  				<option value="false">NE</option>
-  			</select>
-  			Počet vyživovaných nezaopatřených dětí
-  			<select type="text" id="druhyDospelyPrvniZamestnavatelVyzivovaneDeti">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  			</select>
+        <button class="bw-button" type="button" onclick="statickyModelujRodinu()"><strong>Spočítat sociální dávky</strong></button>
+        <button class="bw-button" type="button" onclick="dynamickyModelujRodinu(1)"><strong>Příjmy domácnosti × HPP </strong><sup><div class="tooltip">?<span class="tooltiptext">NĚJAKÝ POVÍDÁNÍ</span></div></sup></button>
+        <button class="bw-button" type="button" onclick="dynamickyModelujRodinu(2)"><strong>Příjmy domácnosti × DPČ </strong><sup><div class="tooltip">?<span class="tooltiptext">NĚJAKÝ POVÍDÁNÍ</span></div></sup></button>
+        <button class="bw-button" type="button" onclick="dynamickyModelujRodinu(3)"><strong>Příjmy domácnosti × DPP </strong><sup><div class="tooltip">?<span class="tooltiptext">NĚJAKÝ POVÍDÁNÍ</span></div></sup></button>
+        <button class="bw-button" type="button" onclick="dynamickyModelujRodinu(4)"><strong>Příjmy domácnosti × nájem </strong><sup><div class="tooltip">?<span class="tooltiptext">NĚJAKÝ POVÍDÁNÍ</span></div></sup></button>
 
- 			<h4>Druhý dospělý, druhý zaměstnavatel</h4>
-  			Příjem na HPP
-  			<input type="text" id="druhyDospelyDruhyZamestnavatelHPPPrijem" value="0" style="width: 50px">
-  			Má výjimku z minimálního základu?
-  			<select type="text" id="druhyDospelyDruhyZamestnavatelHPPVyjimka">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPČ
-  			<input type="text" id="druhyDospelyDruhyZamestnavatelDPCPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="druhyDospelyDruhyZamestnavatelDPCZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPP
-  			<input type="text" id="druhyDospelyDruhyZamestnavatelDPPPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="druhyDospelyDruhyZamestnavatelDPPZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Podepsal <font color="pink">růžový</font> papír?
-  			<select type="text" id="druhyDospelyDruhyZamestnavatelRuzovyPapir">
-  				<option value="true" selected="selected">ANO</option>
-  				<option value="false">NE</option>
-  			</select>
-  			Počet vyživovaných nezaopatřených dětí
-  			<select type="text" id="druhyDospelyDruhyZamestnavatelVyzivovaneDeti">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  			</select>
+      </div>
 
- 			<h4>Druhý dospělý, třetí zaměstnavatel</h4>
-  			Příjem na HPP
-  			<input type="text" id="druhyDospelyTretiZamestnavatelHPPPrijem" value="0" style="width: 50px">
-  			Má výjimku z minimálního základu?
-  			<select type="text" id="druhyDospelyTretiZamestnavatelHPPVyjimka">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPČ
-  			<input type="text" id="druhyDospelyTretiZamestnavatelDPCPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="druhyDospelyTretiZamestnavatelDPCZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPP
-  			<input type="text" id="druhyDospelyTretiZamestnavatelDPPPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="druhyDospelyTretiZamestnavatelDPPZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Podepsal <font color="pink">růžový</font> papír?
-  			<select type="text" id="druhyDospelyTretiZamestnavatelRuzovyPapir">
-  				<option value="true" selected="selected">ANO</option>
-  				<option value="false">NE</option>
-  			</select>
-  			Počet vyživovaných nezaopatřených dětí
-  			<select type="text" id="druhyDospelyTretiZamestnavatelVyzivovaneDeti">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  			</select>
+    </div>
 
-      <h4>Druhý dospělý, další příjmy</h4>
-        Důchod
-        <input type="text" id="druhyDospelyDuchody" value="0" style="width: 50px">
-        Rodičovská
-        <input type="text" id="druhyDospelyRodicovska" value="0" style="width: 50px">
-        Podpora v nezaměstnanosti
-        <input type="text" id="druhyDospelyPodporaVNezamestnanosti" value="0" style="width: 50px">
-        Nemocenská
-        <input type="text" id="druhyDospelyNemocenska" value="0" style="width: 50px">
-        Ostatní příjmy
-        <input type="text" id="druhyDospelyOstatniPrijmy" value="0" style="width: 50px">
+    <div id="mainwindow">
 
- 			<h4>Třetí dospělý, první zaměstnavatel</h4>
-  			Příjem na HPP
-  			<input type="text" id="tretiDospelyPrvniZamestnavatelHPPPrijem" value="0" style="width: 50px">
-  			Má výjimku z minimálního základu?
-  			<select type="text" id="tretiDospelyPrvniZamestnavatelHPPVyjimka">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPČ
-  			<input type="text" id="tretiDospelyPrvniZamestnavatelDPCPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="tretiDospelyPrvniZamestnavatelDPCZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPP
-  			<input type="text" id="tretiDospelyPrvniZamestnavatelDPPPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="tretiDospelyPrvniZamestnavatelDPPZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Podepsal <font color="pink">růžový</font> papír?
-  			<select type="text" id="tretiDospelyPrvniZamestnavatelRuzovyPapir">
-  				<option value="true" selected="selected">ANO</option>
-  				<option value="false">NE</option>
-  			</select>
-  			Počet vyživovaných nezaopatřených dětí
-  			<select type="text" id="tretiDospelyPrvniZamestnavatelVyzivovaneDeti">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  			</select>
+      <div id="mw-text">
 
- 			<h4>Třetí dospělý, druhý zaměstnavatel</h4>
-  			Příjem na HPP
-  			<input type="text" id="tretiDospelyDruhyZamestnavatelHPPPrijem" value="0" style="width: 50px">
-  			Má výjimku z minimálního základu?
-  			<select type="text" id="tretiDospelyDruhyZamestnavatelHPPVyjimka">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPČ
-  			<input type="text" id="tretiDospelyDruhyZamestnavatelDPCPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="tretiDospelyDruhyZamestnavatelDPCZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPP
-  			<input type="text" id="tretiDospelyDruhyZamestnavatelDPPPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="tretiDospelyDruhyZamestnavatelDPPZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Podepsal <font color="pink">růžový</font> papír?
-  			<select type="text" id="tretiDospelyDruhyZamestnavatelRuzovyPapir">
-  				<option value="true" selected="selected">ANO</option>
-  				<option value="false">NE</option>
-  			</select>
-  			Počet vyživovaných nezaopatřených dětí
-  			<select type="text" id="tretiDospelyDruhyZamestnavatelVyzivovaneDeti">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  			</select>
+        <h2 id="bw-title">Klikněte na tlačítka pro nastavení parametrů domácnosti (vlevo nahoře) nebo výpočet dávek (vlevo dole)</h2>
 
- 			<h4>Třetí dospělý, třetí zaměstnavatel</h4>
-  			Příjem na HPP
-  			<input type="text" id="tretiDospelyTretiZamestnavatelHPPPrijem" value="0" style="width: 50px">
-  			Má výjimku z minimálního základu?
-  			<select type="text" id="tretiDospelyTretiZamestnavatelHPPVyjimka">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPČ
-  			<input type="text" id="tretiDospelyTretiZamestnavatelDPCPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="tretiDospelyTretiZamestnavatelDPCZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Příjem na DPP
-  			<input type="text" id="tretiDospelyTretiZamestnavatelDPPPrijem" value="0" style="width: 50px">
-  			Platí zdravotní jinde?
-  			<select type="text" id="tretiDospelyTretiZamestnavatelDPPZdravotni">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Podepsal <font color="pink">růžový</font> papír?
-  			<select type="text" id="tretiDospelyTretiZamestnavatelRuzovyPapir">
-  				<option value="true" selected="selected">ANO</option>
-  				<option value="false">NE</option>
-  			</select>
-  			Počet vyživovaných nezaopatřených dětí
-  			<select type="text" id="tretiDospelyTretiZamestnavatelVyzivovaneDeti">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  			</select>
+      </div>
 
-      <h4>Třetí dospělý, další příjmy</h4>
-        Důchod
-        <input type="text" id="tretiDospelyDuchody" value="0" style="width: 50px">
-        Rodičovská
-        <input type="text" id="tretiDospelyRodicovska" value="0" style="width: 50px">
-        Podpora v nezaměstnanosti
-        <input type="text" id="tretiDospelyPodporaVNezamestnanosti" value="0" style="width: 50px">
-        Nemocenská
-        <input type="text" id="tretiDospelyNemocenska" value="0" style="width: 50px">
-        Ostatní příjmy
-        <input type="text" id="tretiDospelyOstatniPrijmy" value="0" style="width: 50px">
+    </div>
 
-    <h3>Exekuce</h3>
+  </div>
 
-      <h4>Exekuce na prvního dospělého</h4>
-        Přednostní exekuce
-        <input type="text" id="prvniDospelyPrednostniExekuce" value="0" style="width: 50px">
-        Nepřednostní exekuce
-        <input type="text" id="prvniDospelyNeprednostniExekuce" value="0" style="width: 50px">
-        Další vyživované osoby
-        <input type="text" id="prvniDospelyDalsiVyzivovaneOsoby" value="0" style="width: 50px">
-
-      <h4>Exekuce na druhého dospělého</h4>
-        Přednostní exekuce
-        <input type="text" id="druhyDospelyPrednostniExekuce" value="0" style="width: 50px">
-        Nepřednostní exekuce
-        <input type="text" id="druhyDospelyNeprednostniExekuce" value="0" style="width: 50px">
-        Další vyživované osoby
-        <input type="text" id="druhyDospelyDalsiVyzivovaneOsoby" value="0" style="width: 50px">
-
-      <h4>Exekuce na třetího dospělého</h4>
-        Přednostní exekuce
-        <input type="text" id="tretiDospelyPrednostniExekuce" value="0" style="width: 50px">
-        Nepřednostní exekuce
-        <input type="text" id="tretiDospelyNeprednostniExekuce" value="0" style="width: 50px">
-        Další vyživované osoby
-        <input type="text" id="tretiDospelyDalsiVyzivovaneOsoby" value="0" style="width: 50px">
-
-		<h3>Složení domácnosti</h3>
-    <p><i>Pro přídavky na děti a náklady na bydlení</i></p>
-
-  			Počet dospělých
-  			<select type="text" id="pocetDospelych">
-  				<option value="0">0</option>
-  				<option value="1">1</option>
-  				<option value="2" selected="selected">2</option>
-  				<option value="3">3</option>
-  			</select>
-			  Počet dětí do 6 let
-  			<select type="text" id="pocetDetiPod6">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  			</select>
-  			Počet dětí od 6 do 15 let
-  			<select type="text" id="pocetDeti6Az15">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  			</select>
-  			Počet nezaopatřených dětí od 15 do 26 let
-  			<select type="text" id="pocetDeti15Az26">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  			</select>
-			  Počet členů domácnosti
-  			<select type="text" id="pocetClenuDomacnosti">
-  				<option value="0">0</option>
-  				<option value="1">1</option>
-  				<option value="2" selected="selected">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  				<option value="6">6</option>
-  				<option value="7">7</option>
-  				<option value="8">8</option>
-  				<option value="9">9</option>
-  				<option value="10">10</option>
-  			</select>
-        Počet členů domácnosti s trvalým bydlištěm jinde
-        <select type="text" id="trvaleBydlisteJinde">
-          <option value="0" selected="selected">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-
-		<h3>Social optional</h3>
-
-  			Počet členů domácnosti se sníženým životním minimem na existenční
-  			<select type="text" id="snizeneMinimum">
-  				<option value="0" selected="selected">0</option>
-  				<option value="1">1</option>
-  				<option value="2">2</option>
-  				<option value="3">3</option>
-  				<option value="4">4</option>
-  				<option value="5">5</option>
-  			</select>
-  			Má rodina automaticky nárok na vyšší dávky na děti (pobírá rodičovskou, mateřskou, nebo podporu v nezaměstnanosti)?
-  			<select type="text" id="vyssiDavkyNaDeti">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-
-		<h3>Bydlení</h3>
-
-  			Nájem
-  			<input type="text" id="najem" value="0" style="width: 50px">
-  			Poplatky
-  			<input type="text" id="poplatky" value="0" style="width: 50px">
-  			Vlastní nebo družstevní byt?
-  			<select type="text" id="vlastniByt">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Ubytovna, chata nebo podnájem?
-  			<select type="text" id="ubytovna">
-  				<option value="true">ANO</option>
-  				<option value="false" selected="selected">NE</option>
-  			</select>
-  			Velikost obce
-  			<select type="text" id="velikostObce">
-  				<option value="1" selected="selected">Praha</option>
-  				<option value="2">nad 100 tisíc</option>
-  				<option value="3">50 až 100 tisíc</option>
-  				<option value="4">10 až 50 tisíc</option>
-  				<option value="5">pod 10 tisíc</option>
-  			</select>
-  			Místně obvyklé náklady (pokud ÚP nestanovil, nevyplňovat)
-  			<input type="text" id="obvykleNaklady" value="0" style="width: 50px">
-      </form>
-
-			<div>
-				<button type="button" onclick="statickyModelujRodinu()" style="margin: 20px; font-size: 30px">Spočítat příjmy</button>
-        <button type="button" onclick="dynamickyModelujRodinu(1)" style="margin: 20px; font-size: 30px">Graf příjmů prvního dospělého na HPP</button>
-        <button type="button" onclick="dynamickyModelujRodinu(2)" style="margin: 20px; font-size: 30px">Graf příjmů prvního dospělého na DPČ</button>
-        <button type="button" onclick="dynamickyModelujRodinu(3)" style="margin: 20px; font-size: 30px">Graf příjmů prvního dospělého na DPP</button>
-        <button type="button" onclick="dynamickyModelujRodinu(4)" style="margin: 20px; font-size: 30px">Graf výše nájmu</button>
-			</div>
-
-      <h2>Výsledek</h2>
-        <div id="results" style="margin: 20px; font-size: 18px"></div>
-
-      <h2>Simulace</h2>
-        <div id="simulace" style="margin: 20px; font-size: 18px; height: 600px"></div>
-
-  	</div>
 </div>
 
 </body>
