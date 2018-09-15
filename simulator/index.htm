@@ -4,7 +4,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-<script type="text/javascript" src="simulator.js"></script>
+<script type="text/javascript" src="https://code.highcharts.com/modules/annotations.js"></script>
+<script type="text/javascript" src="simulace.js"></script>
+<script type="text/javascript" src="formular.js"></script>
+<script type="text/javascript" src="grafy.js"></script>
+<script type="text/javascript" src="vypocty.js"></script>
 <link rel="stylesheet" type="text/css" href="styles.css">
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
@@ -16,16 +20,8 @@
 
   <div id="title">Simulátor sociálních dávek</div>
 
-  <!--div id="upperwindow">Konfigurace domácností pro testování
-
-    <button class="uw-button" type="button" onclick="nastavRodinu1()">Domácnost 1<sup><div class="tooltip">?<span class="tooltiptext">Matka s 1 dítětem (8 let) bydlí na ubytovně nebo jinde, kde má podnájemní smlouvu (platí 6000 Kč) v Praze</span></div></sup></button>
-    <button class="uw-button" type="button" onclick="nastavRodinu2()">Domácnost 2<sup><div class="tooltip">?<span class="tooltiptext">Mladý dospělý bydlí u rodičů, kteří nemají formální příjem (2 dospělí nezaměstnaní, 2 děti 6 až 15 a jedno 18+), nájem 15 tisíc v Praze</span></div></sup></button>
-    <button class="uw-button" type="button" onclick="nastavRodinu3()">Domácnost 3<sup><div class="tooltip">?<span class="tooltiptext">Domácnost s dvěma dětmi (obě do 6 let), v Praze, kde oba dospělí mají hrubou mzdu na HPP 25 tisíc, nájem 20 tisíc</span></div></sup></button>
-    <button class="uw-button" type="button" onclick="nastavRodinu4()">Domácnost 4<sup><div class="tooltip">?<span class="tooltiptext">Jeden dospělý s jedním dítětem (do 6 let), v obci 50-100 tisíc obyvatel, bez příjmů a s přednostní exekucí, nájem 6 tisíc, bydlí na ubytovně</span></div></sup></button>
-  </div-->
-
   <div id="upperwindow">
-    <div>Parametry domácnosti: </div>
+    <div><script>vypisSlozeni()</script></div>
   </div>
 
   <div id="middlewindowgroup">

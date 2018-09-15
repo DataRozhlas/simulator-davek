@@ -1,14 +1,44 @@
-// doplnit social optional
-// doplnit závislosti (ze složení domácnosti asi)
-// doplnit minima a maxima
-// opravit nastavování rodiny
-// odsazení a velikost pop upů
-
-
 
 // globální proměnné
 
-var colors = ['#333333','#666666','#999999','#1f78b4','#a6cee3','#33a02c','#b2df8a','#fb9a99','#e31a1c','#ff7f00','#fdbf6f','#6a3d9a','#cab2d6','#b15928','#ffff99'];
+var colors = [
+	// 0: čistý příjem 1. dospělého ze zaměstnání
+	'#333333',
+	// 1: čistý příjem 2. dospělého ze zaměstnání
+	'#666666',
+	// 2: čistý příjem 3. dospělého ze zaměstnání
+	'#999999',
+	// 3: daňový bonus 1. dospělého
+	'#cccccc',
+	// 4: daňový bonus 2. dospělého
+	'#cccccc',
+	// 5: daňový bonus 3. dospělého
+	'#cccccc',
+	// 6: přídavky na děti
+	'#1f78b4',
+	// 7: příspěvek na bydlení
+	'#a6cee3',
+	// 8: příspěvek na živobytí
+	'#33a02c',
+	// 9: doplatek na bydlení
+	'#b2df8a',
+	// 10: důchody
+	'#ff7f00',
+	// 11: rodičovský příspěvek
+	'#fdbf6f',
+	// 12: podpora v nezaměstnanosti
+	'#6a3d9a',
+	// 13: nemocenská
+	'#cab2d6',
+	// 14: ostatní příjmy
+	'#ffff99',
+	// 15: nájem
+	'#b15928',
+	// 16: poplatky
+	'#fb9a99',
+	// 17: srážky ze mzdy
+	'#e31a1c'
+];
 
 // hrubý příjem na HPP, výjimka z minimálního základu?, hrubý příjem na DPČ, platí zdravotní jinde?, hrubý příjem na DPP, platí zdravotní jinde?, růžový papír?, počet vyživovaných dětí
 var prvniDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, false, 0],
@@ -790,7 +820,7 @@ function vyplnNakladyNaBydleni() {
 
 function prepisFormular(promenna = 'dummy', poradi = 0, hodnota = 0) {
 
-	// kvůli checkboxům
+	// kvůli checkboxům, hlásí se jako 'on', vskutečnosti true
 	if (hodnota == 'on') {
 		hodnota = true;
 	}
@@ -799,105 +829,11 @@ function prepisFormular(promenna = 'dummy', poradi = 0, hodnota = 0) {
 	var nazevPromenne = promenna + '[' + poradi + ']';
 	eval(nazevPromenne + ' = ' + hodnota);
 
-	// vyplnění složení v růžovém pruhu
-	vypisSlozeni(promenna, poradi, hodnota);
-
-/*	if(document.getElementById("prvniDospelyPrvniZamestnavatelHPPPrijem") !== null) {prvniDospelyPrvniZamestnavatel[0] = parseInt(document.getElementById("prvniDospelyPrvniZamestnavatelHPPPrijem").value)};
-	if(document.getElementById("prvniDospelyPrvniZamestnavatelHPPVyjimka") !== null) {prvniDospelyPrvniZamestnavatel[1] = document.getElementById("prvniDospelyPrvniZamestnavatelHPPVyjimka").checked};
-	if(document.getElementById("prvniDospelyPrvniZamestnavatelDPCPrijem") !== null) {prvniDospelyPrvniZamestnavatel[2] = parseInt(document.getElementById("prvniDospelyPrvniZamestnavatelDPCPrijem").value)};
-	if(document.getElementById("prvniDospelyPrvniZamestnavatelDPCZdravotni") !== null) {prvniDospelyPrvniZamestnavatel[3] = document.getElementById("prvniDospelyPrvniZamestnavatelDPCZdravotni").checked};
-	if(document.getElementById("prvniDospelyPrvniZamestnavatelDPPPrijem") !== null) {prvniDospelyPrvniZamestnavatel[4] = parseInt(document.getElementById("prvniDospelyPrvniZamestnavatelDPPPrijem").value)};
-	if(document.getElementById("prvniDospelyPrvniZamestnavatelDPPZdravotni") !== null) {prvniDospelyPrvniZamestnavatel[5] = document.getElementById("prvniDospelyPrvniZamestnavatelDPPZdravotni").checked};
-	if(document.getElementById("prvniDospelyPrvniZamestnavatelRuzovyPapir") !== null) {prvniDospelyPrvniZamestnavatel[6] = document.getElementById("prvniDospelyPrvniZamestnavatelRuzovyPapir").checked};
-	if(document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDeti") !== null) {prvniDospelyPrvniZamestnavatel[7] = parseInt(document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDeti").value)};
-	if(document.getElementById("prvniDospelyDruhyZamestnavatelHPPPrijem") !== null) {prvniDospelyDruhyZamestnavatel[0] = parseInt(document.getElementById("prvniDospelyDruhyZamestnavatelHPPPrijem").value)};
-	if(document.getElementById("prvniDospelyDruhyZamestnavatelHPPVyjimka") !== null) {prvniDospelyDruhyZamestnavatel[1] = document.getElementById("prvniDospelyDruhyZamestnavatelHPPVyjimka").checked};
-	if(document.getElementById("prvniDospelyDruhyZamestnavatelDPCPrijem") !== null) {prvniDospelyDruhyZamestnavatel[2] = parseInt(document.getElementById("prvniDospelyDruhyZamestnavatelDPCPrijem").value)};
-	if(document.getElementById("prvniDospelyDruhyZamestnavatelDPCZdravotni") !== null) {prvniDospelyDruhyZamestnavatel[3] = document.getElementById("prvniDospelyDruhyZamestnavatelDPCZdravotni").checked};
-	if(document.getElementById("prvniDospelyDruhyZamestnavatelDPPPrijem") !== null) {prvniDospelyDruhyZamestnavatel[4] = parseInt(document.getElementById("prvniDospelyDruhyZamestnavatelDPPPrijem").value)};
-	if(document.getElementById("prvniDospelyDruhyZamestnavatelDPPZdravotni") !== null) {prvniDospelyDruhyZamestnavatel[5] = document.getElementById("prvniDospelyDruhyZamestnavatelDPPZdravotni").checked};
-	if(document.getElementById("prvniDospelyDruhyZamestnavatelRuzovyPapir") !== null) {prvniDospelyDruhyZamestnavatel[6] = document.getElementById("prvniDospelyDruhyZamestnavatelRuzovyPapir").checked};
-	if(document.getElementById("prvniDospelyDruhyZamestnavatelVyzivovaneDeti") !== null) {prvniDospelyDruhyZamestnavatel[7] = parseInt(document.getElementById("prvniDospelyDruhyZamestnavatelVyzivovaneDeti").value)};
-
-	if(document.getElementById("druhyDospelyPrvniZamestnavatelHPPPrijem") !== null) {druhyDospelyPrvniZamestnavatel[0] = parseInt(document.getElementById("druhyDospelyPrvniZamestnavatelHPPPrijem").value)};
-	if(document.getElementById("druhyDospelyPrvniZamestnavatelHPPVyjimka") !== null) {druhyDospelyPrvniZamestnavatel[1] = document.getElementById("druhyDospelyPrvniZamestnavatelHPPVyjimka").checked};
-	if(document.getElementById("druhyDospelyPrvniZamestnavatelDPCPrijem") !== null) {druhyDospelyPrvniZamestnavatel[2] = parseInt(document.getElementById("druhyDospelyPrvniZamestnavatelDPCPrijem").value)};
-	if(document.getElementById("druhyDospelyPrvniZamestnavatelDPCZdravotni") !== null) {druhyDospelyPrvniZamestnavatel[3] = document.getElementById("druhyDospelyPrvniZamestnavatelDPCZdravotni").checked};
-	if(document.getElementById("druhyDospelyPrvniZamestnavatelDPPPrijem") !== null) {druhyDospelyPrvniZamestnavatel[4] = parseInt(document.getElementById("druhyDospelyPrvniZamestnavatelDPPPrijem").value)};
-	if(document.getElementById("druhyDospelyPrvniZamestnavatelDPPZdravotni") !== null) {druhyDospelyPrvniZamestnavatel[5] = document.getElementById("druhyDospelyPrvniZamestnavatelDPPZdravotni").checked};
-	if(document.getElementById("druhyDospelyPrvniZamestnavatelRuzovyPapir") !== null) {druhyDospelyPrvniZamestnavatel[6] = document.getElementById("druhyDospelyPrvniZamestnavatelRuzovyPapir").checked};
-	if(document.getElementById("druhyDospelyPrvniZamestnavatelVyzivovaneDeti") !== null) {druhyDospelyPrvniZamestnavatel[7] = parseInt(document.getElementById("druhyDospelyPrvniZamestnavatelVyzivovaneDeti").value)};
-	if(document.getElementById("druhyDospelyDruhyZamestnavatelHPPPrijem") !== null) {druhyDospelyDruhyZamestnavatel[0] = parseInt(document.getElementById("druhyDospelyDruhyZamestnavatelHPPPrijem").value)};
-	if(document.getElementById("druhyDospelyDruhyZamestnavatelHPPVyjimka") !== null) {druhyDospelyDruhyZamestnavatel[1] = document.getElementById("druhyDospelyDruhyZamestnavatelHPPVyjimka").checked};
-	if(document.getElementById("druhyDospelyDruhyZamestnavatelDPCPrijem") !== null) {druhyDospelyDruhyZamestnavatel[2] = parseInt(document.getElementById("druhyDospelyDruhyZamestnavatelDPCPrijem").value)};
-	if(document.getElementById("druhyDospelyDruhyZamestnavatelDPCZdravotni") !== null) {druhyDospelyDruhyZamestnavatel[3] = document.getElementById("druhyDospelyDruhyZamestnavatelDPCZdravotni").checked};
-	if(document.getElementById("druhyDospelyDruhyZamestnavatelDPPPrijem") !== null) {druhyDospelyDruhyZamestnavatel[4] = parseInt(document.getElementById("druhyDospelyDruhyZamestnavatelDPPPrijem").value)};
-	if(document.getElementById("druhyDospelyDruhyZamestnavatelDPPZdravotni") !== null) {druhyDospelyDruhyZamestnavatel[5] = document.getElementById("druhyDospelyDruhyZamestnavatelDPPZdravotni").checked};
-	if(document.getElementById("druhyDospelyDruhyZamestnavatelRuzovyPapir") !== null) {druhyDospelyDruhyZamestnavatel[6] = document.getElementById("druhyDospelyDruhyZamestnavatelRuzovyPapir").checked};
-	if(document.getElementById("druhyDospelyDruhyZamestnavatelVyzivovaneDeti") !== null) {druhyDospelyDruhyZamestnavatel[7] = parseInt(document.getElementById("druhyDospelyDruhyZamestnavatelVyzivovaneDeti").value)};
-
-	if(document.getElementById("tretiDospelyPrvniZamestnavatelHPPPrijem") !== null) {tretiDospelyPrvniZamestnavatel[0] = parseInt(document.getElementById("tretiDospelyPrvniZamestnavatelHPPPrijem").value)};
-	if(document.getElementById("tretiDospelyPrvniZamestnavatelHPPVyjimka") !== null) {tretiDospelyPrvniZamestnavatel[1] = document.getElementById("tretiDospelyPrvniZamestnavatelHPPVyjimka").checked};
-	if(document.getElementById("tretiDospelyPrvniZamestnavatelDPCPrijem") !== null) {tretiDospelyPrvniZamestnavatel[2] = parseInt(document.getElementById("tretiDospelyPrvniZamestnavatelDPCPrijem").value)};
-	if(document.getElementById("tretiDospelyPrvniZamestnavatelDPCZdravotni") !== null) {tretiDospelyPrvniZamestnavatel[3] = document.getElementById("tretiDospelyPrvniZamestnavatelDPCZdravotni").checked};
-	if(document.getElementById("tretiDospelyPrvniZamestnavatelDPPPrijem") !== null) {tretiDospelyPrvniZamestnavatel[4] = parseInt(document.getElementById("tretiDospelyPrvniZamestnavatelDPPPrijem").value)};
-	if(document.getElementById("tretiDospelyPrvniZamestnavatelDPPZdravotni") !== null) {tretiDospelyPrvniZamestnavatel[5] = document.getElementById("tretiDospelyPrvniZamestnavatelDPPZdravotni").checked};
-	if(document.getElementById("tretiDospelyPrvniZamestnavatelRuzovyPapir") !== null) {tretiDospelyPrvniZamestnavatel[6] = document.getElementById("tretiDospelyPrvniZamestnavatelRuzovyPapir").checked};
-	if(document.getElementById("tretiDospelyPrvniZamestnavatelVyzivovaneDeti") !== null) {tretiDospelyPrvniZamestnavatel[7] = parseInt(document.getElementById("tretiDospelyPrvniZamestnavatelVyzivovaneDeti").value)};
-	if(document.getElementById("tretiDospelyDruhyZamestnavatelHPPPrijem") !== null) {tretiDospelyDruhyZamestnavatel[0] = parseInt(document.getElementById("tretiDospelyDruhyZamestnavatelHPPPrijem").value)};
-	if(document.getElementById("tretiDospelyDruhyZamestnavatelHPPVyjimka") !== null) {tretiDospelyDruhyZamestnavatel[1] = document.getElementById("tretiDospelyDruhyZamestnavatelHPPVyjimka").checked};
-	if(document.getElementById("tretiDospelyDruhyZamestnavatelDPCPrijem") !== null) {tretiDospelyDruhyZamestnavatel[2] = parseInt(document.getElementById("tretiDospelyDruhyZamestnavatelDPCPrijem").value)};
-	if(document.getElementById("tretiDospelyDruhyZamestnavatelDPCZdravotni") !== null) {tretiDospelyDruhyZamestnavatel[3] = document.getElementById("tretiDospelyDruhyZamestnavatelDPCZdravotni").checked};
-	if(document.getElementById("tretiDospelyDruhyZamestnavatelDPPPrijem") !== null) {tretiDospelyDruhyZamestnavatel[4] = parseInt(document.getElementById("tretiDospelyDruhyZamestnavatelDPPPrijem").value)};
-	if(document.getElementById("tretiDospelyDruhyZamestnavatelDPPZdravotni") !== null) {tretiDospelyDruhyZamestnavatel[5] = document.getElementById("tretiDospelyDruhyZamestnavatelDPPZdravotni").checked};
-	if(document.getElementById("tretiDospelyDruhyZamestnavatelRuzovyPapir") !== null) {tretiDospelyDruhyZamestnavatel[6] = document.getElementById("tretiDospelyDruhyZamestnavatelRuzovyPapir").checked};
-	if(document.getElementById("tretiDospelyDruhyZamestnavatelVyzivovaneDeti") !== null) {tretiDospelyDruhyZamestnavatel[7] = parseInt(document.getElementById("tretiDospelyDruhyZamestnavatelVyzivovaneDeti").value)};
-
-	if(document.getElementById("prvniDospelyDuchody") !== null) {prvniDospelyDalsiPrijmy[0] = parseInt(document.getElementById("prvniDospelyDuchody").value)}
-	if(document.getElementById("prvniDospelyRodicovska") !== null) {prvniDospelyDalsiPrijmy[1] = parseInt(document.getElementById("prvniDospelyRodicovska").value)};
-	if(document.getElementById("prvniDospelyPodporaVNezamestnanosti") !== null) {prvniDospelyDalsiPrijmy[2] = parseInt(document.getElementById("prvniDospelyPodporaVNezamestnanosti").value)};
-	if(document.getElementById("prvniDospelyNemocenska") !== null) {prvniDospelyDalsiPrijmy[3] = parseInt(document.getElementById("prvniDospelyNemocenska").value)};
-	if(document.getElementById("prvniDospelyOstatniPrijmy") !== null) {prvniDospelyDalsiPrijmy[4] = parseInt(document.getElementById("prvniDospelyOstatniPrijmy").value)};
-
-	if(document.getElementById("druhyDospelyDuchody") !== null) {druhyDospelyDalsiPrijmy[0] = parseInt(document.getElementById("druhyDospelyDuchody").value)};
-	if(document.getElementById("druhyDospelyRodicovska") !== null) {druhyDospelyDalsiPrijmy[1] = parseInt(document.getElementById("druhyDospelyRodicovska").value)};
-	if(document.getElementById("druhyDospelyPodporaVNezamestnanosti") !== null) {druhyDospelyDalsiPrijmy[2] = parseInt(document.getElementById("druhyDospelyPodporaVNezamestnanosti").value)};
-	if(document.getElementById("druhyDospelyNemocenska") !== null) {druhyDospelyDalsiPrijmy[3] = parseInt(document.getElementById("druhyDospelyNemocenska").value)};
-	if(document.getElementById("druhyDospelyOstatniPrijmy") !== null) {druhyDospelyDalsiPrijmy[4] = parseInt(document.getElementById("druhyDospelyOstatniPrijmy").value)};
-
-	if(document.getElementById("tretiDospelyDuchody") !== null) {tretiDospelyDalsiPrijmy[0] = parseInt(document.getElementById("tretiDospelyDuchody").value)};
-	if(document.getElementById("tretiDospelyRodicovska") !== null) {tretiDospelyDalsiPrijmy[1] = parseInt(document.getElementById("tretiDospelyRodicovska").value)};
-	if(document.getElementById("tretiDospelyPodporaVNezamestnanosti") !== null) {tretiDospelyDalsiPrijmy[2] = parseInt(document.getElementById("tretiDospelyPodporaVNezamestnanosti").value)};
-	if(document.getElementById("tretiDospelyNemocenska") !== null) {tretiDospelyDalsiPrijmy[3] = parseInt(document.getElementById("tretiDospelyNemocenska").value)};
-	if(document.getElementById("tretiDospelyOstatniPrijmy") !== null) {tretiDospelyDalsiPrijmy[4] = parseInt(document.getElementById("tretiDospelyOstatniPrijmy").value)};
-
-	if(document.getElementById("prvniDospelyPrednostniExekuce") !== null) {prvniDospelyExekuce[0] = document.getElementById("prvniDospelyPrednostniExekuce").checked};
-	if(document.getElementById("prvniDospelyNeprednostniExekuce") !== null) {prvniDospelyExekuce[1] = document.getElementById("prvniDospelyNeprednostniExekuce").checked};
-	if(document.getElementById("prvniDospelyDalsiVyzivovaneOsoby") !== null) {prvniDospelyExekuce[2] = parseInt(document.getElementById("prvniDospelyDalsiVyzivovaneOsoby").value)};
-
-	if(document.getElementById("druhyDospelyPrednostniExekuce") !== null) {druhyDospelyExekuce[0] = document.getElementById("druhyDospelyPrednostniExekuce").checked};
-	if(document.getElementById("druhyDospelyNeprednostniExekuce") !== null) {druhyDospelyExekuce[1] = document.getElementById("druhyDospelyNeprednostniExekuce").checked};
-	if(document.getElementById("druhyDospelyDalsiVyzivovaneOsoby") !== null) {druhyDospelyExekuce[2] = parseInt(document.getElementById("druhyDospelyDalsiVyzivovaneOsoby").value)};
-
-	if(document.getElementById("tretiDospelyPrednostniExekuce") !== null) {tretiDospelyExekuce[0] = document.getElementById("tretiDospelyPrednostniExekuce").checked};
-	if(document.getElementById("tretiDospelyNeprednostniExekuce") !== null) {tretiDospelyExekuce[1] = document.getElementById("tretiDospelyNeprednostniExekuce").checked};
-	if(document.getElementById("tretiDospelyDalsiVyzivovaneOsoby") !== null) {tretiDospelyExekuce[2] = parseInt(document.getElementById("tretiDospelyDalsiVyzivovaneOsoby").value)};
-
-	if(document.getElementById("pocetDospelych") !== null) {slozeniDomacnosti[0] = parseInt(document.getElementById("pocetDospelych").value)};
-	if(document.getElementById("pocetDetiPod6") !== null) {slozeniDomacnosti[1] = parseInt(document.getElementById("pocetDetiPod6").value)};
-	if(document.getElementById("pocetDeti6Az15") !== null) {slozeniDomacnosti[2] = parseInt(document.getElementById("pocetDeti6Az15").value)};
-	if(document.getElementById("pocetDeti15Az26") !== null) {slozeniDomacnosti[3] = parseInt(document.getElementById("pocetDeti15Az26").value)};
-	if(document.getElementById("trvaleBydlisteJinde") !== null) {slozeniDomacnosti[5] = parseInt(document.getElementById("trvaleBydlisteJinde").value)};
-
-	if(document.getElementById("najem") !== null) {bydleni[0] = parseInt(document.getElementById("najem").value)};
-	if(document.getElementById("poplatky") !== null) {bydleni[1] = parseInt(document.getElementById("poplatky").value)};
-	if(document.getElementById("vlastniByt") !== null) {bydleni[2] = document.getElementById("vlastniByt").checked};
-	if(document.getElementById("ubytovna") !== null) {bydleni[3] = document.getElementById("ubytovna").checked};
-	if(document.getElementById("velikostObce") !== null) {bydleni[4] = parseInt(document.getElementById("velikostObce").value)};
-	if(document.getElementById("obvykleNaklady") !== null) {bydleni[5] = parseInt(document.getElementById("obvykleNaklady").value)};
-*/
 	// dopočítávání globálních proměnných
 	slozeniDomacnosti[4] = slozeniDomacnosti[0] + slozeniDomacnosti[1] + slozeniDomacnosti[2] + slozeniDomacnosti[3];
+
+	// vyplnění složení v růžovém pruhu
+	vypisSlozeni(promenna, poradi, hodnota);
 
 }
 
@@ -905,7 +841,6 @@ function prepisFormular(promenna = 'dummy', poradi = 0, hodnota = 0) {
 
 function vypisSlozeni(promenna = '', poradi = 0, hodnota = 0) {
 
-//	console.log(promenna, poradi, hodnota)
 	parametryDomacnosti += promenna + '[' + poradi + ']' + ': ' + hodnota + '. ';
 	document.getElementById("upperwindow").innerHTML = parametryDomacnosti;
 
@@ -1030,9 +965,9 @@ function dynamickyModelujRodinu(simulace = 0) {
 
 			var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
 			prijemRodiny.push(prijmyAVydajeRodinyPoZapocteniDavek[13])
-			prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2]),
-			druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5]),
-			tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8]),
+			prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2]-prijmyAVydajeRodinyPoZapocteniDavek[29]),
+			druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5]-prijmyAVydajeRodinyPoZapocteniDavek[30]),
+			tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8]-prijmyAVydajeRodinyPoZapocteniDavek[31]),
 			prvniDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[29]),
 			druhyDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[30]),
 			tretiDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[31]),
@@ -1074,9 +1009,10 @@ function dynamickyModelujRodinu(simulace = 0) {
 		var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
 		prijemRodiny.push(prijmyAVydajeRodinyPoZapocteniDavek[13]);
 
-		prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2]),
-		druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5]),
-		tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8]),
+		// příjem dospělého se v grafu ukazuje jako příjem × daňový bonus, proto kompenzace
+		prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2]-prijmyAVydajeRodinyPoZapocteniDavek[29]),
+		druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5]-prijmyAVydajeRodinyPoZapocteniDavek[30]),
+		tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8]-prijmyAVydajeRodinyPoZapocteniDavek[31]),
 		prvniDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[29]),
 		druhyDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[30]),
 		tretiDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[31]),
@@ -1130,18 +1066,21 @@ function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExeku
 		chart: {
 			type: 'column'
 		},
+
 		title: {
 			text: 'Disponibilní příjem domácnosti × ' + nazev
 		},
+
 		subtitle: {
-//			text: 'Dospělí: <b>' + slozeniDomacnosti[0] + '</b>, děti pod 6: <b>' + slozeniDomacnosti[1] + '</b>, děti 6 až 15: <b>' + slozeniDomacnosti[2] + '</b>, děti 15 až 26: <b>' + slozeniDomacnosti[3] + '</b>'
 		},
+
 		xAxis: {
 			categories: x,
 			title: {
 				text: nazev
 			},
 		},
+
 		yAxis: {
 			title: {
 				text: 'disponibilní příjem domácnosti'
@@ -1157,40 +1096,58 @@ function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExeku
 			}],
 			reversedStacks: false
 		},
+
 		tooltip: {
 			formatter: function () {
-				// var s = '<b>' + nazev + ': ' + this.x + ' Kč</b>',
+
 				var s = '<div></div>'
 				var celkem = 0;
 
 				$.each(this.points, function () {
 					if ((this.series.name != 'disponibilní příjem domácnosti') & (this.series.name != 'srážky ze mzdy')) {
-						s += '<br/><span style="color:' + this.color +'">' + this.series.name + '</span>: ' +
-							this.y + ' Kč';
-						celkem += this.y;
+
+						// přidávají se jen nenulové položky
+						var prubehPole = this.series.data.map(function(x) {
+							return x['y'];
+						});
+
+						if (!prubehPole.every(x => x == 0)) {
+
+							s += '<br/><span style="color:' + this.color +'">' + this.series.name + '</span>: ' +
+								this.y + ' Kč';
+							celkem += this.y;
+
+						}
+
 					}
+
 				});
 
 				s += '<br/><b>disponibilní příjem domácnosti: ' + celkem + ' Kč</b>';
 
-				s += '<br/>(včetně srážek ze mzdy: ' + this.points[14]['y'] + ' Kč)';
+				// pokud je exekuce, na závěr se přidají srážky ze mzdy
+				if (prvniDospelyExekuce[0] || prvniDospelyExekuce[1] || druhyDospelyExekuce[0] || druhyDospelyExekuce[1] || tretiDospelyExekuce[0] || tretiDospelyExekuce[1]) {
+
+					s += '<br/><span style="color:' + colors[17] +'">' + '(včetně srážek ze mzdy: ' + this.points[17]['y'] + ' Kč)' + '</span>';
+
+				};
 
 				return s;
 			},
 			shared: true
 		},
+
 		exporting: {
 			enabled: false
 		},
+
 		credits: {
-			href: '',
-			text: ''
+			enabled: false
 		},
-		legend: {
-			enabled: true
-		},
+
 		plotOptions: {
 		},
+
 		series: [{
 			name: 'čistý příjem 1. dospělého ze zaměstnání',
 			data: prvniDospelyPoExekuci,
@@ -1209,81 +1166,81 @@ function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExeku
 		}, {
 			name: 'daňový bonus 1. dospělého',
 			data: prvniDospelyDanovyBonus,
-			color: 'black',
+			color: colors[3],
 			stacking: 'stacked'
 		}, {
 			name: 'daňový bonus 2. dospělého',
 			data: druhyDospelyDanovyBonus,
-			color: 'black',
+			color: colors[4],
 			stacking: 'stacked'
 		}, {
 			name: 'daňový bonus 3. dospělého',
 			data: tretiDospelyDanovyBonus,
-			color: 'black',
+			color: colors[5],
 			stacking: 'stacked'
 		}, {
 			name: 'přídavky na děti',
 			data: pridavkyNaDeti,
-			color: colors[3],
+			color: colors[6],
 			stacking: 'stacked'
 		}, {
 			name: 'příspěvek na bydlení',
 			data: prispevekNaBydleni,
-			color: colors[4],
+			color: colors[7],
 			stacking: 'stacked'
 		}, {
 			name: 'příspěvek na živobytí',
 			data: prispevekNaZivobyti,
-			color: colors[5],
+			color: colors[8],
 			stacking: 'stacked'
 		}, {
 			name: 'doplatek na bydlení',
 			data: doplatekNaBydleni,
-			color: colors[6],
+			color: colors[9],
 			stacking: 'stacked'
 		}, {
 			name: 'důchody',
 			data: duchody,
-			color: colors[9],
+			color: colors[10],
 			stacking: 'stacked'
 		}, {
 			name: 'rodičovský příspěvek',
 			data: rodicovska,
-			color: colors[10],
+			color: colors[11],
 			stacking: 'stacked'
 		}, {
 			name: 'podpora v nezaměstnanosti',
 			data: podporaVNezamestnanosti,
-			color: colors[11],
+			color: colors[12],
 			stacking: 'stacked'
 		}, {
 			name: 'nemocenská',
 			data: nemocenska,
-			color: colors[12],
+			color: colors[13],
 			stacking: 'stacked'
 		}, {
 			name: 'ostatní příjmy',
 			data: ostatniPrijmy,
-			color: colors[13],
+			color: colors[14],
 			stacking: 'stacked'
 		}, {
 			name: 'nájem',
 			data: najem,
-			color: colors[8],
+			color: colors[15],
 			stacking: 'stacked'
 		}, {
 			name: 'poplatky',
 			data: poplatky,
-			color: colors[7],
+			color: colors[16],
 			stacking: 'stacked'
 		}, {
 			type: 'spline',
 			name: 'srážky ze mzdy',
 			data: exekuce,
-			color: colors[7],
+			color: colors[17],
 			marker: {
 				lineWidth: 2,
-				lineColor: colors[7],
+				lineColor: colors[17],
 				fillColor: 'white',
 				symbol: 'circle'
 			}
@@ -1302,25 +1259,26 @@ function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExeku
 	});
 
 	// vyhážu z grafu proměnné, které mají v celém průběhu nulovou hodnotu
-	for (i = 0; i <= 18; i++) {
+	for (i = 0; i <= chart.series.length - 1; i++) {
 
 		if(chart.series[i].processedYData.every(x => x == 0)) {
 
 			chart.series[i].update({
-				showInLegend: false,
-				visible: false
+				showInLegend: false
 			});
+
+			// line chart se chová jinak, je potřeba ho vyhodit z grafu zvlášť
+			if (chart.series[i].name == 'srážky ze mzdy') {
+
+				chart.series[i].remove();
+
+			}
 
 		}
 
 	}
 
 }
-
-
-
-
-
 
 
 
@@ -2181,15 +2139,13 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], duc
 	// výpočet nezabavitelné částky
 	nezabavitelnaCastka = nezabavitelnaCastkaProPrvniOsobu + dalsiVyzivovaneOsoby * nezabavitelnaCastkaProDalsiOsobu;
 
-	// pokud je bez exekucí, příjmy před exekucí a po exekuci se nemění
+	// pokud je bez exekucí, nebo jsou příjmy nižší než nezabavitelná částka, nic se nestrhává
+	prijmyPoExekuci = prijmyPredExekuci;
+
 	if( (prednostniExekuce + neprednostniExekuce ) == 0) {
-		return([prijmyPredExekuci, prijmyPredExekuci, 0]);
-	}
+		return([prijmyPredExekuci, prijmyPoExekuci, 0, danovyBonusNaDeti]);
 
-	// Pokud jsou příjmy nižší než nezabavitelná částka, nic se nestrhává
-	if (prijmyPredExekuci < nezabavitelnaCastka) {
-		return([prijmyPredExekuci, prijmyPredExekuci, 0])
-
+	// jinak se vypočítá exekuce:
 	} else {
 
 		// Z čisté mzdy zaměstnance je odečtena základní nezabavitelná částka (minimum). Pokud je rovna nebo vyšší 9338 Kč, počítá se v této fázi s celou částkou 9338 Kč.
@@ -2205,32 +2161,35 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], duc
 		}
 
 		// exekuuje se i daňový bonus na dítě
-		prijmyPoExekuci = prijmyPoExekuci + nezabavitelnaCastka;
 		danovyBonusNaDeti = 0;
+
+		prijmyPoExekuci = prijmyPoExekuci + nezabavitelnaCastka;
+
+		exekuce = prijmyPredExekuci - prijmyPoExekuci;
+
+		return([prijmyPredExekuci, prijmyPoExekuci, exekuce, danovyBonusNaDeti]);
 
 	}
 
-	exekuce = prijmyPredExekuci - prijmyPoExekuci;
-
-	return([prijmyPredExekuci, prijmyPoExekuci, exekuce, danovyBonusNaDeti]);
 }
 
 
 
 /*
 
-spočítej příjem domácnost po exekuci
+spočítej příjem domácnosti po exekuci
 
 */
 
-function spocitejPrijemDomacnostiPoExekuci(prijemPrvnihoDospelehoPoExekuci = [0, 0, 0], prijemDruhehoDospelehoPoExekuci = [0, 0, 0], prijemTretihoDospelehoPoExekuci = [0, 0, 0],
+function spocitejPrijemDomacnostiPoExekuci(prijemPrvnihoDospelehoPoExekuci = [0, 0, 0, 0], prijemDruhehoDospelehoPoExekuci = [0, 0, 0, 0], prijemTretihoDospelehoPoExekuci = [0, 0, 0, 0],
 	pridavkyNaDeti = 0, prispevekNaBydleni = 0, prispevekNaZivobyti = 0, doplatekNaBydleni = 0, najem = 0, poplatky = 0) {
 
 	var prijemDomacnostiPredExekuci = 0,
 		prijemDomacnostiPoExekuci = 0,
 		prijemDomacnostiPredExekuciMinusNajem = 0,
 		prijemDomacnostiPoExekuciMinusNajem = 0,
-		exekuce = 0;
+		exekuce = 0,
+		danovyBonusNaDeti = 0;
 
 	prijemDomacnostiPredExekuci = prijemPrvnihoDospelehoPoExekuci[0] + prijemDruhehoDospelehoPoExekuci[0] + prijemTretihoDospelehoPoExekuci[0] +
 		pridavkyNaDeti + prispevekNaBydleni + prispevekNaZivobyti + doplatekNaBydleni;
@@ -2239,9 +2198,12 @@ function spocitejPrijemDomacnostiPoExekuci(prijemPrvnihoDospelehoPoExekuci = [0,
 	prijemDomacnostiPredExekuciMinusNajem = prijemDomacnostiPredExekuci - najem - poplatky;
 	prijemDomacnostiPoExekuciMinusNajem = prijemDomacnostiPoExekuci - najem - poplatky;
 
+	danovyBonusNaDeti = prijemPrvnihoDospelehoPoExekuci[3] + prijemDruhehoDospelehoPoExekuci[3] + prijemTretihoDospelehoPoExekuci[3];
+
 	exekuce = prijemPrvnihoDospelehoPoExekuci[2] + prijemDruhehoDospelehoPoExekuci[2] + prijemTretihoDospelehoPoExekuci[2];
 
-	return([prijemDomacnostiPredExekuci, prijemDomacnostiPoExekuci, prijemDomacnostiPredExekuciMinusNajem, prijemDomacnostiPoExekuciMinusNajem, exekuce]);
+	return([prijemDomacnostiPredExekuci, prijemDomacnostiPoExekuci, prijemDomacnostiPredExekuciMinusNajem, prijemDomacnostiPoExekuciMinusNajem, exekuce, danovyBonusNaDeti]);
+
 }
 
 
@@ -2689,3 +2651,7 @@ function nastavRodinu4() {
 	vyplnSlozeniDomacnosti()
 }
 */
+
+
+prvniDospelyDalsiPrijmy[0] = 10000
+slozeniDomacnostip = [1, 0, 0, 0, 0, 0]
