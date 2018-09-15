@@ -24,9 +24,9 @@ var prvniDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, false, 0],
 	tretiDospelyDalsiPrijmy = [0, 0, 0, 0, 0],
 
 // počet přednostních exekucí, počet nepřednostních exekucí, počet dalších vyživovaných osob
-	prvniDospelyExekuce = [0, 0, 0],
-	druhyDospelyExekuce = [0, 0, 0],
-	tretiDospelyExekuce = [0, 0, 0],
+	prvniDospelyExekuce = [false, false, 0],
+	druhyDospelyExekuce = [false, false, 0],
+	tretiDospelyExekuce = [false, false, 0],
 
 // počet dospělých, počet dětí pod 6 let, počet dětí 6 až 15 let, počet nezaopatřených dětí 15 až 26 let, počet členů domácnosti, počet členů domácnosti s trvalým bydlištěm jinde
 	slozeniDomacnosti = [0, 0, 0, 0, 0, 0],
@@ -38,34 +38,36 @@ var prvniDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, false, 0],
 // velikost obce (1 = Praha, 2 = nad 100 000, 3 = nad 50 000, 4 = nad 10 000, 5 = pod 10 000), místně obvyklé náklady stanovené úřadem práce
 	bydleni = [0, 0, false, false, 1, 0];
 
+// parametry domácnosti, kam se zapisují změny
+var parametryDomacnosti = '<div>Parametry domácnosti: ';
+
+var dummy = 0;
+
 
 
 function vyplnSlozeniDomacnosti() {
-
-	// uložení do globálních proměnných
-	prepisFormular()
 
 	var text = '<div class="mw-text">';
 	text += '<h2>Složení domácnosti</h2>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Počet dospělých</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="3" id="pocetDospelych"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="3" id="pocetDospelych" onchange="prepisFormular(\'slozeniDomacnosti\', \'0\', this.value)"</div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Počet dětí do 6 let</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="5" id="pocetDetiPod6"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="5" id="pocetDetiPod6" onchange="prepisFormular(\'slozeniDomacnosti\', \'1\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Počet dětí od 6 do 15 let</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="5" id="pocetDeti6Az15"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="5" id="pocetDeti6Az15" onchange="prepisFormular(\'slozeniDomacnosti\', \'2\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Počet nezaopatřených dětí od 15 do 26 let</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="5" id="pocetDeti15Az26"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="5" id="pocetDeti15Az26" onchange="prepisFormular(\'slozeniDomacnosti\', \'3\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Počet členů domácnosti s trvalým bydlištěm jinde</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="18" id="trvaleBydlisteJinde"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="18" id="trvaleBydlisteJinde" onchange="prepisFormular(\'slozeniDomacnosti\', \'5\', this.value)"></div>';
 	text += '</div>';
 
 	document.getElementById("mainwindow").innerHTML = text;
@@ -82,9 +84,6 @@ function vyplnSlozeniDomacnosti() {
 
 function vyplnPrijmyPrvnihoDospeleho() {
 
-	// uložení do globálních proměnných
-	prepisFormular()
-
 	var text = '<div class="mw-text">';
 
 	text += '<div id="mw-text-1">';
@@ -92,25 +91,25 @@ function vyplnPrijmyPrvnihoDospeleho() {
 	text += '<h3>První zaměstnavatel</h3>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na HPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="prvniDospelyPrvniZamestnavatelHPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyPrvniZamestnavatelHPPVyjimka">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="prvniDospelyPrvniZamestnavatelHPPPrijem" onchange="prepisFormular(\'prvniDospelyPrvniZamestnavatel\', \'0\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyPrvniZamestnavatelHPPVyjimka" onclick="prepisFormular(\'prvniDospelyPrvniZamestnavatel\', \'1\', this.value)">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPČ</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="prvniDospelyPrvniZamestnavatelDPCPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyPrvniZamestnavatelDPCZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="prvniDospelyPrvniZamestnavatelDPCPrijem" onchange="prepisFormular(\'prvniDospelyPrvniZamestnavatel\', \'2\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyPrvniZamestnavatelDPCZdravotni" onclick="prepisFormular(\'prvniDospelyPrvniZamestnavatel\', \'3\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="prvniDospelyPrvniZamestnavatelDPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyPrvniZamestnavatelDPPZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="prvniDospelyPrvniZamestnavatelDPPPrijem" onchange="prepisFormular(\'prvniDospelyPrvniZamestnavatel\', \'4\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyPrvniZamestnavatelDPPZdravotni"  onclick="prepisFormular(\'prvniDospelyPrvniZamestnavatel\', \'5\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>'
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="prvniDospelyPrvniZamestnavatelRuzovyPapir">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="prvniDospelyPrvniZamestnavatelRuzovyPapir" onclick="prepisFormular(\'prvniDospelyPrvniZamestnavatel\', \'6\', this.value)">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="prvniDospelyPrvniZamestnavatelVyzivovaneDetiForm" style="visibility: hidden;">';
 	text += '<div class="formrowtext">Počet dětí k daňovému bonusu</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="prvniDospelyPrvniZamestnavatelVyzivovaneDeti"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="prvniDospelyPrvniZamestnavatelVyzivovaneDeti" onchange="prepisFormular(\'prvniDospelyPrvniZamestnavatel\', \'7\', this.value)"></div>';
 	text += '</div>';
 	text += '</div>';
 	text += '<div id="mw-text-2">';
@@ -161,25 +160,25 @@ function pridejZamestnavatelePrvnihoDospeleho() {
 	var text = '<h3>Druhý zaměstnavatel</h3>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na HPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="prvniDospelyDruhyZamestnavatelHPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyDruhyZamestnavatelHPPVyjimka">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="prvniDospelyDruhyZamestnavatelHPPPrijem" onchange="prepisFormular(\'prvniDospelyDruhyZamestnavatel\', \'0\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyDruhyZamestnavatelHPPVyjimka" onclick="prepisFormular(\'prvniDospelyDruhyZamestnavatel\', \'1\', this.value)">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPČ</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="prvniDospelyDruhyZamestnavatelDPCPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyDruhyZamestnavatelDPCZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="prvniDospelyDruhyZamestnavatelDPCPrijem" onchange="prepisFormular(\'prvniDospelyDruhyZamestnavatel\', \'2\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyDruhyZamestnavatelDPCZdravotni" onclick="prepisFormular(\'prvniDospelyDruhyZamestnavatel\', \'3\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="prvniDospelyDruhyZamestnavatelDPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyDruhyZamestnavatelDPPZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="prvniDospelyDruhyZamestnavatelDPPPrijem" onchange="prepisFormular(\'prvniDospelyDruhyZamestnavatel\', \'4\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="prvniDospelyDruhyZamestnavatelDPPZdravotni" onclick="prepisFormular(\'prvniDospelyDruhyZamestnavatel\', \'5\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>'
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="prvniDospelyDruhyZamestnavatelRuzovyPapir">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="prvniDospelyDruhyZamestnavatelRuzovyPapir" onclick="prepisFormular(\'prvniDospelyDruhyZamestnavatel\', \'6\', this.value)">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="prvniDospelyDruhyZamestnavatelVyzivovaneDetiForm" style="visibility: hidden;">';
 	text += '<div class="formrowtext">Počet dětí k daňovému bonusu</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="prvniDospelyDruhyZamestnavatelVyzivovaneDeti"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="prvniDospelyDruhyZamestnavatelVyzivovaneDeti" onchange="prepisFormular(\'prvniDospelyDruhyZamestnavatel\', \'7\', this.value)"></div>';
 	text += '</div>';
 
 	document.getElementById("mw-text-2").innerHTML = text;
@@ -222,23 +221,23 @@ function pridejDalsiPrijmyPrvnihoDospeleho() {
 	var text = '<h3>Jiné příjmy</h3>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Důchod</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="prvniDospelyDuchody"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="prvniDospelyDuchody" onchange="prepisFormular(\'prvniDospelyDalsiPrijmy\', \'0\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Rodičovská</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="prvniDospelyRodicovska"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="prvniDospelyRodicovska" onchange="prepisFormular(\'prvniDospelyDalsiPrijmy\', \'1\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Podpora v nezaměstnanosti</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="prvniDospelyPodporaVNezamestnanosti"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="prvniDospelyPodporaVNezamestnanosti" onchange="prepisFormular(\'prvniDospelyDalsiPrijmy\', \'2\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Nemocenská</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="prvniDospelyNemocenska"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="prvniDospelyNemocenska" onchange="prepisFormular(\'prvniDospelyDalsiPrijmy\', \'3\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Ostatní</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="prvniDospelyOstatniPrijmy"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="prvniDospelyOstatniPrijmy" onchange="prepisFormular(\'prvniDospelyDalsiPrijmy\', \'4\', this.value)"></div>';
 	text += '</div>';
 
 	document.getElementById("mw-text-3").innerHTML = text;
@@ -256,34 +255,31 @@ function pridejDalsiPrijmyPrvnihoDospeleho() {
 
 function vyplnPrijmyDruhehoDospeleho() {
 
-	// uložení do globálních proměnných
-	prepisFormular()
-
 	var text = '<div class="mw-text">';
 	text += '<div id="mw-text-1">';
 	text += '<h2>Příjmy druhého dospělého</h2>';
 	text += '<h3>První zaměstnavatel</h3>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na HPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="druhyDospelyPrvniZamestnavatelHPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyPrvniZamestnavatelHPPVyjimka">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="druhyDospelyPrvniZamestnavatelHPPPrijem" onchange="prepisFormular(\'druhyDospelyPrvniZamestnavatel\', \'0\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyPrvniZamestnavatelHPPVyjimka" onclick="prepisFormular(\'druhyDospelyPrvniZamestnavatel\', \'1\', this.value)">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPČ</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="druhyDospelyPrvniZamestnavatelDPCPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyPrvniZamestnavatelDPCZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="druhyDospelyPrvniZamestnavatelDPCPrijem" onchange="prepisFormular(\'druhyDospelyPrvniZamestnavatel\', \'2\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyPrvniZamestnavatelDPCZdravotni" onclick="prepisFormular(\'druhyDospelyPrvniZamestnavatel\', \'3\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="druhyDospelyPrvniZamestnavatelDPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyPrvniZamestnavatelDPPZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="druhyDospelyPrvniZamestnavatelDPPPrijem" onchange="prepisFormular(\'druhyDospelyPrvniZamestnavatel\', \'4\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyPrvniZamestnavatelDPPZdravotni" onclick="prepisFormular(\'druhyDospelyPrvniZamestnavatel\', \'5\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>'
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="druhyDospelyPrvniZamestnavatelRuzovyPapir">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="druhyDospelyPrvniZamestnavatelRuzovyPapir" onclick="prepisFormular(\'druhyDospelyPrvniZamestnavatel\', \'6\', this.value)">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="druhyDospelyPrvniZamestnavatelVyzivovaneDetiForm" style="visibility: hidden;">';
 	text += '<div class="formrowtext">Počet dětí k daňovému bonusu</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="druhyDospelyPrvniZamestnavatelVyzivovaneDeti"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="druhyDospelyPrvniZamestnavatelVyzivovaneDeti" onchange="prepisFormular(\'druhyDospelyPrvniZamestnavatel\', \'7\', this.value)"></div>';
 	text += '</div>';
 	text += '</div>';
 	text += '<div id="mw-text-2">';
@@ -334,25 +330,25 @@ function pridejZamestnavateleDruhehoDospeleho() {
 	var text = '<h3>Druhý zaměstnavatel</h3>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na HPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="druhyDospelyDruhyZamestnavatelHPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyDruhyZamestnavatelHPPVyjimka">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="druhyDospelyDruhyZamestnavatelHPPPrijem" onchange="prepisFormular(\'druhyDospelyDruhyZamestnavatel\', \'0\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyDruhyZamestnavatelHPPVyjimka" onclick="prepisFormular(\'druhyDospelyDruhyZamestnavatel\', \'1\', this.value)">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPČ</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="druhyDospelyDruhyZamestnavatelDPCPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyDruhyZamestnavatelDPCZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="druhyDospelyDruhyZamestnavatelDPCPrijem" onchange="prepisFormular(\'druhyDospelyDruhyZamestnavatel\', \'2\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyDruhyZamestnavatelDPCZdravotni" onclick="prepisFormular(\'druhyDospelyDruhyZamestnavatel\', \'3\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="druhyDospelyDruhyZamestnavatelDPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyDruhyZamestnavatelDPPZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="druhyDospelyDruhyZamestnavatelDPPPrijem" onchange="prepisFormular(\'druhyDospelyDruhyZamestnavatel\', \'4\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="druhyDospelyDruhyZamestnavatelDPPZdravotni" onclick="prepisFormular(\'druhyDospelyDruhyZamestnavatel\', \'5\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>'
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="druhyDospelyDruhyZamestnavatelRuzovyPapir">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="druhyDospelyDruhyZamestnavatelRuzovyPapir" onclick="prepisFormular(\'druhyDospelyDruhyZamestnavatel\', \'6\', this.value)">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="druhyDospelyDruhyZamestnavatelVyzivovaneDetiForm" style="visibility: hidden;">';
 	text += '<div class="formrowtext">Počet dětí k daňovému bonusu</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="druhyDospelyDruhyZamestnavatelVyzivovaneDeti"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="druhyDospelyDruhyZamestnavatelVyzivovaneDeti" onchange="prepisFormular(\'druhyDospelyDruhyZamestnavatel\', \'7\', this.value)"></div>';
 	text += '</div>';
 
 	document.getElementById("mw-text-2").innerHTML = text;
@@ -395,23 +391,23 @@ function pridejDalsiPrijmyDruhehoDospeleho() {
 	var text = '<h3>Jiné příjmy</h3>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Důchod</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="druhyDospelyDuchody"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="druhyDospelyDuchody" onchange="prepisFormular(\'druhyDospelyDalsiPrijmy\', \'0\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Rodičovská</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="druhyDospelyRodicovska"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="druhyDospelyRodicovska" onchange="prepisFormular(\'druhyDospelyDalsiPrijmy\', \'1\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Podpora v nezaměstnanosti</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="druhyDospelyPodporaVNezamestnanosti"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="druhyDospelyPodporaVNezamestnanosti" onchange="prepisFormular(\'druhyDospelyDalsiPrijmy\', \'2\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Nemocenská</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="druhyDospelyNemocenska"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="druhyDospelyNemocenska" onchange="prepisFormular(\'druhyDospelyDalsiPrijmy\', \'3\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Ostatní</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="druhyDospelyOstatniPrijmy"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="druhyDospelyOstatniPrijmy" onchange="prepisFormular(\'druhyDospelyDalsiPrijmy\', \'4\', this.value)"></div>';
 	text += '</div>';
 
 	document.getElementById("mw-text-3").innerHTML = text;
@@ -429,34 +425,31 @@ function pridejDalsiPrijmyDruhehoDospeleho() {
 
 function vyplnPrijmyTretihoDospeleho() {
 
-	// uložení do globálních proměnných
-	prepisFormular()
-
 	var text = '<div class="mw-text">';
 	text += '<div id="mw-text-1">';
 	text += '<h2>Příjmy třetího dospělého</h2>';
 	text += '<h3>První zaměstnavatel</h3>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na HPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="tretiDospelyPrvniZamestnavatelHPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyPrvniZamestnavatelHPPVyjimka">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="tretiDospelyPrvniZamestnavatelHPPPrijem" onchange="prepisFormular(\'tretiDospelyPrvniZamestnavatel\', \'0\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyPrvniZamestnavatelHPPVyjimka" onclick="prepisFormular(\'tretiDospelyPrvniZamestnavatel\', \'1\', this.value)">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPČ</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="tretiDospelyPrvniZamestnavatelDPCPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyPrvniZamestnavatelDPCZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="tretiDospelyPrvniZamestnavatelDPCPrijem" onchange="prepisFormular(\'tretiDospelyPrvniZamestnavatel\', \'2\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyPrvniZamestnavatelDPCZdravotni" onclick="prepisFormular(\'tretiDospelyPrvniZamestnavatel\', \'3\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="tretiDospelyPrvniZamestnavatelDPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyPrvniZamestnavatelDPPZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="tretiDospelyPrvniZamestnavatelDPPPrijem" onchange="prepisFormular(\'tretiDospelyPrvniZamestnavatel\', \'4\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyPrvniZamestnavatelDPPZdravotni" onclick="prepisFormular(\'tretiDospelyPrvniZamestnavatel\', \'5\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>'
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="tretiDospelyPrvniZamestnavatelRuzovyPapir">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="tretiDospelyPrvniZamestnavatelRuzovyPapir" onclick="prepisFormular(\'tretiDospelyPrvniZamestnavatel\', \'6\', this.value)">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="tretiDospelyPrvniZamestnavatelVyzivovaneDetiForm" style="visibility: hidden;">';
 	text += '<div class="formrowtext">Počet dětí k daňovému bonusu</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="tretiDospelyPrvniZamestnavatelVyzivovaneDeti"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="tretiDospelyPrvniZamestnavatelVyzivovaneDeti" onchange="prepisFormular(\'tretiDospelyPrvniZamestnavatel\', \'7\', this.value)"></div>';
 	text += '</div>';
 	text += '</div>';
 	text += '<div id="mw-text-2">';
@@ -507,25 +500,25 @@ function pridejZamestnavateleTretihoDospeleho() {
 	var text = '<h3>Druhý zaměstnavatel</h3>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na HPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="tretiDospelyDruhyZamestnavatelHPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyDruhyZamestnavatelHPPVyjimka">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="50000" step="1000" id="tretiDospelyDruhyZamestnavatelHPPPrijem" onchange="prepisFormular(\'tretiDospelyDruhyZamestnavatel\', \'0\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyDruhyZamestnavatelHPPVyjimka" onclick="prepisFormular(\'tretiDospelyDruhyZamestnavatel\', \'1\', this.value)">Výjimka z minimálního základu <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPČ</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="tretiDospelyDruhyZamestnavatelDPCPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyDruhyZamestnavatelDPCZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="tretiDospelyDruhyZamestnavatelDPCPrijem" onchange="prepisFormular(\'tretiDospelyDruhyZamestnavatel\', \'2\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyDruhyZamestnavatelDPCZdravotni" onclick="prepisFormular(\'tretiDospelyDruhyZamestnavatel\', \'3\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Hrubý příjem na DPP</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="tretiDospelyDruhyZamestnavatelDPPPrijem"></div>';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyDruhyZamestnavatelDPPZdravotni">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="30000" step="1000" id="tretiDospelyDruhyZamestnavatelDPPPrijem" onchange="prepisFormular(\'tretiDospelyDruhyZamestnavatel\', \'4\', this.value)"></div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="tretiDospelyDruhyZamestnavatelDPPZdravotni" onclick="prepisFormular(\'tretiDospelyDruhyZamestnavatel\', \'5\', this.value)">Platí zdravotní jinde <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>'
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="tretiDospelyDruhyZamestnavatelRuzovyPapir">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="tretiDospelyDruhyZamestnavatelRuzovyPapir" onclick="prepisFormular(\'tretiDospelyDruhyZamestnavatel\', \'6\', this.value)">Prohlášení k dani u tohoto zaměstnavatele <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="tretiDospelyDruhyZamestnavatelVyzivovaneDetiForm" style="visibility: hidden;">';
 	text += '<div class="formrowtext">Počet dětí k daňovému bonusu</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="tretiDospelyDruhyZamestnavatelVyzivovaneDeti"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="tretiDospelyDruhyZamestnavatelVyzivovaneDeti" onchange="prepisFormular(\'tretiDospelyDruhyZamestnavatel\', \'7\', this.value)"></div>';
 	text += '</div>';
 
 	document.getElementById("mw-text-2").innerHTML = text;
@@ -568,23 +561,23 @@ function pridejDalsiPrijmyTretihoDospeleho() {
 	var text = '<h3>Jiné příjmy</h3>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Důchod</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="tretiDospelyDuchody"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="tretiDospelyDuchody" onchange="prepisFormular(\'tretiDospelyDalsiPrijmy\', \'0\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Rodičovská</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="tretiDospelyRodicovska"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="tretiDospelyRodicovska" onchange="prepisFormular(\'tretiDospelyDalsiPrijmy\', \'1\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Podpora v nezaměstnanosti</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="tretiDospelyPodporaVNezamestnanosti"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="tretiDospelyPodporaVNezamestnanosti" onchange="prepisFormular(\'tretiDospelyDalsiPrijmy\', \'2\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Nemocenská</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="tretiDospelyNemocenska"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="tretiDospelyNemocenska" onchange="prepisFormular(\'tretiDospelyDalsiPrijmy\', \'3\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Ostatní</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="tretiDospelyOstatniPrijmy"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="tretiDospelyOstatniPrijmy" onchange="prepisFormular(\'tretiDospelyDalsiPrijmy\', \'4\', this.value)"></div>';
 	text += '</div>';
 
 	document.getElementById("mw-text-3").innerHTML = text;
@@ -602,43 +595,40 @@ function pridejDalsiPrijmyTretihoDospeleho() {
 
 function vyplnExekuce() {
 
-	// uložení do globálních proměnných
-	prepisFormular()
-
 	var text = '<div class="mw-text">';
 	text += '<h2>Exekuce</h2>';
 	text += '<h3>První dospělý</h3>'
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="prvniDospelyPrednostniExekuce">Přednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="prvniDospelyPrednostniExekuce" onclick="prepisFormular(\'prvniDospelyExekuce\', \'0\', this.value)">Přednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="prvniDospelyNeprednostniExekuce">Nepřednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="prvniDospelyNeprednostniExekuce" onclick="prepisFormular(\'prvniDospelyExekuce\', \'1\', this.value)">Nepřednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="prvniDospelyDalsiVyzivovaneOsobyForm" style="visibility: hidden;">';
 	text += '<div class="formrowtext">Další vyživované osoby</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="prvniDospelyDalsiVyzivovaneOsoby"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="prvniDospelyDalsiVyzivovaneOsoby" onchange="prepisFormular(\'prvniDospelyExekuce\', \'2\', this.value)"></div>';
 	text += '</div>';
 	text += '<h3>Druhý dospělý</h3>'
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="druhyDospelyPrednostniExekuce">Přednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="druhyDospelyPrednostniExekuce" onclick="prepisFormular(\'druhyDospelyExekuce\', \'0\', this.value)">Přednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="druhyDospelyNeprednostniExekuce">Nepřednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="druhyDospelyNeprednostniExekuce" onclick="prepisFormular(\'druhyDospelyExekuce\', \'1\', this.value)">Nepřednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="druhyDospelyDalsiVyzivovaneOsobyForm" style="visibility: hidden;">';
 	text += '<div class="formrowtext">Další vyživované osoby</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="druhyDospelyDalsiVyzivovaneOsoby"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="druhyDospelyDalsiVyzivovaneOsoby" onchange="prepisFormular(\'druhyDospelyExekuce\', \'2\', this.value)"></div>';
 	text += '</div>';
 	text += '<h3>Třetí dospělý</h3>'
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="tretiDospelyPrednostniExekuce">Přednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="tretiDospelyPrednostniExekuce" onclick="prepisFormular(\'tretiDospelyExekuce\', \'0\', this.value)">Přednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="tretiDospelyNeprednostniExekuce">Nepřednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="tretiDospelyNeprednostniExekuce" onclick="prepisFormular(\'tretiDospelyExekuce\', \'1\', this.value)">Nepřednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="tretiDospelyDalsiVyzivovaneOsobyForm" style="visibility: hidden;">';
 	text += '<div class="formrowtext">Další vyživované osoby</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="tretiDospelyDalsiVyzivovaneOsoby"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="tretiDospelyDalsiVyzivovaneOsoby" onchange="prepisFormular(\'tretiDospelyExekuce\', \'2\', this.value)"></div>';
 	text += '</div>';
 
 	document.getElementById("mainwindow").innerHTML = text;
@@ -737,29 +727,26 @@ function vyplnExekuce() {
 
 function vyplnNakladyNaBydleni() {
 
-	// uložení do globálních proměnných
-	prepisFormular()
-
 	var text = '<div class="mw-text">';
 	text += '<div id="mw-text-1">';
 	text += '<h2>Náklady na bydlení</h2>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Nájem</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="najem"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="najem" onchange="prepisFormular(\'bydleni\', \'0\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Poplatky <sup><div class="tooltip">?<span class="tooltiptext">Energie, voda, úklid, ...</span></div></sup></div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="poplatky"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="poplatky" onchange="prepisFormular(\'bydleni\', \'1\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="vlastniByt">Vlastní nebo družstevní byt</div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="vlastniByt" onclick="prepisFormular(\'bydleni\', \'2\', this.value)">Vlastní nebo družstevní byt</div>';
 	text += '</div>';
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiodetail"><input type="checkbox" id="ubytovna">Ubytovna, chata nebo podnájem</div>';
+	text += '<div class="formrowradiodetail"><input type="checkbox" id="ubytovna" onclick="prepisFormular(\'bydleni\', \'3\', this.value)">Ubytovna, chata nebo podnájem</div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Velikost obce</div>';
-	text += '<div class="formrowinput"><select class="inputnr" type="text" id="velikostObce">';
+	text += '<div class="formrowinput"><select class="inputnr" type="text" id="velikostObce" onchange="prepisFormular(\'bydleni\', \'4\', this.value)">';
 	text += '<option value="1" selected="selected">Praha</option>';
 	text += '<option value="2">nad 100 tisíc</option>';
 	text += '<option value="3">50 až 100 tisíc</option>';
@@ -768,11 +755,11 @@ function vyplnNakladyNaBydleni() {
 	text += '</select></div>';
 
 	text += '<div class="formrow">';
-	text += '<div class="formrowradiomain"><input type="checkbox" id="obvykleNakladyButton">Stanovil ÚP místně obvyklé náklady? <sup><div class="tooltip">?<span class="tooltiptext">NĚJAKÝ TEXT</span></sup></div></div>'
+	text += '<div class="formrowradiomain"><input type="checkbox" id="obvykleNakladyButton" onchange="prepisFormular(\'bydleni\', \'5\', this.value)">Stanovil ÚP místně obvyklé náklady? <sup><div class="tooltip">?<span class="tooltiptext">NĚJAKÝ TEXT</span></sup></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="obvykleNakladyForm" style="visibility: hidden;">';
 	text += '<div class="formrowtext">Místně obvyklé náklady</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="obvykleNaklady"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="obvykleNaklady" onchange="prepisFormular(\'bydleni\', \'6\', this.value)"></div>';
 	text += '</div>';
 
 	text += '</div>';
@@ -801,9 +788,21 @@ function vyplnNakladyNaBydleni() {
 
 
 
-function prepisFormular() {
+function prepisFormular(promenna = 'dummy', poradi = 0, hodnota = 0) {
 
-	if(document.getElementById("prvniDospelyPrvniZamestnavatelHPPPrijem") !== null) {prvniDospelyPrvniZamestnavatel[0] = parseInt(document.getElementById("prvniDospelyPrvniZamestnavatelHPPPrijem").value)};
+	// kvůli checkboxům
+	if (hodnota == 'on') {
+		hodnota = true;
+	}
+
+	// přiřazení do globální proměnné
+	var nazevPromenne = promenna + '[' + poradi + ']';
+	eval(nazevPromenne + ' = ' + hodnota);
+
+	// vyplnění složení v růžovém pruhu
+	vypisSlozeni(promenna, poradi, hodnota);
+
+/*	if(document.getElementById("prvniDospelyPrvniZamestnavatelHPPPrijem") !== null) {prvniDospelyPrvniZamestnavatel[0] = parseInt(document.getElementById("prvniDospelyPrvniZamestnavatelHPPPrijem").value)};
 	if(document.getElementById("prvniDospelyPrvniZamestnavatelHPPVyjimka") !== null) {prvniDospelyPrvniZamestnavatel[1] = document.getElementById("prvniDospelyPrvniZamestnavatelHPPVyjimka").checked};
 	if(document.getElementById("prvniDospelyPrvniZamestnavatelDPCPrijem") !== null) {prvniDospelyPrvniZamestnavatel[2] = parseInt(document.getElementById("prvniDospelyPrvniZamestnavatelDPCPrijem").value)};
 	if(document.getElementById("prvniDospelyPrvniZamestnavatelDPCZdravotni") !== null) {prvniDospelyPrvniZamestnavatel[3] = document.getElementById("prvniDospelyPrvniZamestnavatelDPCZdravotni").checked};
@@ -854,23 +853,23 @@ function prepisFormular() {
 	if(document.getElementById("tretiDospelyDruhyZamestnavatelRuzovyPapir") !== null) {tretiDospelyDruhyZamestnavatel[6] = document.getElementById("tretiDospelyDruhyZamestnavatelRuzovyPapir").checked};
 	if(document.getElementById("tretiDospelyDruhyZamestnavatelVyzivovaneDeti") !== null) {tretiDospelyDruhyZamestnavatel[7] = parseInt(document.getElementById("tretiDospelyDruhyZamestnavatelVyzivovaneDeti").value)};
 
-	if(document.getElementById("prvniDospelyDuchody") !== null) {prvniDospelyDalsiPrijmy[0] = parseInt(document.getElementById("prvniDospelyDuchody").value)};
-	if(document.getElementById("prvniDospelyRodicovska") !== null) {prvniDospelyDalsiPrijmy[0] = parseInt(document.getElementById("prvniDospelyRodicovska").value)};
-	if(document.getElementById("prvniDospelyPodporaVNezamestnanosti") !== null) {prvniDospelyDalsiPrijmy[0] = parseInt(document.getElementById("prvniDospelyPodporaVNezamestnanosti").value)};
-	if(document.getElementById("prvniDospelyNemocenska") !== null) {prvniDospelyDalsiPrijmy[0] = parseInt(document.getElementById("prvniDospelyNemocenska").value)};
-	if(document.getElementById("prvniDospelyOstatniPrijmy") !== null) {prvniDospelyDalsiPrijmy[0] = parseInt(document.getElementById("prvniDospelyOstatniPrijmy").value)};
+	if(document.getElementById("prvniDospelyDuchody") !== null) {prvniDospelyDalsiPrijmy[0] = parseInt(document.getElementById("prvniDospelyDuchody").value)}
+	if(document.getElementById("prvniDospelyRodicovska") !== null) {prvniDospelyDalsiPrijmy[1] = parseInt(document.getElementById("prvniDospelyRodicovska").value)};
+	if(document.getElementById("prvniDospelyPodporaVNezamestnanosti") !== null) {prvniDospelyDalsiPrijmy[2] = parseInt(document.getElementById("prvniDospelyPodporaVNezamestnanosti").value)};
+	if(document.getElementById("prvniDospelyNemocenska") !== null) {prvniDospelyDalsiPrijmy[3] = parseInt(document.getElementById("prvniDospelyNemocenska").value)};
+	if(document.getElementById("prvniDospelyOstatniPrijmy") !== null) {prvniDospelyDalsiPrijmy[4] = parseInt(document.getElementById("prvniDospelyOstatniPrijmy").value)};
 
 	if(document.getElementById("druhyDospelyDuchody") !== null) {druhyDospelyDalsiPrijmy[0] = parseInt(document.getElementById("druhyDospelyDuchody").value)};
-	if(document.getElementById("druhyDospelyRodicovska") !== null) {druhyDospelyDalsiPrijmy[0] = parseInt(document.getElementById("druhyDospelyRodicovska").value)};
-	if(document.getElementById("druhyDospelyPodporaVNezamestnanosti") !== null) {druhyDospelyDalsiPrijmy[0] = parseInt(document.getElementById("druhyDospelyPodporaVNezamestnanosti").value)};
-	if(document.getElementById("druhyDospelyNemocenska") !== null) {druhyDospelyDalsiPrijmy[0] = parseInt(document.getElementById("druhyDospelyNemocenska").value)};
-	if(document.getElementById("druhyDospelyOstatniPrijmy") !== null) {druhyDospelyDalsiPrijmy[0] = parseInt(document.getElementById("druhyDospelyOstatniPrijmy").value)};
+	if(document.getElementById("druhyDospelyRodicovska") !== null) {druhyDospelyDalsiPrijmy[1] = parseInt(document.getElementById("druhyDospelyRodicovska").value)};
+	if(document.getElementById("druhyDospelyPodporaVNezamestnanosti") !== null) {druhyDospelyDalsiPrijmy[2] = parseInt(document.getElementById("druhyDospelyPodporaVNezamestnanosti").value)};
+	if(document.getElementById("druhyDospelyNemocenska") !== null) {druhyDospelyDalsiPrijmy[3] = parseInt(document.getElementById("druhyDospelyNemocenska").value)};
+	if(document.getElementById("druhyDospelyOstatniPrijmy") !== null) {druhyDospelyDalsiPrijmy[4] = parseInt(document.getElementById("druhyDospelyOstatniPrijmy").value)};
 
 	if(document.getElementById("tretiDospelyDuchody") !== null) {tretiDospelyDalsiPrijmy[0] = parseInt(document.getElementById("tretiDospelyDuchody").value)};
-	if(document.getElementById("tretiDospelyRodicovska") !== null) {tretiDospelyDalsiPrijmy[0] = parseInt(document.getElementById("tretiDospelyRodicovska").value)};
-	if(document.getElementById("tretiDospelyPodporaVNezamestnanosti") !== null) {tretiDospelyDalsiPrijmy[0] = parseInt(document.getElementById("tretiDospelyPodporaVNezamestnanosti").value)};
-	if(document.getElementById("tretiDospelyNemocenska") !== null) {tretiDospelyDalsiPrijmy[0] = parseInt(document.getElementById("tretiDospelyNemocenska").value)};
-	if(document.getElementById("tretiDospelyOstatniPrijmy") !== null) {tretiDospelyDalsiPrijmy[0] = parseInt(document.getElementById("tretiDospelyOstatniPrijmy").value)};
+	if(document.getElementById("tretiDospelyRodicovska") !== null) {tretiDospelyDalsiPrijmy[1] = parseInt(document.getElementById("tretiDospelyRodicovska").value)};
+	if(document.getElementById("tretiDospelyPodporaVNezamestnanosti") !== null) {tretiDospelyDalsiPrijmy[2] = parseInt(document.getElementById("tretiDospelyPodporaVNezamestnanosti").value)};
+	if(document.getElementById("tretiDospelyNemocenska") !== null) {tretiDospelyDalsiPrijmy[3] = parseInt(document.getElementById("tretiDospelyNemocenska").value)};
+	if(document.getElementById("tretiDospelyOstatniPrijmy") !== null) {tretiDospelyDalsiPrijmy[4] = parseInt(document.getElementById("tretiDospelyOstatniPrijmy").value)};
 
 	if(document.getElementById("prvniDospelyPrednostniExekuce") !== null) {prvniDospelyExekuce[0] = document.getElementById("prvniDospelyPrednostniExekuce").checked};
 	if(document.getElementById("prvniDospelyNeprednostniExekuce") !== null) {prvniDospelyExekuce[1] = document.getElementById("prvniDospelyNeprednostniExekuce").checked};
@@ -896,17 +895,25 @@ function prepisFormular() {
 	if(document.getElementById("ubytovna") !== null) {bydleni[3] = document.getElementById("ubytovna").checked};
 	if(document.getElementById("velikostObce") !== null) {bydleni[4] = parseInt(document.getElementById("velikostObce").value)};
 	if(document.getElementById("obvykleNaklady") !== null) {bydleni[5] = parseInt(document.getElementById("obvykleNaklady").value)};
-
+*/
 	// dopočítávání globálních proměnných
 	slozeniDomacnosti[4] = slozeniDomacnosti[0] + slozeniDomacnosti[1] + slozeniDomacnosti[2] + slozeniDomacnosti[3];
+
+}
+
+
+
+function vypisSlozeni(promenna = '', poradi = 0, hodnota = 0) {
+
+//	console.log(promenna, poradi, hodnota)
+	parametryDomacnosti += promenna + '[' + poradi + ']' + ': ' + hodnota + '. ';
+	document.getElementById("upperwindow").innerHTML = parametryDomacnosti;
+
 }
 
 
 
 function statickyModelujRodinu() {
-
-	// vyplnění z globálních proměnných
-	prepisFormular();
 
 	var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
 
@@ -940,15 +947,14 @@ function statickyModelujRodinu() {
 
 function dynamickyModelujRodinu(simulace = 0) {
 
-	// uložení do globálních proměnných
-	prepisFormular();
-
 	/* simulace:
 
 	1: příjem prvního dospělého na HPP
 	2: příjem prvního dospělého na DPČ
 	3: příjem prvního dospělého na DPP
 	4: nájem
+	5: důchod
+	6: rodičovská
 
 	*/
 
@@ -968,6 +974,9 @@ function dynamickyModelujRodinu(simulace = 0) {
 		prvniDospelyPoExekuci = [],
 		druhyDospelyPoExekuci = [],
 		tretiDospelyPoExekuci = [],
+		prvniDospelyDanovyBonus = [],
+		druhyDospelyDanovyBonus = [],
+		tretiDospelyDanovyBonus = [],
 		pridavkyNaDeti = [],
 		prispevekNaBydleni = [],
 		prispevekNaZivobyti = [],
@@ -990,17 +999,27 @@ function dynamickyModelujRodinu(simulace = 0) {
 		nazevNezavislePromenne = 'hrubý příjem prvního dospělého na DPČ';
 		backup = prvniDospelyPrvniZamestnavatel[2];
 		intervalMin = 0;
-		intervalMax = 10000;
+		intervalMax = 20000;
 	} else if (simulace == 3) {
 		nazevNezavislePromenne = 'hrubý příjem prvního dospělého na DPP';
 		backup = prvniDospelyPrvniZamestnavatel[4];
 		intervalMin = 0;
-		intervalMax = 10000;
+		intervalMax = 20000;
 	} else if (simulace == 4) {
 		nazevNezavislePromenne = 'nájem';
 		backup = bydleni[0];
 		intervalMin = 0;
 		intervalMax = 20000;
+	} else if (simulace == 5) {
+		nazevNezavislePromenne = 'důchod';
+		backup = prvniDospelyDalsiPrijmy[0];
+		intervalMin = 0;
+		intervalMax = 15000;
+	} else if (simulace == 6) {
+		nazevNezavislePromenne = 'rodičovská';
+		backup = prvniDospelyDalsiPrijmy[1];
+		intervalMin = 0;
+		intervalMax = 10000;
 	}
 
 	// u HPP nejdřív spočítat situaci s nulovou a minimální mzdou
@@ -1014,6 +1033,9 @@ function dynamickyModelujRodinu(simulace = 0) {
 			prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2]),
 			druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5]),
 			tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8]),
+			prvniDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[29]),
+			druhyDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[30]),
+			tretiDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[31]),
 			pridavkyNaDeti.push(prijmyAVydajeRodinyPoZapocteniDavek[14]),
 			prispevekNaBydleni.push(prijmyAVydajeRodinyPoZapocteniDavek[15]),
 			prispevekNaZivobyti.push(prijmyAVydajeRodinyPoZapocteniDavek[16]),
@@ -1041,6 +1063,10 @@ function dynamickyModelujRodinu(simulace = 0) {
 			prvniDospelyPrvniZamestnavatel[4] = i;
 		} else if (simulace == 4) {
 			bydleni[0] = i;
+		} else if (simulace == 5) {
+			prvniDospelyDalsiPrijmy[0] = i;
+		} else if (simulace == 6) {
+			prvniDospelyDalsiPrijmy[1] = i;
 		}
 
 		nezavisla.push(i)
@@ -1051,6 +1077,9 @@ function dynamickyModelujRodinu(simulace = 0) {
 		prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2]),
 		druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5]),
 		tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8]),
+		prvniDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[29]),
+		druhyDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[30]),
+		tretiDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[31]),
 		pridavkyNaDeti.push(prijmyAVydajeRodinyPoZapocteniDavek[14]),
 		prispevekNaBydleni.push(prijmyAVydajeRodinyPoZapocteniDavek[15]),
 		prispevekNaZivobyti.push(prijmyAVydajeRodinyPoZapocteniDavek[16]),
@@ -1074,23 +1103,30 @@ function dynamickyModelujRodinu(simulace = 0) {
 		prvniDospelyPrvniZamestnavatel[4] = backup;
 	} else if (simulace == 4) {
 		bydleni[0] = backup;
+	} else if (simulace == 5) {
+		prvniDospelyDalsiPrijmy[0] = backup;
+	} else if (simulace == 6) {
+		prvniDospelyDalsiPrijmy[1] = backup;
 	}
 
 	// vytvoření divu pro graf
 	var text = '<div id="graf" style="width:100%; height:100%">';
 	document.getElementById("mainwindow").innerHTML = text;
 
-	nakresliGraf(nezavisla, nazevNezavislePromenne, prijemRodiny, prvniDospelyPoExekuci, druhyDospelyPoExekuci, tretiDospelyPoExekuci, pridavkyNaDeti, prispevekNaBydleni, prispevekNaZivobyti,
-		doplatekNaBydleni, duchody, rodicovska, podporaVNezamestnanosti, nemocenska, ostatniPrijmy, najem, poplatky, exekuce);
+	nakresliGraf(nezavisla, nazevNezavislePromenne, prijemRodiny, prvniDospelyPoExekuci, druhyDospelyPoExekuci, tretiDospelyPoExekuci, prvniDospelyDanovyBonus, druhyDospelyDanovyBonus,
+		tretiDospelyDanovyBonus, pridavkyNaDeti, prispevekNaBydleni, prispevekNaZivobyti, doplatekNaBydleni, duchody, rodicovska, podporaVNezamestnanosti, nemocenska, ostatniPrijmy,
+		najem, poplatky, exekuce);
 
 }
 
 
 
-function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExekuci = [], druhyDospelyPoExekuci = [], tretiDospelyPoExekuci = [], pridavkyNaDeti = [], prispevekNaBydleni = [], prispevekNaZivobyti,
-		doplatekNaBydleni = [], duchody = [], rodicovska = [], podporaVNezamestnanosti = [], nemocenska = [], ostatniPrijmy = [], najem = [], poplatky = [], exekuce = []) {
+function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExekuci = [], druhyDospelyPoExekuci = [], tretiDospelyPoExekuci = [], prvniDospelyDanovyBonus = [],
+		druhyDospelyDanovyBonus = [], tretiDospelyDanovyBonus = [], pridavkyNaDeti = [], prispevekNaBydleni = [], prispevekNaZivobyti, doplatekNaBydleni = [], duchody = [],
+		rodicovska = [], podporaVNezamestnanosti = [], nemocenska = [], ostatniPrijmy = [], najem = [], poplatky = [], exekuce = []) {
 
-	Highcharts.chart('graf', {
+	var chart = Highcharts.chart('graf', {
+
 		chart: {
 			type: 'column'
 		},
@@ -1098,7 +1134,7 @@ function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExeku
 			text: 'Disponibilní příjem domácnosti × ' + nazev
 		},
 		subtitle: {
-			text: 'Dospělí: <b>' + slozeniDomacnosti[0] + '</b>, děti pod 6: <b>' + slozeniDomacnosti[1] + '</b>, děti 6 až 15: <b>' + slozeniDomacnosti[2] + '</b>, děti 15 až 26: <b>' + slozeniDomacnosti[3] + '</b>'
+//			text: 'Dospělí: <b>' + slozeniDomacnosti[0] + '</b>, děti pod 6: <b>' + slozeniDomacnosti[1] + '</b>, děti 6 až 15: <b>' + slozeniDomacnosti[2] + '</b>, děti 15 až 26: <b>' + slozeniDomacnosti[3] + '</b>'
 		},
 		xAxis: {
 			categories: x,
@@ -1156,19 +1192,34 @@ function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExeku
 		plotOptions: {
 		},
 		series: [{
-			name: 'čistý příjem 1. dospělého ze zaměstnání (po exekuci)',
+			name: 'čistý příjem 1. dospělého ze zaměstnání',
 			data: prvniDospelyPoExekuci,
 			color: colors[0],
 			stacking: 'stacked'
 		}, {
-			name: 'čistý příjem 2. dospělého ze zaměstnání (po exekuci)',
+			name: 'čistý příjem 2. dospělého ze zaměstnání',
 			data: druhyDospelyPoExekuci,
 			color: colors[1],
 			stacking: 'stacked'
 		}, {
-			name: 'čistý příjem 3. dospělého ze zaměstnání (po exekuci)',
+			name: 'čistý příjem 3. dospělého ze zaměstnání',
 			data: tretiDospelyPoExekuci,
 			color: colors[2],
+			stacking: 'stacked'
+		}, {
+			name: 'daňový bonus 1. dospělého',
+			data: prvniDospelyDanovyBonus,
+			color: 'black',
+			stacking: 'stacked'
+		}, {
+			name: 'daňový bonus 2. dospělého',
+			data: druhyDospelyDanovyBonus,
+			color: 'black',
+			stacking: 'stacked'
+		}, {
+			name: 'daňový bonus 3. dospělého',
+			data: tretiDospelyDanovyBonus,
+			color: 'black',
 			stacking: 'stacked'
 		}, {
 			name: 'přídavky na děti',
@@ -1249,6 +1300,20 @@ function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExeku
 			}
 		}]
 	});
+
+	// vyhážu z grafu proměnné, které mají v celém průběhu nulovou hodnotu
+	for (i = 0; i <= 18; i++) {
+
+		if(chart.series[i].processedYData.every(x => x == 0)) {
+
+			chart.series[i].update({
+				showInLegend: false,
+				visible: false
+			});
+
+		}
+
+	}
 
 }
 
@@ -2139,20 +2204,15 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], duc
 			prijmyPoExekuci = 2 * zakladPrijmuProExekuci / 3;
 		}
 
-		// u první exekuce se připočte daňový bonus na dítě
-		if ( (prednostniExekuce + neprednostniExekuce) == 1 ) {
-			prijmyPoExekuci = prijmyPoExekuci + nezabavitelnaCastka + danovyBonusNaDeti;
-
-		// pokud je ale exekucí víc, může další exekutor zabavit i daňový bonus, tj. do výpočtu vstupuje čistý příjem včetně bonusu
-		} else {
-			prijmyPoExekuci = prijmyPoExekuci + nezabavitelnaCastka;
-		}
+		// exekuuje se i daňový bonus na dítě
+		prijmyPoExekuci = prijmyPoExekuci + nezabavitelnaCastka;
+		danovyBonusNaDeti = 0;
 
 	}
 
 	exekuce = prijmyPredExekuci - prijmyPoExekuci;
 
-	return([prijmyPredExekuci, prijmyPoExekuci, exekuce]);
+	return([prijmyPredExekuci, prijmyPoExekuci, exekuce, danovyBonusNaDeti]);
 }
 
 
@@ -2467,15 +2527,17 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	prijmyAVydajeRodinyPoZapocteniDavek[27] = Math.round(rodinkaPrijemTretihoDospelehoPoExekuci[2]);
 	prijmyAVydajeRodinyPoZapocteniDavek[28] = Math.round(rodinkaPrijemPoExekuci[4]);
 
+	// daňový bonus
+	prijmyAVydajeRodinyPoZapocteniDavek[29] = Math.round(rodinkaPrijemPrvnihoDospelehoPoExekuci[3]);
+	prijmyAVydajeRodinyPoZapocteniDavek[30] = Math.round(rodinkaPrijemDruhehoDospelehoPoExekuci[3]);
+	prijmyAVydajeRodinyPoZapocteniDavek[31] = Math.round(rodinkaPrijemTretihoDospelehoPoExekuci[3]);
+
 	return(prijmyAVydajeRodinyPoZapocteniDavek);
 }
 
 
 
 /*
-
-*/
-
 function nastavRodinu1() {
 
 	// pokud je v hlavním okně otevřené nastavení rodiny, nepřepsalo by se; proto nejdřív vyčištění okna
@@ -2514,10 +2576,6 @@ function nastavRodinu1() {
 
 
 
-/*
-
-*/
-
 function nastavRodinu2() {
 
 	// pokud je v hlavním okně otevřené nastavení rodiny, nepřepsalo by se; proto nejdřív vyčištění okna
@@ -2555,10 +2613,6 @@ function nastavRodinu2() {
 }
 
 
-
-/*
-
-*/
 
 function nastavRodinu3() {
 
@@ -2634,3 +2688,4 @@ function nastavRodinu4() {
 
 	vyplnSlozeniDomacnosti()
 }
+*/
