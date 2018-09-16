@@ -127,9 +127,9 @@ function dynamickyModelujRodinu(simulace = 0) {
 
 			var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
 			prijemRodiny.push(prijmyAVydajeRodinyPoZapocteniDavek[13])
-			prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2] - prijmyAVydajeRodinyPoZapocteniDavek[29]),
-			druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5] - prijmyAVydajeRodinyPoZapocteniDavek[30]),
-			tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8] - prijmyAVydajeRodinyPoZapocteniDavek[31]),
+			prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2]),
+			druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5]),
+			tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8]),
 			prvniDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[29]),
 			druhyDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[30]),
 			tretiDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[31]),
@@ -177,10 +177,10 @@ function dynamickyModelujRodinu(simulace = 0) {
 			prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2] - prijmyAVydajeRodinyPoZapocteniDavek[29] - prvniDospelyDalsiPrijmy[0] - prvniDospelyDalsiPrijmy[1] -
 				prvniDospelyDalsiPrijmy[2] - prvniDospelyDalsiPrijmy[3] - prvniDospelyDalsiPrijmy[4])
 		} else {
-			prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2] - prijmyAVydajeRodinyPoZapocteniDavek[29])
+			prvniDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[2])
 		}
-		druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5] - prijmyAVydajeRodinyPoZapocteniDavek[30]),
-		tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8] - prijmyAVydajeRodinyPoZapocteniDavek[31])
+		druhyDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[5]),
+		tretiDospelyPoExekuci.push(prijmyAVydajeRodinyPoZapocteniDavek[8]),
 		prvniDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[29]),
 		druhyDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[30]),
 		tretiDospelyDanovyBonus.push(prijmyAVydajeRodinyPoZapocteniDavek[31]),

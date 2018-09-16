@@ -27,16 +27,6 @@ var prvniDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, false, 0],
 // velikost obce (1 = Praha, 2 = nad 100 000, 3 = nad 50 000, 4 = nad 10 000, 5 = pod 10 000), místně obvyklé náklady stanovené úřadem práce
 	bydleni = [0, 0, false, false, 1, 0];
 
-// parametry domácnosti, kam se zapisují změny
-
-
-var dummy = 0;
-
-	if (bydleni[3]) {var ubytovna = 'ano'} else {var ubytovna = 'ne'}
-	if (prvniDospelyExekuce[0] || prvniDospelyExekuce[1]) {var prvniExekuce = 'ano'} else {var prvniExekuce = 'ne'}
-	if (druhyDospelyExekuce[0] || druhyDospelyExekuce[1]) {var druhyExekuce = 'ano'} else {var druhyExekuce = 'ne'}
-	if (tretiDospelyExekuce[0] || tretiDospelyExekuce[1]) {var tretiExekuce = 'ano'} else {var tretiExekuce = 'ne'}
-
 // testovací rodinka
 prvniDospelyPrvniZamestnavatel = [20000, false, 0, false, 0, false, true, 2]
 prvniDospelyDalsiPrijmy = [0, 3800, 0, 0, 0]
