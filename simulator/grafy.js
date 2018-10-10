@@ -228,7 +228,7 @@ function dynamickyModelujRodinu(simulace = 0) {
 function nakresliGraf(x = [], nazev = '', prijemRodiny = [], prvniDospelyPoExekuci = [], druhyDospelyPoExekuci = [], tretiDospelyPoExekuci = [], prvniDospelyDanovyBonus = [],
 		druhyDospelyDanovyBonus = [], tretiDospelyDanovyBonus = [], pridavkyNaDeti = [], prispevekNaBydleni = [], prispevekNaZivobyti, doplatekNaBydleni = [], duchody = [],
 		rodicovska = [], podporaVNezamestnanosti = [], nemocenska = [], ostatniPrijmy = [], najem = [], poplatky = [], exekuce = []) {
-console.log(prijemRodiny[0])
+
 	var chart = Highcharts.chart('graf', {
 
 		chart: {

@@ -179,7 +179,7 @@ function pridejDalsiPrijmyPrvnihoDospeleho() {
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Rodičovská</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="prvniDospelyRodicovska" onchange="prepisFormular(\'prvniDospelyDalsiPrijmy\', \'1\', this.value)"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="prvniDospelyRodicovska" onchange="prepisFormular(\'prvniDospelyDalsiPrijmy\', \'1\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Podpora v nezaměstnanosti</div>';
@@ -349,7 +349,7 @@ function pridejDalsiPrijmyDruhehoDospeleho() {
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Rodičovská</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="druhyDospelyRodicovska" onchange="prepisFormular(\'druhyDospelyDalsiPrijmy\', \'1\', this.value)"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="druhyDospelyRodicovska" onchange="prepisFormular(\'druhyDospelyDalsiPrijmy\', \'1\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Podpora v nezaměstnanosti</div>';
@@ -519,7 +519,7 @@ function pridejDalsiPrijmyTretihoDospeleho() {
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Rodičovská</div>';
-	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10000" step="1000" id="tretiDospelyRodicovska" onchange="prepisFormular(\'tretiDospelyDalsiPrijmy\', \'1\', this.value)"></div>';
+	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="20000" step="1000" id="tretiDospelyRodicovska" onchange="prepisFormular(\'tretiDospelyDalsiPrijmy\', \'1\', this.value)"></div>';
 	text += '</div>';
 	text += '<div class="formrow">';
 	text += '<div class="formrowtext">Podpora v nezaměstnanosti</div>';
@@ -552,10 +552,10 @@ function vyplnExekuce() {
 	var text = '<div class="mw-text">';
 	text += '<h2>Exekuce</h2>';
 	text += '<h3>První dospělý</h3>'
-	text += '<div class="formrow">';
+	text += '<div class="formrow" id="prvniDospelyPrednostniExekuceForm">';
 	text += '<div class="formrowradiomain"><input type="checkbox" id="prvniDospelyPrednostniExekuce" onclick="prepisFormular(\'prvniDospelyExekuce\', \'0\', this.checked)">Přednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
-	text += '<div class="formrow">';
+	text += '<div class="formrow" id="prvniDospelyNeprednostniExekuceForm">';
 	text += '<div class="formrowradiomain"><input type="checkbox" id="prvniDospelyNeprednostniExekuce" onclick="prepisFormular(\'prvniDospelyExekuce\', \'1\', this.checked)">Nepřednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="prvniDospelyDalsiVyzivovaneOsobyForm" style="visibility: hidden;">';
@@ -563,10 +563,10 @@ function vyplnExekuce() {
 	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="prvniDospelyDalsiVyzivovaneOsoby" onchange="prepisFormular(\'prvniDospelyExekuce\', \'2\', this.value)"></div>';
 	text += '</div>';
 	text += '<h3>Druhý dospělý</h3>'
-	text += '<div class="formrow">';
+	text += '<div class="formrow" id="druhyDospelyPrednostniExekuceForm">';
 	text += '<div class="formrowradiomain"><input type="checkbox" id="druhyDospelyPrednostniExekuce" onclick="prepisFormular(\'druhyDospelyExekuce\', \'0\', this.checked)">Přednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
-	text += '<div class="formrow">';
+	text += '<div class="formrow" id="druhyDospelyNeprednostniExekuceForm">';
 	text += '<div class="formrowradiomain"><input type="checkbox" id="druhyDospelyNeprednostniExekuce" onclick="prepisFormular(\'druhyDospelyExekuce\', \'1\', this.checked)">Nepřednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="druhyDospelyDalsiVyzivovaneOsobyForm" style="visibility: hidden;">';
@@ -574,10 +574,10 @@ function vyplnExekuce() {
 	text += '<div class="formrowinput"><input class="inputnr" type="number" min="0" max="10" id="druhyDospelyDalsiVyzivovaneOsoby" onchange="prepisFormular(\'druhyDospelyExekuce\', \'2\', this.value)"></div>';
 	text += '</div>';
 	text += '<h3>Třetí dospělý</h3>'
-	text += '<div class="formrow">';
+	text += '<div class="formrow" id="tretiDospelyPrednostniExekuceForm">';
 	text += '<div class="formrowradiomain"><input type="checkbox" id="tretiDospelyPrednostniExekuce" onclick="prepisFormular(\'tretiDospelyExekuce\', \'0\', this.checked)">Přednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
-	text += '<div class="formrow">';
+	text += '<div class="formrow" id="tretiDospelyNeprednostniExekuceForm">';
 	text += '<div class="formrowradiomain"><input type="checkbox" id="tretiDospelyNeprednostniExekuce" onclick="prepisFormular(\'tretiDospelyExekuce\', \'1\', this.checked)">Nepřednostní exekuce <sup><div class="tooltip">?</sup><span class="tooltiptext">NĚJAKÝ TEXT</span></div></div>'
 	text += '</div>';
 	text += '<div class="formrow taxbonus" id="tretiDospelyDalsiVyzivovaneOsobyForm" style="visibility: hidden;">';
@@ -611,6 +611,14 @@ function vyplnExekuce() {
 		document.getElementById("tretiDospelyDalsiVyzivovaneOsobyForm").style.visibility = "visible";
 	}
 
+	// vypnutí druhého typu exekucí, pokud je někde nějaká
+	if(prvniDospelyExekuce[0]) {document.getElementById("prvniDospelyNeprednostniExekuceForm").style.visibility = "hidden";}
+	if(prvniDospelyExekuce[1]) {document.getElementById("prvniDospelyPrednostniExekuceForm").style.visibility = "hidden";}
+	if(druhyDospelyExekuce[0]) {document.getElementById("druhyDospelyNeprednostniExekuceForm").style.visibility = "hidden";}
+	if(druhyDospelyExekuce[1]) {document.getElementById("druhyDospelyPrednostniExekuceForm").style.visibility = "hidden";}
+	if(tretiDospelyExekuce[0]) {document.getElementById("tretiDospelyNeprednostniExekuceForm").style.visibility = "hidden";}
+	if(tretiDospelyExekuce[1]) {document.getElementById("tretiDospelyPrednostniExekuceForm").style.visibility = "hidden";}
+
 	// zapnutí/vypnutí formuláře pro počet vyživovaných osob
 	var prvniDospelyPrednostniExekuceCheck = document.getElementById("prvniDospelyPrednostniExekuce"),
 		prvniDospelyNeprednostniExekuceCheck = document.getElementById("prvniDospelyNeprednostniExekuce");
@@ -622,6 +630,14 @@ function vyplnExekuce() {
 		} else {
 			document.getElementById("prvniDospelyDalsiVyzivovaneOsobyForm").style.visibility = "hidden";
 		}
+
+		// zapnutí/vypnutí druhého typu exekucí - vždy jen přednostní, nebo nepřednostní
+		if(document.getElementById("prvniDospelyPrednostniExekuce").checked) {
+			document.getElementById("prvniDospelyNeprednostniExekuce").checked = false;
+			document.getElementById("prvniDospelyNeprednostniExekuceForm").style.visibility = "hidden";
+		} else {
+			document.getElementById("prvniDospelyNeprednostniExekuceForm").style.visibility = "visible";
+		}
 	};
 
 	prvniDospelyNeprednostniExekuceCheck.onchange = function() {
@@ -630,6 +646,14 @@ function vyplnExekuce() {
 			document.getElementById("prvniDospelyDalsiVyzivovaneOsoby").value = prvniDospelyExekuce[2];
 		} else {
 			document.getElementById("prvniDospelyDalsiVyzivovaneOsobyForm").style.visibility = "hidden";
+		}
+
+		// zapnutí/vypnutí druhého typu exekucí - vždy jen přednostní, nebo nepřednostní
+		if(document.getElementById("prvniDospelyNeprednostniExekuce").checked) {
+			document.getElementById("prvniDospelyPrednostniExekuce").checked = false;
+			document.getElementById("prvniDospelyPrednostniExekuceForm").style.visibility = "hidden";
+		} else {
+			document.getElementById("prvniDospelyPrednostniExekuceForm").style.visibility = "visible";
 		}
 	};
 
@@ -643,6 +667,14 @@ function vyplnExekuce() {
 		} else {
 			document.getElementById("druhyDospelyDalsiVyzivovaneOsobyForm").style.visibility = "hidden";
 		}
+
+		// zapnutí/vypnutí druhého typu exekucí - vždy jen přednostní, nebo nepřednostní
+		if(document.getElementById("druhyDospelyPrednostniExekuce").checked) {
+			document.getElementById("druhyDospelyNeprednostniExekuce").checked = false;
+			document.getElementById("druhyDospelyNeprednostniExekuceForm").style.visibility = "hidden";
+		} else {
+			document.getElementById("druhyDospelyNeprednostniExekuceForm").style.visibility = "visible";
+		}
 	};
 
 	druhyDospelyNeprednostniExekuceCheck.onchange = function() {
@@ -651,6 +683,14 @@ function vyplnExekuce() {
 			document.getElementById("druhyDospelyDalsiVyzivovaneOsoby").value = druhyDospelyExekuce[2];
 		} else {
 			document.getElementById("druhyDospelyDalsiVyzivovaneOsobyForm").style.visibility = "hidden";
+		}
+
+		// zapnutí/vypnutí druhého typu exekucí - vždy jen přednostní, nebo nepřednostní
+		if(document.getElementById("druhyDospelyNeprednostniExekuce").checked) {
+			document.getElementById("druhyDospelyPrednostniExekuce").checked = false;
+			document.getElementById("druhyDospelyPrednostniExekuceForm").style.visibility = "hidden";
+		} else {
+			document.getElementById("druhyDospelyPrednostniExekuceForm").style.visibility = "visible";
 		}
 	};
 
@@ -664,6 +704,14 @@ function vyplnExekuce() {
 		} else {
 			document.getElementById("tretiDospelyDalsiVyzivovaneOsobyForm").style.visibility = "hidden";
 		}
+
+		// zapnutí/vypnutí druhého typu exekucí - vždy jen přednostní, nebo nepřednostní
+		if(document.getElementById("tretiDospelyPrednostniExekuce").checked) {
+			document.getElementById("tretiDospelyNeprednostniExekuce").checked = false;
+			document.getElementById("tretiDospelyNeprednostniExekuceForm").style.visibility = "hidden";
+		} else {
+			document.getElementById("tretiDospelyNeprednostniExekuceForm").style.visibility = "visible";
+		}
 	};
 
 	tretiDospelyNeprednostniExekuceCheck.onchange = function() {
@@ -672,6 +720,14 @@ function vyplnExekuce() {
 			document.getElementById("tretiDospelyDalsiVyzivovaneOsoby").value = tretiDospelyExekuce[2];
 		} else {
 			document.getElementById("tretiDospelyDalsiVyzivovaneOsobyForm").style.visibility = "hidden";
+		}
+
+		// zapnutí/vypnutí druhého typu exekucí - vždy jen přednostní, nebo nepřednostní
+		if(document.getElementById("tretiDospelyNeprednostniExekuce").checked) {
+			document.getElementById("tretiDospelyPrednostniExekuce").checked = false;
+			document.getElementById("tretiDospelyPrednostniExekuceForm").style.visibility = "hidden";
+		} else {
+			document.getElementById("tretiDospelyPrednostniExekuceForm").style.visibility = "visible";
 		}
 	};
 
