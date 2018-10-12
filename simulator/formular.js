@@ -97,12 +97,24 @@ function vyplnPrijmyPrvnihoDospeleho() {
 	// zapnutí/vypnutí formuláře pro počet dětí u prohlášení k dani
 	var prvniDospelyPrvniZamestnavatelDaneCheck = document.getElementById("prvniDospelyPrvniZamestnavatelRuzovyPapir");
 	prvniDospelyPrvniZamestnavatelDaneCheck.onchange = function() {
+
 		if(document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility == "visible") {
 			document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
 		} else {
 			document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility = "visible";
 			document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDeti").value = prvniDospelyPrvniZamestnavatel[7];
 		}
+
+		// vynulování počtu dětí u prohlášení k dani jinde a přepnutí tlačítka u dalšího zaměstnavatele stejného dospělého
+		document.getElementById("prvniDospelyDruhyZamestnavatelRuzovyPapir").checked = false;
+		document.getElementById("prvniDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
+		prvniDospelyPrvniZamestnavatel[7] = 0;
+		prvniDospelyDruhyZamestnavatel[7] = 0;
+		druhyDospelyPrvniZamestnavatel[7] = 0;
+		druhyDospelyDruhyZamestnavatel[7] = 0;
+		tretiDospelyPrvniZamestnavatel[7] = 0;
+		tretiDospelyDruhyZamestnavatel[7] = 0;
+
 	};
 
 }
@@ -158,12 +170,24 @@ function pridejZamestnavatelePrvnihoDospeleho() {
 	// zapnutí/vypnutí formuláře pro počet dětí u prohlášení k dani
 	var prvniDospelyDruhyZamestnavatelDaneCheck = document.getElementById("prvniDospelyDruhyZamestnavatelRuzovyPapir");
 	prvniDospelyDruhyZamestnavatelDaneCheck.onchange = function() {
+
 		if(document.getElementById("prvniDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility == "visible") {
 			document.getElementById("prvniDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
 		} else {
 			document.getElementById("prvniDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility = "visible";
 			document.getElementById("prvniDospelyDruhyZamestnavatelVyzivovaneDeti").value = prvniDospelyDruhyZamestnavatel[7];
 		}
+
+		// vynulování počtu dětí u prohlášení k dani jinde a přepnutí tlačítka u dalšího zaměstnavatele stejného dospělého
+		document.getElementById("prvniDospelyPrvniZamestnavatelRuzovyPapir").checked = false;
+		document.getElementById("prvniDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
+		prvniDospelyPrvniZamestnavatel[7] = 0;
+		prvniDospelyDruhyZamestnavatel[7] = 0;
+		druhyDospelyPrvniZamestnavatel[7] = 0;
+		druhyDospelyDruhyZamestnavatel[7] = 0;
+		tretiDospelyPrvniZamestnavatel[7] = 0;
+		tretiDospelyDruhyZamestnavatel[7] = 0;
+
 	};
 
 }
@@ -267,12 +291,24 @@ function vyplnPrijmyDruhehoDospeleho() {
 	// zapnutí/vypnutí formuláře pro počet dětí u prohlášení k dani
 	var druhyDospelyPrvniZamestnavatelDaneCheck = document.getElementById("druhyDospelyPrvniZamestnavatelRuzovyPapir");
 	druhyDospelyPrvniZamestnavatelDaneCheck.onchange = function() {
+
 		if(document.getElementById("druhyDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility == "visible") {
 			document.getElementById("druhyDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
 		} else {
 			document.getElementById("druhyDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility = "visible";
 			document.getElementById("druhyDospelyPrvniZamestnavatelVyzivovaneDeti").value = druhyDospelyPrvniZamestnavatel[7];
 		}
+
+		// vynulování počtu dětí u prohlášení k dani jinde a přepnutí tlačítka u dalšího zaměstnavatele stejného dospělého
+		document.getElementById("druhyDospelyDruhyZamestnavatelRuzovyPapir").checked = false;
+		document.getElementById("druhyDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
+		prvniDospelyPrvniZamestnavatel[7] = 0;
+		prvniDospelyDruhyZamestnavatel[7] = 0;
+		druhyDospelyPrvniZamestnavatel[7] = 0;
+		druhyDospelyDruhyZamestnavatel[7] = 0;
+		tretiDospelyPrvniZamestnavatel[7] = 0;
+		tretiDospelyDruhyZamestnavatel[7] = 0;
+
 	};
 
 }
@@ -328,12 +364,24 @@ function pridejZamestnavateleDruhehoDospeleho() {
 	// zapnutí/vypnutí formuláře pro počet dětí u prohlášení k dani
 	var druhyDospelyDruhyZamestnavatelDaneCheck = document.getElementById("druhyDospelyDruhyZamestnavatelRuzovyPapir");
 	druhyDospelyDruhyZamestnavatelDaneCheck.onchange = function() {
+
 		if(document.getElementById("druhyDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility == "visible") {
 			document.getElementById("druhyDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
 		} else {
 			document.getElementById("druhyDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility = "visible";
 			document.getElementById("druhyDospelyDruhyZamestnavatelVyzivovaneDeti").value = druhyDospelyDruhyZamestnavatel[7];
 		}
+
+		// vynulování počtu dětí u prohlášení k dani jinde a přepnutí tlačítka u dalšího zaměstnavatele stejného dospělého
+		document.getElementById("druhyDospelyPrvniZamestnavatelRuzovyPapir").checked = false;
+		document.getElementById("druhyDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
+		prvniDospelyPrvniZamestnavatel[7] = 0;
+		prvniDospelyDruhyZamestnavatel[7] = 0;
+		druhyDospelyPrvniZamestnavatel[7] = 0;
+		druhyDospelyDruhyZamestnavatel[7] = 0;
+		tretiDospelyPrvniZamestnavatel[7] = 0;
+		tretiDospelyDruhyZamestnavatel[7] = 0;
+
 	};
 
 }
@@ -437,12 +485,24 @@ function vyplnPrijmyTretihoDospeleho() {
 	// zapnutí/vypnutí formuláře pro počet dětí u prohlášení k dani
 	var tretiDospelyPrvniZamestnavatelDaneCheck = document.getElementById("tretiDospelyPrvniZamestnavatelRuzovyPapir");
 	tretiDospelyPrvniZamestnavatelDaneCheck.onchange = function() {
+
 		if(document.getElementById("tretiDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility == "visible") {
 			document.getElementById("tretiDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
 		} else {
 			document.getElementById("tretiDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility = "visible";
 			document.getElementById("tretiDospelyPrvniZamestnavatelVyzivovaneDeti").value = tretiDospelyPrvniZamestnavatel[7];
 		}
+
+		// vynulování počtu dětí u prohlášení k dani jinde a přepnutí tlačítka u dalšího zaměstnavatele stejného dospělého
+		document.getElementById("tretiDospelyDruhyZamestnavatelRuzovyPapir").checked = false;
+		document.getElementById("tretiDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
+		prvniDospelyPrvniZamestnavatel[7] = 0;
+		prvniDospelyDruhyZamestnavatel[7] = 0;
+		druhyDospelyPrvniZamestnavatel[7] = 0;
+		druhyDospelyDruhyZamestnavatel[7] = 0;
+		tretiDospelyPrvniZamestnavatel[7] = 0;
+		tretiDospelyDruhyZamestnavatel[7] = 0;
+
 	};
 
 }
@@ -498,12 +558,24 @@ function pridejZamestnavateleTretihoDospeleho() {
 	// zapnutí/vypnutí formuláře pro počet dětí u prohlášení k dani
 	var tretiDospelyDruhyZamestnavatelDaneCheck = document.getElementById("tretiDospelyDruhyZamestnavatelRuzovyPapir");
 	tretiDospelyDruhyZamestnavatelDaneCheck.onchange = function() {
+
 		if(document.getElementById("tretiDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility == "visible") {
 			document.getElementById("tretiDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
 		} else {
 			document.getElementById("tretiDospelyDruhyZamestnavatelVyzivovaneDetiForm").style.visibility = "visible";
 			document.getElementById("tretiDospelyDruhyZamestnavatelVyzivovaneDeti").value = tretiDospelyDruhyZamestnavatel[7];
 		}
+
+		// vynulování počtu dětí u prohlášení k dani jinde a přepnutí tlačítka u dalšího zaměstnavatele stejného dospělého
+		document.getElementById("tretiDospelyPrvniZamestnavatelRuzovyPapir").checked = false;
+		document.getElementById("tretiDospelyPrvniZamestnavatelVyzivovaneDetiForm").style.visibility = "hidden";
+		prvniDospelyPrvniZamestnavatel[7] = 0;
+		prvniDospelyDruhyZamestnavatel[7] = 0;
+		druhyDospelyPrvniZamestnavatel[7] = 0;
+		druhyDospelyDruhyZamestnavatel[7] = 0;
+		tretiDospelyPrvniZamestnavatel[7] = 0;
+		tretiDospelyDruhyZamestnavatel[7] = 0;
+
 	};
 
 }
@@ -816,21 +888,27 @@ function prepisFormular(promenna = 'dummy', poradi = 0, hodnota = 0) {
 
 function vypisSlozeni(promenna = '', poradi = 0, hodnota = 0) {
 
-	if (bydleni[3]) {var ubytovna = 'ano'} else {var ubytovna = 'ne'}
-	if (prvniDospelyExekuce[0] || prvniDospelyExekuce[1]) {var prvniExekuce = 'ano'} else {var prvniExekuce = 'ne'}
-	if (druhyDospelyExekuce[0] || druhyDospelyExekuce[1]) {var druhyExekuce = 'ano'} else {var druhyExekuce = 'ne'}
-	if (tretiDospelyExekuce[0] || tretiDospelyExekuce[1]) {var tretiExekuce = 'ano'} else {var tretiExekuce = 'ne'}
+	if (prvniDospelyPrvniZamestnavatel[6] || prvniDospelyDruhyZamestnavatel[6]) {var prvniDospelyZamestnavatel = 'ano'} else {var prvniDospelyZamestnavatel = 'ne'};
+	if (druhyDospelyPrvniZamestnavatel[6] || druhyDospelyDruhyZamestnavatel[6]) {var druhyDospelyZamestnavatel = 'ano'} else {var druhyDospelyZamestnavatel = 'ne'};
+	if (tretiDospelyPrvniZamestnavatel[6] || tretiDospelyDruhyZamestnavatel[6]) {var tretiDospelyZamestnavatel = 'ano'} else {var tretiDospelyZamestnavatel = 'ne'};
+	if (bydleni[3]) {var ubytovna = 'ano'} else {var ubytovna = 'ne'};
+	if (prvniDospelyExekuce[0] || prvniDospelyExekuce[1]) {var prvniExekuce = 'ano'} else {var prvniExekuce = 'ne'};
+	if (druhyDospelyExekuce[0] || druhyDospelyExekuce[1]) {var druhyExekuce = 'ano'} else {var druhyExekuce = 'ne'};
+	if (tretiDospelyExekuce[0] || tretiDospelyExekuce[1]) {var tretiExekuce = 'ano'} else {var tretiExekuce = 'ne'};
 
 	var parametryDomacnosti = '<div><b>Složení domácnosti: </b>dospělí: ' + slozeniDomacnosti[0] + ', děti: ' + parseInt(slozeniDomacnosti[1] + slozeniDomacnosti[2] + slozeniDomacnosti[3]) + '</br>' +
-							'<b>Příjmy 1. dospělého: </b>HPP: ' + parseInt(prvniDospelyPrvniZamestnavatel[0] + prvniDospelyDruhyZamestnavatel[0]) +
+							'<b>Příjmy 1. dospělého: </b>HPP: ' + parseInt(prvniDospelyPrvniZamestnavatel + prvniDospelyDruhyZamestnavatel[0]) +
 													  ', DPČ: ' + parseInt(prvniDospelyPrvniZamestnavatel[2] + prvniDospelyDruhyZamestnavatel[2]) +
-													  ', DPP: ' + parseInt(prvniDospelyPrvniZamestnavatel[4] + prvniDospelyDruhyZamestnavatel[4]) + '</br>' +
+													  ', DPP: ' + parseInt(prvniDospelyPrvniZamestnavatel[4] + prvniDospelyDruhyZamestnavatel[4]) +
+													  ', prohlášení k dani: ' + prvniDospelyZamestnavatel + '</br>' +
 							'<b>Příjmy 2. dospělého: </b>HPP: ' + parseInt(druhyDospelyPrvniZamestnavatel[0] + druhyDospelyDruhyZamestnavatel[0]) +
 													  ', DPČ: ' + parseInt(druhyDospelyPrvniZamestnavatel[2] + druhyDospelyDruhyZamestnavatel[2]) +
-													  ', DPP: ' + parseInt(druhyDospelyPrvniZamestnavatel[4] + druhyDospelyDruhyZamestnavatel[4]) + '</br>' +
+													  ', DPP: ' + parseInt(druhyDospelyPrvniZamestnavatel[4] + druhyDospelyDruhyZamestnavatel[4]) +
+													  ', prohlášení k dani: ' + druhyDospelyZamestnavatel + '</br>' +
 							'<b>Příjmy 3. dospělého: </b>HPP: ' + parseInt(tretiDospelyPrvniZamestnavatel[0] + tretiDospelyDruhyZamestnavatel[0]) +
 													  ', DPČ: ' + parseInt(tretiDospelyPrvniZamestnavatel[2] + tretiDospelyDruhyZamestnavatel[2]) +
-													  ', DPP: ' + parseInt(tretiDospelyPrvniZamestnavatel[4] + tretiDospelyDruhyZamestnavatel[4]) + '</br>' +
+													  ', DPP: ' + parseInt(tretiDospelyPrvniZamestnavatel[4] + tretiDospelyDruhyZamestnavatel[4]) +
+													  ', prohlášení k dani: ' + tretiDospelyZamestnavatel + '</br>' +
 							'<b>Další příjmy: </b>důchody: ' + parseInt(prvniDospelyDalsiPrijmy[0] + druhyDospelyDalsiPrijmy[0] + tretiDospelyDalsiPrijmy[0]) +
 											   ', rodičovská: ' + parseInt(prvniDospelyDalsiPrijmy[1] + druhyDospelyDalsiPrijmy[1] + tretiDospelyDalsiPrijmy[1]) +
 											   ', podpora v nezaměstnanosti: ' + parseInt(prvniDospelyDalsiPrijmy[2] + druhyDospelyDalsiPrijmy[2] + tretiDospelyDalsiPrijmy[2]) +
@@ -844,6 +922,7 @@ function vypisSlozeni(promenna = '', poradi = 0, hodnota = 0) {
 }
 
 
+// je potřeba změnit proměnné
 
 function statickyModelujRodinu() {
 
