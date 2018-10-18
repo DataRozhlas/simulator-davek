@@ -871,13 +871,13 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], duc
 	// pokud je bez exekucí, nebo jsou příjmy nižší než nezabavitelná částka, nic se nestrhává
 	if( (prednostniExekuce + neprednostniExekuce == 0) || (prijmyDospelehoPredExekuci < nezabavitelnaCastka) ) {
 
-		prijmyDospelehoPoExekuci = prijmyDospelehoPredExekuci;
+		prijmyDospelehoPoExekuci = prijmyDospelehoPredExekuci + danovyBonusNaDetiPoExekuci;
 		prijemDospelehoBezDanovehoBonusuPoExekuci = prijemDospelehoBezDanovehoBonusuPredExekuci;
 		danovyBonusNaDetiPoExekuci = danovyBonusNaDetiPredExekuci;
 		duchodyPoExekuci = duchody;
-		nemocenskaPoExekuci = nemocenska;
-		podporaVNezamestnanostiPoExekuci = podporaVNezamestnanosti;
 		rodicovskaPoExekuci = rodicovska;
+		podporaVNezamestnanostiPoExekuci = podporaVNezamestnanosti;
+		nemocenskaPoExekuci = nemocenska;
 		ostatniPrijmyPoExekuci = ostatniPrijmy;
 		exekuce = 0;
 
@@ -910,13 +910,13 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], duc
 
 		prijemDospelehoBezDanovehoBonusuPoExekuci = pomerExekuci * prijemDospelehoBezDanovehoBonusuPredExekuci;
 		duchodyPoExekuci = pomerExekuci * duchody;
-		nemocenskaPoExekuci = pomerExekuci * nemocenska;
-		podporaVNezamestnanostiPoExekuci = pomerExekuci * podporaVNezamestnanosti;
 		rodicovskaPoExekuci = pomerExekuci * rodicovska;
+		podporaVNezamestnanostiPoExekuci = pomerExekuci * podporaVNezamestnanosti;
+		nemocenskaPoExekuci = pomerExekuci * nemocenska;
 		ostatniPrijmyPoExekuci = pomerExekuci * ostatniPrijmy;
 
-		return([prijmyDospelehoPredExekuci, prijmyDospelehoPoExekuci, prijemDospelehoBezDanovehoBonusuPoExekuci, danovyBonusNaDetiPoExekuci, duchodyPoExekuci, nemocenskaPoExekuci,
-			podporaVNezamestnanostiPoExekuci, rodicovskaPoExekuci, ostatniPrijmyPoExekuci, exekuce]);
+		return([prijmyDospelehoPredExekuci, prijmyDospelehoPoExekuci, prijemDospelehoBezDanovehoBonusuPoExekuci, danovyBonusNaDetiPoExekuci, duchodyPoExekuci, rodicovskaPoExekuci,
+			podporaVNezamestnanostiPoExekuci, nemocenskaPoExekuci, ostatniPrijmyPoExekuci, exekuce]);
 
 	}
 
@@ -948,14 +948,14 @@ function spocitejPrijemDomacnostiPoExekuci(prijemPrvnihoDospelehoPoExekuci = [0,
 	prijemDomacnostiBezDanovehoBonusuPoExekuci = prijemPrvnihoDospelehoPoExekuci[2] + prijemDruhehoDospelehoPoExekuci[2] + prijemTretihoDospelehoPoExekuci[2];
 	danovyBonusDomacnostiNaDetiPoExekuci = prijemPrvnihoDospelehoPoExekuci[3] + prijemDruhehoDospelehoPoExekuci[3] + prijemTretihoDospelehoPoExekuci[3];
 	duchodyDomacnostiPoExekuci = prijemPrvnihoDospelehoPoExekuci[4] + prijemDruhehoDospelehoPoExekuci[4] + prijemTretihoDospelehoPoExekuci[4];
-	nemocenskaDomacnostiPoExekuci = prijemPrvnihoDospelehoPoExekuci[5] + prijemDruhehoDospelehoPoExekuci[5] + prijemTretihoDospelehoPoExekuci[5];
+	rodicovskaDomacnostiPoExekuci = prijemPrvnihoDospelehoPoExekuci[5] + prijemDruhehoDospelehoPoExekuci[5] + prijemTretihoDospelehoPoExekuci[5];
 	podporaDomacnostiVNezamestnanostiPoExekuci = prijemPrvnihoDospelehoPoExekuci[6] + prijemDruhehoDospelehoPoExekuci[6] + prijemTretihoDospelehoPoExekuci[6];
-	rodicovskaDomacnostiPoExekuci = prijemPrvnihoDospelehoPoExekuci[7] + prijemDruhehoDospelehoPoExekuci[7] + prijemTretihoDospelehoPoExekuci[7];
+	nemocenskaDomacnostiPoExekuci = prijemPrvnihoDospelehoPoExekuci[7] + prijemDruhehoDospelehoPoExekuci[7] + prijemTretihoDospelehoPoExekuci[7];
 	ostatniPrijmyDomacnostiPoExekuci = prijemPrvnihoDospelehoPoExekuci[8] + prijemDruhehoDospelehoPoExekuci[8] + prijemTretihoDospelehoPoExekuci[8];
 	exekuceDomacnosti = prijemPrvnihoDospelehoPoExekuci[9] + prijemDruhehoDospelehoPoExekuci[9] + prijemTretihoDospelehoPoExekuci[9];
 
 	return([prijmyDomacnostiPredExekuci, prijmyDomacnostiPoExekuci, prijemDomacnostiBezDanovehoBonusuPoExekuci, danovyBonusDomacnostiNaDetiPoExekuci, duchodyDomacnostiPoExekuci,
-		nemocenskaDomacnostiPoExekuci, podporaDomacnostiVNezamestnanostiPoExekuci, rodicovskaDomacnostiPoExekuci, ostatniPrijmyDomacnostiPoExekuci, exekuceDomacnosti]);
+		rodicovskaDomacnostiPoExekuci, podporaDomacnostiVNezamestnanostiPoExekuci, nemocenskaDomacnostiPoExekuci, ostatniPrijmyDomacnostiPoExekuci, exekuceDomacnosti]);
 
 }
 
@@ -1233,7 +1233,7 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	prijmyAVydajeRodinyPoZapocteniDavek[17] = Math.round(rodinkaPrijemPoExekuci[9]);
 
 	// 18: kontrola, disponibilní příjem včetně dávek a výdajů na nájem
-	prijmyAVydajeRodinyPoZapocteniDavek[18] = Math.round(rodinkaPrijemPoExekuci[1] + rodinkaPridavkyNaDeti + rodinkaPrispevekNaBydleni + rodinkaPrispevekNaZivobyti +
+	prijmyAVydajeRodinyPoZapocteniDavek[18] = Math.round(rodinkaPrijemPoExekuci[1] + rodinkaPrijemPoExekuci[3] + rodinkaPridavkyNaDeti + rodinkaPrispevekNaBydleni + rodinkaPrispevekNaZivobyti +
 		rodinkaDoplatekNaBydleni - bydleni[0] - bydleni[1]);
 
 	return(prijmyAVydajeRodinyPoZapocteniDavek);

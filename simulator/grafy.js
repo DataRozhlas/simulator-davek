@@ -237,8 +237,6 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 		tretiDospelyPoExekuci = [], tretiDospelyDanovyBonus = [], pridavkyNaDeti = [], prispevekNaBydleni = [], prispevekNaZivobyti, doplatekNaBydleni = [], duchody = [],
 		rodicovska = [], podporaVNezamestnanosti = [], nemocenska = [], ostatniPrijmy = [], najem = [], poplatky = [], exekuce = [], prijemRodiny = []) {
 
-console.log(prijemRodiny)
-
 	var chart = Highcharts.chart('graf', {
 
 		chart: {
