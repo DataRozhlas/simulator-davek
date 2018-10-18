@@ -881,8 +881,8 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], duc
 		ostatniPrijmyPoExekuci = ostatniPrijmy;
 		exekuce = 0;
 
-		return([prijmyDospelehoPredExekuci, prijmyDospelehoPoExekuci, prijemDospelehoBezDanovehoBonusuPoExekuci, danovyBonusNaDetiPoExekuci, duchodyPoExekuci, nemocenskaPoExekuci,
-			podporaVNezamestnanostiPoExekuci, rodicovskaPoExekuci, ostatniPrijmyPoExekuci, exekuce]);
+		return([prijmyDospelehoPredExekuci, prijmyDospelehoPoExekuci, prijemDospelehoBezDanovehoBonusuPoExekuci, danovyBonusNaDetiPoExekuci, duchodyPoExekuci, rodicovskaPoExekuci,
+			podporaVNezamestnanostiPoExekuci, nemocenskaPoExekuci, ostatniPrijmyPoExekuci, exekuce]);
 
 	// jinak se vypočítá exekuce:
 	} else {
