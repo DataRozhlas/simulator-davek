@@ -1007,47 +1007,59 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 
 	*/
 
-	var rodinkaPrijemPrvnihoDospeleho = spocitejPrijemDospeleho(
-		prijemPrace1 = spocitejPrijemUZamestnavatele(
+	var rodinkaPrijemPrvniDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
 			prijemNaHPP = spocitejSlozkyNaHPP(prvniDospelyPrvniZamestnavatel[0], prvniDospelyPrvniZamestnavatel[1]),
 			prijemNaDPC = spocitejSlozkyNaDPC(prvniDospelyPrvniZamestnavatel[2], prvniDospelyPrvniZamestnavatel[3]),
 			prijemNaDPP = spocitejSlozkyNaDPP(prvniDospelyPrvniZamestnavatel[4], prvniDospelyPrvniZamestnavatel[5]),
 			ruzovyPapir = prvniDospelyPrvniZamestnavatel[6],
-			pocetVyzivovanychDeti = prvniDospelyPrvniZamestnavatel[7]),
-		prijemPrace2 = spocitejPrijemUZamestnavatele(
+			pocetVyzivovanychDeti = prvniDospelyPrvniZamestnavatel[7]);
+
+	var rodinkaPrijemPrvniDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
 			prijemNaHPP = spocitejSlozkyNaHPP(prvniDospelyDruhyZamestnavatel[0], prvniDospelyDruhyZamestnavatel[1]),
 			prijemNaDPC = spocitejSlozkyNaDPC(prvniDospelyDruhyZamestnavatel[2], prvniDospelyDruhyZamestnavatel[3]),
 			prijemNaDPP = spocitejSlozkyNaDPP(prvniDospelyDruhyZamestnavatel[4], prvniDospelyDruhyZamestnavatel[5]),
 			ruzovyPapir = prvniDospelyDruhyZamestnavatel[6],
-			pocetVyzivovanychDeti = prvniDospelyDruhyZamestnavatel[7]));
+			pocetVyzivovanychDeti = prvniDospelyDruhyZamestnavatel[7]);
 
-	var rodinkaPrijemDruhehoDospeleho = spocitejPrijemDospeleho(
-		prijemPrace1 = spocitejPrijemUZamestnavatele(
+	var rodinkaPrijemDruhyDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
 			prijemNaHPP = spocitejSlozkyNaHPP(druhyDospelyPrvniZamestnavatel[0], druhyDospelyPrvniZamestnavatel[1]),
 			prijemNaDPC = spocitejSlozkyNaDPC(druhyDospelyPrvniZamestnavatel[2], druhyDospelyPrvniZamestnavatel[3]),
 			prijemNaDPP = spocitejSlozkyNaDPP(druhyDospelyPrvniZamestnavatel[4], druhyDospelyPrvniZamestnavatel[5]),
 			ruzovyPapir = druhyDospelyPrvniZamestnavatel[6],
-			pocetVyzivovanychDeti = druhyDospelyPrvniZamestnavatel[7]),
-		prijemPrace2 = spocitejPrijemUZamestnavatele(
+			pocetVyzivovanychDeti = druhyDospelyPrvniZamestnavatel[7]);
+
+	var rodinkaPrijemDruhyDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
 			prijemNaHPP = spocitejSlozkyNaHPP(druhyDospelyDruhyZamestnavatel[0], druhyDospelyDruhyZamestnavatel[1]),
 			prijemNaDPC = spocitejSlozkyNaDPC(druhyDospelyDruhyZamestnavatel[2], druhyDospelyDruhyZamestnavatel[3]),
 			prijemNaDPP = spocitejSlozkyNaDPP(druhyDospelyDruhyZamestnavatel[4], druhyDospelyDruhyZamestnavatel[5]),
 			ruzovyPapir = druhyDospelyDruhyZamestnavatel[6],
-			pocetVyzivovanychDeti = druhyDospelyDruhyZamestnavatel[7]));
+			pocetVyzivovanychDeti = druhyDospelyDruhyZamestnavatel[7]);
 
-	var rodinkaPrijemTretihoDospeleho = spocitejPrijemDospeleho(
-		prijemPrace1 = spocitejPrijemUZamestnavatele(
+	var rodinkaPrijemTretiDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
 			prijemNaHPP = spocitejSlozkyNaHPP(tretiDospelyPrvniZamestnavatel[0], tretiDospelyPrvniZamestnavatel[1]),
 			prijemNaDPC = spocitejSlozkyNaDPC(tretiDospelyPrvniZamestnavatel[2], tretiDospelyPrvniZamestnavatel[3]),
 			prijemNaDPP = spocitejSlozkyNaDPP(tretiDospelyPrvniZamestnavatel[4], tretiDospelyPrvniZamestnavatel[5]),
 			ruzovyPapir = tretiDospelyPrvniZamestnavatel[6],
-			pocetVyzivovanychDeti = tretiDospelyPrvniZamestnavatel[7]),
-		prijemPrace2 = spocitejPrijemUZamestnavatele(
+			pocetVyzivovanychDeti = tretiDospelyPrvniZamestnavatel[7]);
+
+	var rodinkaPrijemTretiDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
 			prijemNaHPP = spocitejSlozkyNaHPP(tretiDospelyDruhyZamestnavatel[0], tretiDospelyDruhyZamestnavatel[1]),
 			prijemNaDPC = spocitejSlozkyNaDPC(tretiDospelyDruhyZamestnavatel[2], tretiDospelyDruhyZamestnavatel[3]),
 			prijemNaDPP = spocitejSlozkyNaDPP(tretiDospelyDruhyZamestnavatel[4], tretiDospelyDruhyZamestnavatel[5]),
 			ruzovyPapir = tretiDospelyDruhyZamestnavatel[6],
-			pocetVyzivovanychDeti = tretiDospelyDruhyZamestnavatel[7]));
+			pocetVyzivovanychDeti = tretiDospelyDruhyZamestnavatel[7]);
+
+	var rodinkaPrijemPrvnihoDospeleho = spocitejPrijemDospeleho(
+		prijemPrace1 = rodinkaPrijemPrvniDospelyPrvniPrace,
+		prijemPrace2 = rodinkaPrijemPrvniDospelyDruhaPrace);
+
+	var rodinkaPrijemDruhehoDospeleho = spocitejPrijemDospeleho(
+		prijemPrace1 = rodinkaPrijemDruhyDospelyPrvniPrace,
+		prijemPrace2 = rodinkaPrijemDruhyDospelyDruhaPrace);
+
+	var rodinkaPrijemTretihoDospeleho = spocitejPrijemDospeleho(
+		prijemPrace1 = rodinkaPrijemTretiDospelyPrvniPrace,
+		prijemPrace2 = rodinkaPrijemTretiDospelyDruhaPrace);
 
 	var rodinkaCistyPrijemDomacnosti = spocitejCistyPrijemDomacnostiZeZamestnani(
 		prijemPrvnihoDospeleho = rodinkaPrijemPrvnihoDospeleho,
@@ -1235,6 +1247,114 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	// 18: kontrola, disponibilní příjem včetně dávek a výdajů na nájem
 	prijmyAVydajeRodinyPoZapocteniDavek[18] = Math.round(rodinkaPrijemPoExekuci[1] + rodinkaPrijemPoExekuci[3] + rodinkaPridavkyNaDeti + rodinkaPrispevekNaBydleni + rodinkaPrispevekNaZivobyti +
 		rodinkaDoplatekNaBydleni - bydleni[0] - bydleni[1]);
+
+	// proměnné pro statický výpočet dávek
+
+	// 19: čistý příjem 1. dospělého z 1. zaměstnání
+	prijmyAVydajeRodinyPoZapocteniDavek[19] = rodinkaPrijemPrvniDospelyPrvniPrace[1];
+
+	// 20: čistý příjem 1. dospělého z 2. zaměstnání
+	prijmyAVydajeRodinyPoZapocteniDavek[20] = rodinkaPrijemPrvniDospelyDruhaPrace[1];
+
+	// 21:
+
+	// 22: daňový bonus 1. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[22] = rodinkaPrijemPrvnihoDospeleho[0] - rodinkaPrijemPrvnihoDospeleho[1];
+
+	// 23: rodičovská 1. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[23] = prvniDospelyDalsiPrijmy[1];
+
+	// 24: pojistné dávky: důchody, podpora v nezaměstnanosti, nemocenská 1. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[24] = prvniDospelyDalsiPrijmy[0] + prvniDospelyDalsiPrijmy[2] + prvniDospelyDalsiPrijmy[3];
+
+	// 25: jiné příjmy 1. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[25] = prvniDospelyDalsiPrijmy[4];
+
+	// 26: exekuce 1. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[26] = rodinkaPrijemPrvnihoDospelehoPoExekuci[9];
+
+	// 27: čistý příjem po exekuci 1. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[27] = prijmyAVydajeRodinyPoZapocteniDavek[0] + prijmyAVydajeRodinyPoZapocteniDavek[1];
+
+	// 28: čistý příjem 2. dospělého z 1. zaměstnání
+	prijmyAVydajeRodinyPoZapocteniDavek[28] = rodinkaPrijemDruhyDospelyPrvniPrace[1];
+
+	// 29: čistý příjem 2. dospělého z 2. zaměstnání
+	prijmyAVydajeRodinyPoZapocteniDavek[29] = rodinkaPrijemDruhyDospelyDruhaPrace[1];
+
+	// 30:
+
+	// 31: daňový bonus 2. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[31] = rodinkaPrijemDruhehoDospeleho[0] - rodinkaPrijemDruhehoDospeleho[1];
+
+	// 32: rodičovská 2. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[32] = druhyDospelyDalsiPrijmy[1];
+
+	// 33: pojistné dávky: důchody, podpora v nezaměstnanosti, nemocenská 2. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[33] = druhyDospelyDalsiPrijmy[0] + druhyDospelyDalsiPrijmy[2] + druhyDospelyDalsiPrijmy[3];
+
+	// 34: jiné příjmy 2. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[34] = druhyDospelyDalsiPrijmy[4];
+
+	// 35: exekuce 2. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[35] = rodinkaPrijemDruhehoDospelehoPoExekuci[9];
+
+	// 36: čistý příjem po exekuci 2. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[36] = prijmyAVydajeRodinyPoZapocteniDavek[2] + prijmyAVydajeRodinyPoZapocteniDavek[3];
+
+	// 37: čistý příjem 2. dospělého z 1. zaměstnání
+	prijmyAVydajeRodinyPoZapocteniDavek[37] = rodinkaPrijemTretiDospelyPrvniPrace[1];
+
+	// 38: čistý příjem 2. dospělého z 2. zaměstnání
+	prijmyAVydajeRodinyPoZapocteniDavek[38] = rodinkaPrijemTretiDospelyDruhaPrace[1];
+
+	// 39:
+
+	// 40: daňový bonus 3. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[40] = rodinkaPrijemTretihoDospeleho[0] - rodinkaPrijemTretihoDospeleho[1];
+
+	// 41: rodičovská 3. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[41] = tretiDospelyDalsiPrijmy[1];
+
+	// 42: pojistné dávky: důchody, podpora v nezaměstnanosti, nemocenská 3. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[42] = tretiDospelyDalsiPrijmy[0] + tretiDospelyDalsiPrijmy[2] + tretiDospelyDalsiPrijmy[3];
+
+	// 43: jiné příjmy 3. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[43] = tretiDospelyDalsiPrijmy[4];
+
+	// 44: exekuce 3. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[44] = rodinkaPrijemTretihoDospelehoPoExekuci[9];
+
+	// 45: čistý příjem po exekuci 3. dospělého
+	prijmyAVydajeRodinyPoZapocteniDavek[45] = prijmyAVydajeRodinyPoZapocteniDavek[4] + prijmyAVydajeRodinyPoZapocteniDavek[5];
+
+	// 46: přídavky na děti
+	prijmyAVydajeRodinyPoZapocteniDavek[46] = prijmyAVydajeRodinyPoZapocteniDavek[6];
+
+	// 47: příspěvek na bydlení
+	prijmyAVydajeRodinyPoZapocteniDavek[47] = prijmyAVydajeRodinyPoZapocteniDavek[7];
+
+	// 48: příspěvek na živobytí
+	prijmyAVydajeRodinyPoZapocteniDavek[48] = prijmyAVydajeRodinyPoZapocteniDavek[8];
+
+	// 49: doplatek na bydlení
+	prijmyAVydajeRodinyPoZapocteniDavek[49] = prijmyAVydajeRodinyPoZapocteniDavek[9];
+
+	// 50: celkem dávky
+	prijmyAVydajeRodinyPoZapocteniDavek[50] = prijmyAVydajeRodinyPoZapocteniDavek[46] + prijmyAVydajeRodinyPoZapocteniDavek[47] + prijmyAVydajeRodinyPoZapocteniDavek[48] +
+											  prijmyAVydajeRodinyPoZapocteniDavek[49];
+
+	// 51: nájem
+	prijmyAVydajeRodinyPoZapocteniDavek[51] = prijmyAVydajeRodinyPoZapocteniDavek[15];
+
+	// 52: poplatky
+	prijmyAVydajeRodinyPoZapocteniDavek[52] = prijmyAVydajeRodinyPoZapocteniDavek[16];
+
+	// 53: celkem výdaje
+	prijmyAVydajeRodinyPoZapocteniDavek[53] = prijmyAVydajeRodinyPoZapocteniDavek[51] + prijmyAVydajeRodinyPoZapocteniDavek[52];
+
+	// 54: celkem disponibilní příjem domácnosti
+	prijmyAVydajeRodinyPoZapocteniDavek[54] = prijmyAVydajeRodinyPoZapocteniDavek[18];
 
 	return(prijmyAVydajeRodinyPoZapocteniDavek);
 

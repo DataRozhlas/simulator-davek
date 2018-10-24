@@ -928,27 +928,63 @@ function statickyModelujRodinu() {
 
 	var prijmyAVydajeRodinyPoZapocteniDavek = spocitejPrijmyAVydajeRodinyPoZapocteniDavek();
 
-	var text = "<h2>Příjmy, dávky a výdaje domácnosti</h2>"
-		text += "<p><strong>Rodina po započtení nákladů na bydlení: včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[12] + " Kč, po exekuci " + prijmyAVydajeRodinyPoZapocteniDavek[13] + " Kč</strong></p>";
-		text += "<h3>Detailně:</h3>"
-		text += "<p>První dospělý: čistý příjem " + prijmyAVydajeRodinyPoZapocteniDavek[0] + " Kč, včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[1] + " Kč, po exekuci " +
-		prijmyAVydajeRodinyPoZapocteniDavek[2] + " Kč, exekuce: " + prijmyAVydajeRodinyPoZapocteniDavek[25] + " Kč</p>";
-		text += "<p>Druhý dospělý: čistý příjem " + prijmyAVydajeRodinyPoZapocteniDavek[3] + " Kč, včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[4] + " Kč, po exekuci " +
-		prijmyAVydajeRodinyPoZapocteniDavek[5] + " Kč, exekuce: " + prijmyAVydajeRodinyPoZapocteniDavek[26] + " Kč</p>";
-		text += "<p>Třetí dospělý: čistý příjem " + prijmyAVydajeRodinyPoZapocteniDavek[6] + " Kč, včetně dávek " + prijmyAVydajeRodinyPoZapocteniDavek[7] + " Kč, po exekuci " +
-		prijmyAVydajeRodinyPoZapocteniDavek[8] + " Kč, exekuce: " + prijmyAVydajeRodinyPoZapocteniDavek[27] + " Kč</p>";
-		text += "<p><font color=\"#33a02c\">Přídavky na děti: " + prijmyAVydajeRodinyPoZapocteniDavek[14] + " Kč.</font></p>";
-		text += "<p><font color=\"#33a02c\">Příspěvek na bydlení: " + prijmyAVydajeRodinyPoZapocteniDavek[15] + " Kč.</font></p>";
-		text += "<p><font color=\"#33a02c\">Příspěvek na živobytí: " + prijmyAVydajeRodinyPoZapocteniDavek[16] + " Kč.</font></p>";
-		text += "<p><font color=\"#33a02c\">Doplatek na bydlení: " + prijmyAVydajeRodinyPoZapocteniDavek[17] + " Kč.</font></p>";
-		text += "<p><font color=\"#33a02c\">Důchody: " + prijmyAVydajeRodinyPoZapocteniDavek[18] + " Kč.</font></p>";
-		text += "<p><font color=\"#33a02c\">Rodičovská: " + prijmyAVydajeRodinyPoZapocteniDavek[19] + " Kč.</font></p>";
-		text += "<p><font color=\"#33a02c\">Podpora v nezaměstnanosti: " + prijmyAVydajeRodinyPoZapocteniDavek[20] + " Kč.</font></p>";
-		text += "<p><font color=\"#33a02c\">Nemocenská: " + prijmyAVydajeRodinyPoZapocteniDavek[21] + " Kč.</font></p>";
-		text += "<p><font color=\"#33a02c\">Ostatní příjmy: " + prijmyAVydajeRodinyPoZapocteniDavek[22] + " Kč.</font></p>";
-		text += "<p><font color=\"#e31a1c\">Nájem: " + prijmyAVydajeRodinyPoZapocteniDavek[23] + " Kč.</font></p>";
-		text += "<p><font color=\"#e31a1c\">Poplatky: " + prijmyAVydajeRodinyPoZapocteniDavek[24] + " Kč.</font></p>";
-		text += "<p><font color=\"#e31a1c\">Zaplaceno na exekucích: " + prijmyAVydajeRodinyPoZapocteniDavek[28] + " Kč.</font></p>";
+	var text = "<h3>ČISTÝ DISPONIBILNÍ PŘÍJEM DOMÁCNOSTI <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[54] + " Kč</font></h3>"
+
+		text += "<h3>PŘÍJMY 1. DOSPĚLÝ</h3>"
+
+		text +="<h4>Příjmy ze zaměstnání</h4>"
+		text +="<h4>Další příjmy, které se počítají do příjmu pro výpočet exekucí</h4>"
+		text +="<p>Čistý příjem z prvního zaměstnání <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[19] + " Kč</font></p>"
+		text +="<p>Čistý příjem z druhého zaměstnání <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[20] + " Kč</font></p>"
+		text +="<p>Daňový bonus <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[22] + " Kč</font></p>"
+		text +="<h4>Další příjmy, které se nepočítají do příjmu pro výpočet exekucí</h4>"
+		text +="<p>Rodičovská <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[23] + " Kč</font></p>"
+		text +="<p>Pojistné dávky: důchody, podpora v nezaměstnanosti, nemocenská <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[24] + " Kč</font></p>"
+		text +="<p>Jiné příjmy <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[25] + " Kč</font></p>"
+		text +="<h4>Exekuční srážky <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[26] + " Kč</font></h4>"
+		text +="<h4>Čistý příjem po exekuci <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[27] + " Kč</font></h4>"
+
+		text +="<h3>PŘÍJMY 2. DOSPĚLÝ</h3>"
+		text +="<h4>Příjmy ze zaměstnání</h4>"
+		text +="<h4>Další příjmy, které se počítají do příjmu pro výpočet exekucí</h4>"
+		text +="<p>Čistý příjem z prvního zaměstnání <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[28] + " Kč</font></p>"
+		text +="<p>Čistý příjem z druhého zaměstnání <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[29] + " Kč</font></p>"
+		text +="<p>Daňový bonus <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[31] + " Kč</font></p>"
+		text +="<h4>Další příjmy, které se nepočítají do příjmu pro výpočet exekucí</h4>"
+		text +="<p>Rodičovská <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[32] + " Kč</font></p>"
+		text +="<p>Pojistné dávky: důchody, podpora v nezaměstnanosti, nemocenská <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[33] + " Kč</font></p>"
+		text +="<p>Jiné příjmy <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[34] + " Kč</font></p>"
+		text +="<h4>Exekuční srážky <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[35] + " Kč</font></h4>"
+		text +="<h4>Čistý příjem po exekuci <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[36] + " Kč</font></h4>"
+
+		text +="<h3>PŘÍJMY 3. DOSPĚLÝ</h3>"
+		text +="<h4>Příjmy ze zaměstnání</h4>"
+		text +="<h4>Další příjmy, které se počítají do příjmu pro výpočet exekucí</h4>"
+		text +="<p>Čistý příjem z prvního zaměstnání <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[37] + " Kč</font></p>"
+		text +="<p>Čistý příjem z druhého zaměstnání <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[38] + " Kč</font></p>"
+		text +="<p>Daňový bonus <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[40] + " Kč</font></p>"
+		text +="<h4>Další příjmy, které se nepočítají do příjmu pro výpočet exekucí</h4>"
+		text +="<p>Rodičovská <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[41] + " Kč</font></p>"
+		text +="<p>Pojistné dávky: důchody, podpora v nezaměstnanosti, nemocenská <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[42] + " Kč</font></p>"
+		text +="<p>Jiné příjmy <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[43] + " Kč</font></p>"
+		text +="<h4>Exekuční srážky <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[44] + " Kč</font></h4>"
+		text +="<h4>Čistý příjem po exekuci <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[45] + " Kč</font></h4>"
+
+		text +="<h3>NÁROK DOMÁCNOSTI NA SOCIÁLNÍ DÁVKY </h3>"
+		text +="<h4>Dávky státní sociální podpory</h4>"
+		text +="<p>Přídavky na děti <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[46] + " Kč</font></p>"
+		text +="<p>Příspěvek na bydlení <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[47] + " Kč</font></p>"
+		text +="<h4>Dávky v hmotné nouzi</h4>"
+		text +="<p>Příspěvek na živobytí <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[48] + " Kč</font></p>"
+		text +="<p>Doplatek na bydlení <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[49] + " Kč</font></p>"
+		text +="<h4>Celkem dávky <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[50] + " Kč</font></h4>"
+
+		text +="<h3>VÝDAJE DOMÁCNOSTI</h3>"
+		text +="<h4>Výdaje, které jsou zohledněny při výpočtu dávek</h4>"
+		text +="<p>Nájem <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[51] + " Kč</font></p>"
+		text +="<p>Poplatky: vodné, stočné, energie <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[52] + " Kč</font></p>"
+		text +="<h4>Výdaje, které nejsou zohledněny při výpočtu dávek</h4>"
+		text +="<h4>Celkem výdaje <font color='blue'>" + prijmyAVydajeRodinyPoZapocteniDavek[53] + " Kč</font></h4>"
 
 	document.getElementById("mainwindow").innerHTML = text;
 
