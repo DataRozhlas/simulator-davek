@@ -29,7 +29,7 @@ var prvniDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, false, 0],
 
 // testovací rodinka
 
-
+/*
 prvniDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, false, 0]
 druhyDospelyPrvniZamestnavatel = [0, false, 0, false, 0, false, false, 0]
 prvniDospelyDalsiPrijmy = [0, 11000, 0, 0, 0]
@@ -37,3 +37,4 @@ prvniDospelyExekuce = [true, false, 2]
 druhyDospelyExekuce = [true, false, 2]
 slozeniDomacnosti = [2, 2, 0, 0, 4, 0]
 bydleni = [8000, 2000, false, false, 3, 0]
+*/
