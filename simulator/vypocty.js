@@ -868,8 +868,8 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], duc
 	// výpočet nezabavitelné částky
 	nezabavitelnaCastka = nezabavitelnaCastkaProPrvniOsobu + dalsiVyzivovaneOsoby * nezabavitelnaCastkaProDalsiOsobu;
 
-	// pokud je bez exekucí, nebo jsou příjmy nižší než nezabavitelná částka, nic se nestrhává
-	if( (prednostniExekuce + neprednostniExekuce == 0) || (prijmyDospelehoPredExekuci < nezabavitelnaCastka) ) {
+	// pokud je bez exekucí, nic se nestrhává
+	if(prednostniExekuce + neprednostniExekuce == 0) {
 
 		prijmyDospelehoPoExekuci = prijmyDospelehoPredExekuci + danovyBonusNaDetiPoExekuci;
 		prijemDospelehoBezDanovehoBonusuPoExekuci = prijemDospelehoBezDanovehoBonusuPredExekuci;
@@ -884,7 +884,23 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0], duc
 		return([prijmyDospelehoPredExekuci, prijmyDospelehoPoExekuci, prijemDospelehoBezDanovehoBonusuPoExekuci, danovyBonusNaDetiPoExekuci, duchodyPoExekuci, rodicovskaPoExekuci,
 			podporaVNezamestnanostiPoExekuci, nemocenskaPoExekuci, ostatniPrijmyPoExekuci, exekuce]);
 
-	// jinak se vypočítá exekuce:
+	// pokud má exekuci a příjmy jsou nižší než nezabavitelná částka, strhává se pouze daňový bonus
+	} else if (prijmyDospelehoPredExekuci < nezabavitelnaCastka) {
+
+		prijmyDospelehoPoExekuci = prijmyDospelehoPredExekuci;
+		prijemDospelehoBezDanovehoBonusuPoExekuci = prijemDospelehoBezDanovehoBonusuPredExekuci;
+		danovyBonusNaDetiPoExekuci = 0;
+		duchodyPoExekuci = duchody;
+		rodicovskaPoExekuci = rodicovska;
+		podporaVNezamestnanostiPoExekuci = podporaVNezamestnanosti;
+		nemocenskaPoExekuci = nemocenska;
+		ostatniPrijmyPoExekuci = ostatniPrijmy;
+		exekuce = danovyBonusNaDetiPredExekuci;
+
+		return([prijmyDospelehoPredExekuci, prijmyDospelehoPoExekuci, prijemDospelehoBezDanovehoBonusuPoExekuci, danovyBonusNaDetiPoExekuci, duchodyPoExekuci, rodicovskaPoExekuci,
+			podporaVNezamestnanostiPoExekuci, nemocenskaPoExekuci, ostatniPrijmyPoExekuci, exekuce]);
+
+	//jinak se vypočítá exekuce
 	} else {
 
 		// Z čisté mzdy zaměstnance je odečtena základní nezabavitelná částka (minimum). Pokud je rovna nebo vyšší 9338 Kč, počítá se v této fázi s celou částkou 9338 Kč.
