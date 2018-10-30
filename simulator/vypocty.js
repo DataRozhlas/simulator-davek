@@ -227,7 +227,7 @@ function spocitejPrijemUZamestnavatele(prijemNaHPP = [0, 0, 0, 0, 0], prijemNaDP
 		slevyNaDani = slevaNaPoplatnika;
 
 		// daňový bonus na děti je navázaný na roční příjem alespoň ve výši šestinásobku minimální mzdy, maximální výše je limit bonusu na děti
-		if ( (12 * hrubyPrijem) > (6 * minimalniMzda) ) {
+		if ( (12 * hrubyPrijem) > (6 * minimalniMzda) & (pocetVyzivovanychDeti > 0) ) {
 			narokNaBonusNaDeti = true;
 		}
 
