@@ -78,13 +78,18 @@
 	padding-right: 5px;
 }
 
+.formrowtextfirst {
+	display: block;
+	padding-bottom: 5px;
+}
+
 .formrowinput {
 	display: inline;
 }
 
 .formrowradiodetail {
 	display: inline;
-	padding-left: 20px;
+	padding-left: 5px;
 }
 
 .formrowradiomain {
@@ -137,4 +142,10 @@
 .mw-text h2 {
 	margin-top: 10px;
 	margin-left: 0px;
+}
+
+.typsmlouvyform {
+	border-radius: 5px;
+	border-width: 1px;
+	padding: 5px;
 }
