@@ -124,6 +124,8 @@ function spocitejSlozkyNaDPC(hrubyPrijem = 0, vyjimkaMinimalniZaklad = false, pl
 
 	cistyPrijem = hrubyPrijem - socialniPojisteni - zdravotniPojisteniZamestnanec - zalohaNaDan;
 
+console.log('hrubý příjem: ', hrubyPrijem)
+
 	return([hrubyPrijem, cistyPrijem, socialniPojisteni, zdravotniPojisteniZamestnanec, zdravotniPojisteniZamestnavatel, doplatekNaZdravotni, zalohaNaDan]);
 }
 //IT
@@ -298,10 +300,21 @@ function spocitejPrijemUZamestnavatele(prijem = [0, 0, 0, 0, 0, 0, 0], ruzovyPap
 		// daňový bonus nesmí překonat limit
 		danovyBonusNaDeti = Math.min(danovyBonusNaDeti, limitBonusuNaDeti);
 
-//		cistyPrijemBezBonusuNaDeti = hrubyPrijem - socialniPojisteni - zdravotniPojisteniZamestnanec - zalohaNaDanPoSlevach;
-//		cistyPrijem = cistyPrijemBezBonusuNaDeti + danovyBonusNaDeti;
+		cistyPrijem = hrubyPrijem - socialniPojisteni - zdravotniPojisteniZamestnanec - zaplacenaDan + danovyBonusNaDeti;
 
 	}
+
+
+console.log('sociální: ', socialniPojisteni)
+console.log('zdravotní zaměstnanec: ', zdravotniPojisteniZamestnanec)
+console.log('zdravotní zaměstnavatel: ', zdravotniPojisteniZamestnavatel)
+console.log('doplatek na zdravotní: ', doplatekNaZdravotni)
+console.log('sleva na poplatníka: ', slevaNaPoplatnika)
+console.log('sleva na děti: ', slevaNaDeti)
+console.log('zaplacená daň (po aplikaci slev): ', zaplacenaDan)
+console.log('daňový bonus na děti: ', danovyBonusNaDeti)
+console.log('čistý příjem: ', cistyPrijem)
+console.log('---')
 
 	return([cistyPrijem, danovyBonusNaDeti, socialniPojisteni, zdravotniPojisteniZamestnanec, zdravotniPojisteniZamestnavatel, doplatekNaZdravotni, zaplacenaDan]);
 }
