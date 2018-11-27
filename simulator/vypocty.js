@@ -1,7 +1,7 @@
 
 /*
 
-výpočet složek příjmu na HPP
+výpočet složek příjmu na HPP (https://docs.google.com/document/d/1qPdf8DUds-qW-8_0dkYZ4n7kWbKczQILsN7xchPLkSU)
 
 vstupy:
 	hrubý příjem na HPP (hrubyPrijem, integer)
@@ -16,40 +16,43 @@ výstupy:
 */
 
 //ED
-function spocitejSlozkyNaHPP(hrubyPrijem = 0, vyjimkaMinimalniZaklad = false) {
+function spocitejSlozkyNaHPP(hrubyPrijem = 0, vyjimkaMinimalniZaklad = false, platiZdravotniJinde = false) {
 
 	var cistyPrijem = 0,
 		socialniPojisteni = 0,
-		zdravotniPojisteni = 0,
+		zdravotniPojisteniZamestnanec = 0,
+		zdravotniPojisteniZamestnavatel = 0,
+		doplatekNaZdravotni = 0,
 		zalohaNaDan = 0,
 		minimalniMzda = 12200;
 
-	// u nulového příjmu vrací nulové všechny složky
+	// u nulového příjmu všechno 0
 	if (hrubyPrijem == 0) {
-		return([0, 0, 0, 0, 0]);
+		return([0, 0, 0, 0, 0, 0, 0]);
 	};
 
-	// pokud je příjem vyšší než minimální mzda, nebo pro něj neplatí minimální vyměřovací základ podle §3 zákona 592/1992 Sb. o pojistném na všeobecné zdravotní pojištění,
-	// platí zdravotní pojištění: 4,5 % příjmu
-	if ( (hrubyPrijem > minimalniMzda) || vyjimkaMinimalniZaklad ) {
-		zdravotniPojisteni = 0.045 * minimalniMzda;
+	zalohaNaDan = Math.ceil(0.15 * 1.34 * hrubyPrijem / 100) * 100;
 
-	// pokud nemá výjimku a má méně než minimálku (částečný úvazek), počítají se procenta z minimální mzdy
-	} else {
-		zdravotniPojisteni = 0.045 * hrubyPrijem;
-	};
-
-	// sociální pojištění: 6,5 % příjmu
 	socialniPojisteni = 0.065 * hrubyPrijem;
 
-	// záloha na daň: 15 % ze superhrubé mzdy (134 % hrubé)
-	zalohaNaDan = 0.15 * Math.ceil(1.34 * hrubyPrijem / 100) * 100;
+	// u menšího než celého úvazku může být mzda pod minimální
+	if ( (hrubyPrijem < minimalniMzda) && !vyjimkaMinimalniZaklad ) {
+		zdravotniPojisteniZamestnanec = 0.045 * hrubyPrijem + 0.135 * (minimalniMzda - hrubyPrijem);
+	} else if ( (hrubyPrijem < minimalniMzda) && vyjimkaMinimalniZaklad ) {
+		zdravotniPojisteniZamestnanec = 0.045 * hrubyPrijem;
+	} else {
+		zdravotniPojisteniZamestnanec = 0.045 * hrubyPrijem;
+	}
 
-	cistyPrijem = hrubyPrijem - socialniPojisteni - zdravotniPojisteni - zalohaNaDan;
+	zdravotniPojisteniZamestnavatel = 0.09 * hrubyPrijem;
 
-	return([hrubyPrijem, cistyPrijem, socialniPojisteni, zdravotniPojisteni, zalohaNaDan]);
+	doplatekNaZdravotni = 0;
+
+	cistyPrijem = hrubyPrijem - socialniPojisteni - zdravotniPojisteniZamestnanec - zalohaNaDan;
+
+	return([hrubyPrijem, cistyPrijem, socialniPojisteni, zdravotniPojisteniZamestnanec, zdravotniPojisteniZamestnavatel, doplatekNaZdravotni, zalohaNaDan]);
 }
-
+//IT
 
 
 /*
@@ -68,44 +71,62 @@ výstupy:
 
 */
 
-function spocitejSlozkyNaDPC(hrubyPrijem = 0) {
+//ED
+function spocitejSlozkyNaDPC(hrubyPrijem = 0, vyjimkaMinimalniZaklad = false, platiZdravotniJinde = false) {
 
 	var cistyPrijem = 0,
 		socialniPojisteni = 0,
-		zdravotniPojisteni = 0,
+		zdravotniPojisteniZamestnanec = 0,
+		zdravotniPojisteniZamestnavatel = 0,
+		doplatekNaZdravotni = 0,
 		zalohaNaDan = 0,
 		maximalniCastkaBezPojistneho = 2500,
 		minimalniMzda = 12200;
 
-	// u nulového příjmu vrací nulové všechny složky
+	// u nulového příjmu všechno 0
 	if (hrubyPrijem == 0) {
-		return([0, 0, 0, 0, 0]);
+		return([0, 0, 0, 0, 0, 0, 0]);
 	};
 
-	// pod limitem je sociální i zdravotní nula
-	if (hrubyPrijem <= maximalniCastkaBezPojistneho) {
-		zalohaNaDan = 0.15 * hrubyPrijem;
-
-	// pokud je příjem nižší než minimální mzda a nemají snížený vyměřovací základ podle §3 zákona 592/1992 Sb. o pojistném na všeobecné zdravotní pojištění,
-	// platí zdravotní pojištění: 4,5 % minimální mzdy
-	} else if ( (hrubyPrijem <= minimalniMzda) && !vyjimkaMinimalniZaklad ) {
-		zalohaNaDan = 0.15 * Math.ceil(1.34 * hrubyPrijem / 100) * 100;
-		zdravotniPojisteni = 0.045 * minimalniMzda;
-
-	// pokud je příjem vyšší nebo nemá výjimku, počítají se nad limitem procenta z hrubé mzdy
+	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
+		zalohaNaDan = Math.ceil(0.15 * hrubyPrijem / 100) * 100;
 	} else {
-		zalohaNaDan = 0.15 * Math.ceil(1.34 * hrubyPrijem / 100) * 100;
-		zdravotniPojisteni = 0.045 * hrubyPrijem;
-	};
+		zalohaNaDan = Math.ceil(0.15 * 1.34 * hrubyPrijem / 100) * 100;
+	}
 
-	// sociální pojištění: 6,5 % příjmu
-	socialniPojisteni = 0.065 * hrubyPrijem;
+	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
+		socialniPojisteni = 0;
+	} else {
+		socialniPojisteni = 0.065 * hrubyPrijem;
+	}
 
-	cistyPrijem = hrubyPrijem - socialniPojisteni - zdravotniPojisteni - zalohaNaDan;
+	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
+		zdravotniPojisteniZamestnanec = 0;
+	} else if ( (hrubyPrijem < minimalniMzda) && !platiZdravotniJinde && !vyjimkaMinimalniZaklad ) {
+		zdravotniPojisteniZamestnanec = 0.045 * hrubyPrijem + 0.135 * (minimalniMzda - hrubyPrijem);
+	} else if ( (hrubyPrijem < minimalniMzda) && (platiZdravotniJinde || vyjimkaMinimalniZaklad) ) {
+		zdravotniPojisteniZamestnanec = 0.045 * hrubyPrijem;
+	} else {
+		zdravotniPojisteniZamestnanec = 0.045 * hrubyPrijem;
+	}
 
-	return([hrubyPrijem, cistyPrijem, socialniPojisteni, zdravotniPojisteni, zalohaNaDan]);
+	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
+		zdravotniPojisteniZamestnavatel = 0;
+	} else {
+		zdravotniPojisteniZamestnavatel = 0.09 * hrubyPrijem;
+	}
+
+	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
+		doplatekNaZdravotni = 0.135 * minimalniMzda;
+	} else {
+		doplatekNaZdravotni = 0;
+	}
+
+	cistyPrijem = hrubyPrijem - socialniPojisteni - zdravotniPojisteniZamestnanec - zalohaNaDan;
+
+	return([hrubyPrijem, cistyPrijem, socialniPojisteni, zdravotniPojisteniZamestnanec, zdravotniPojisteniZamestnavatel, doplatekNaZdravotni, zalohaNaDan]);
 }
-
+//IT
 
 
 /*
@@ -124,44 +145,62 @@ výstupy:
 
 */
 
-function spocitejSlozkyNaDPP(hrubyPrijem = 0, vyjimkaMinimalniZaklad = false) {
+//ED
+function spocitejSlozkyNaDPP(hrubyPrijem = 0, vyjimkaMinimalniZaklad = false, platiZdravotniJinde = false) {
 
-	var socialniPojisteni = 0,
-		zdravotniPojisteni = 0,
+	var cistyPrijem = 0,
+		socialniPojisteni = 0,
+		zdravotniPojisteniZamestnanec = 0,
+		zdravotniPojisteniZamestnavatel = 0,
+		doplatekNaZdravotni = 0,
 		zalohaNaDan = 0,
-		cistyPrijem = 0,
 		maximalniCastkaBezPojistneho = 10000,
 		minimalniMzda = 12200;
 
-	// u nulového příjmu vrací nulové všechny složky
+	// u nulového příjmu všechno 0
 	if (hrubyPrijem == 0) {
-		return([0, 0, 0, 0, 0]);
+		return([0, 0, 0, 0, 0, 0, 0]);
 	};
 
-	// pod limitem je sociální i zdravotní nula
-	if (hrubyPrijem <= maximalniCastkaBezPojistneho) {
-		zalohaNaDan = 0.15 * hrubyPrijem;
-
-	// pokud je příjem nižší než minimální mzda a nemají snížený vyměřovací základ podle §3 zákona 592/1992 Sb. o pojistném na všeobecné zdravotní pojištění,
-	// platí zdravotní pojištění: 4,5 % minimální mzdy, sociální pojištění: 6,5 % příjmu
-	} else if ( (hrubyPrijem <= minimalniMzda) && !vyjimkaMinimalniZaklad ) {
-		zalohaNaDan = 0.15 * Math.ceil(1.34 * hrubyPrijem / 100) * 100;
-		zdravotniPojisteni = 0.045 * minimalniMzda;
-
-	// pokud je příjem vyšší nebo nemá výjimku, počítají se nad limitem procenta z hrubé mzdy
+	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
+		zalohaNaDan = Math.ceil(0.15 * hrubyPrijem / 100) * 100;
 	} else {
-		zalohaNaDan = 0.15 * Math.ceil(1.34 * hrubyPrijem / 100) * 100;
-		zdravotniPojisteni = 0.045 * hrubyPrijem;
-	};
+		zalohaNaDan = Math.ceil(0.15 * 1.34 * hrubyPrijem / 100) * 100;
+	}
 
-	// sociální pojištění: 6,5 % příjmu
-	socialniPojisteni = 0.065 * hrubyPrijem;
+	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
+		socialniPojisteni = 0;
+	} else {
+		socialniPojisteni = 0.065 * hrubyPrijem;
+	}
 
-	cistyPrijem = hrubyPrijem - socialniPojisteni - zdravotniPojisteni - zalohaNaDan;
+	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
+		zdravotniPojisteniZamestnanec = 0;
+	} else if ( (hrubyPrijem < minimalniMzda) && !platiZdravotniJinde && !vyjimkaMinimalniZaklad ) {
+		zdravotniPojisteniZamestnanec = 0.045 * hrubyPrijem + 0.135 * (minimalniMzda - hrubyPrijem);
+	} else if ( (hrubyPrijem < minimalniMzda) && (platiZdravotniJinde || vyjimkaMinimalniZaklad) ) {
+		zdravotniPojisteniZamestnanec = 0.045 * hrubyPrijem;
+	} else {
+		zdravotniPojisteniZamestnanec = 0.045 * hrubyPrijem;
+	}
 
-	return([hrubyPrijem, cistyPrijem, socialniPojisteni, zdravotniPojisteni, zalohaNaDan]);
+	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
+		zdravotniPojisteniZamestnavatel = 0;
+	} else {
+		zdravotniPojisteniZamestnavatel = 0.09 * hrubyPrijem;
+	}
+
+	if (hrubyPrijem < maximalniCastkaBezPojistneho) {
+		doplatekNaZdravotni = 0.135 * minimalniMzda;
+	} else {
+		doplatekNaZdravotni = 0;
+	}
+
+	cistyPrijem = hrubyPrijem - socialniPojisteni - zdravotniPojisteniZamestnanec - zalohaNaDan;
+
+	return([hrubyPrijem, cistyPrijem, socialniPojisteni, zdravotniPojisteniZamestnanec, zdravotniPojisteniZamestnavatel, doplatekNaZdravotni, zalohaNaDan]);
 }
-
+//IT
 
 
 /*
@@ -185,7 +224,8 @@ poznámky:
 
 */
 
-function spocitejPrijemUZamestnavatele(prijem = [0, 0, 0, 0, 0], ruzovyPapir = false, pocetVyzivovanychDeti = 0) {
+//ED
+function spocitejPrijemUZamestnavatele(prijem = [0, 0, 0, 0, 0, 0, 0], ruzovyPapir = false, pocetVyzivovanychDeti = 0) {
 
 	var slevaNaDeti = 0,
 		danovyBonusNaDeti = 0,
@@ -195,15 +235,20 @@ function spocitejPrijemUZamestnavatele(prijem = [0, 0, 0, 0, 0], ruzovyPapir = f
 		limitBonusuNaDeti = 60300 / 12, // 5025
 		slevaNaPoplatnika = 24840 / 12, // 2070
 		zalohaNaDanPoSleveNaPoplatnika = 0,
-		zalohaNaDanPoSlevach = 0,
-		cistyPrijemBezBonusuNaDeti = 0,
+		zaplacenaDan = 0,
 		cistyPrijem = 0,
 		hrubyPrijem = 0,
 		socialniPojisteni = 0,
-		zdravotniPojisteni = 0,
+		zdravotniPojisteniZamestnanec = 0,
+		zdravotniPojisteniZamestnavatel = 0,
 		zalohaNaDan = 0,
 		minimalniMzda = 12200,
 		narokNaBonusNaDeti = false;
+
+	// u nulového příjmu všechno 0
+	if (prijem[0] == 0) {
+		return([0, 0, 0, 0, 0, 0, 0]);
+	};
 
 	// daňové zvýhodnění na děti
 	if (pocetVyzivovanychDeti == 1) {
@@ -217,10 +262,11 @@ function spocitejPrijemUZamestnavatele(prijem = [0, 0, 0, 0, 0], ruzovyPapir = f
 	// základní hodnoty - bez slevy na dani
 	hrubyPrijem = prijem[0];
 	cistyPrijem = prijem[1];
-	cistyPrijemBezBonusuNaDeti = cistyPrijem;
 	socialniPojisteni = prijem[2];
-	zdravotniPojisteni = prijem[3];
-	zalohaNaDan = prijem[4];
+	zdravotniPojisteniZamestnanec = prijem[3];
+	zdravotniPojisteniZamestnavatel = prijem[4];
+	doplatekNaZdravotni = prijem[5];
+	zalohaNaDan = prijem[6];
 
 	// pokud je podepsaný růžový papír, aplikují se slevy na dani
 	if (ruzovyPapir) {
@@ -234,33 +280,32 @@ function spocitejPrijemUZamestnavatele(prijem = [0, 0, 0, 0, 0], ruzovyPapir = f
 		zalohaNaDanPoSleveNaPoplatnika = Math.max(zalohaNaDan - slevaNaPoplatnika, 0);
 
 		// aplikace slevy na dítě
-		zalohaNaDanPoSlevach = zalohaNaDanPoSleveNaPoplatnika - slevaNaDeti;
+		zaplacenaDan = zalohaNaDanPoSleveNaPoplatnika - slevaNaDeti;
 
 		// pokud je záloha po slevě na dítě záporná a existuje nárok, považuje se za daňový bonus
-		if(zalohaNaDanPoSlevach < 0) {
+		if(zaplacenaDan < 0) {
 			if (narokNaBonusNaDeti) {
-				danovyBonusNaDeti = -zalohaNaDanPoSlevach;
-				zalohaNaDanPoSlevach = 0;
+				danovyBonusNaDeti = -zaplacenaDan;
+				zaplacenaDan = 0;
 
 			// pokud nárok neexistuje, jsou bonus i sleva nulové
 			} else {
 				danovyBonusNaDeti = 0;
-				zalohaNaDanPoSlevach = 0;
+				zaplacenaDan = 0;
 			}
 		}
 
 		// daňový bonus nesmí překonat limit
 		danovyBonusNaDeti = Math.min(danovyBonusNaDeti, limitBonusuNaDeti);
 
-		cistyPrijemBezBonusuNaDeti = hrubyPrijem - socialniPojisteni - zdravotniPojisteni - zalohaNaDanPoSlevach;
-		cistyPrijem = cistyPrijemBezBonusuNaDeti + danovyBonusNaDeti;
+//		cistyPrijemBezBonusuNaDeti = hrubyPrijem - socialniPojisteni - zdravotniPojisteniZamestnanec - zalohaNaDanPoSlevach;
+//		cistyPrijem = cistyPrijemBezBonusuNaDeti + danovyBonusNaDeti;
 
 	}
 
-	return([cistyPrijem, cistyPrijemBezBonusuNaDeti, socialniPojisteni, zdravotniPojisteni, zalohaNaDanPoSlevach]);
+	return([cistyPrijem, danovyBonusNaDeti, socialniPojisteni, zdravotniPojisteniZamestnanec, zdravotniPojisteniZamestnavatel, doplatekNaZdravotni, zaplacenaDan]);
 }
-
-// zaplatit minimum OBZP, ale odečte se od hr- př.
+//IT
 
 
 /*
@@ -280,13 +325,17 @@ výstupy:
 
 */
 
-function spocitejPrijemDospeleho(prijemPrace1 = [0, 0, 0, 0, 0], prijemPrace2 = [0, 0, 0, 0, 0]) {
+//ED
+function spocitejPrijemDospeleho(prijemPrace1 = [0, 0, 0, 0, 0, 0, 0], prijemPrace2 = [0, 0, 0, 0, 0, 0, 0]) {
 
 	var minimalniMzda = 12200,
-		minimalniPojisteni = 0.135 * minimalniMzda,
-		doplatekZdravotniho = 0,
-		fikceCistehoPrijmu = 0,
-		fikceCistehoPrijmuBezBonusuNaDeti = 0;
+		doplatekNaZdravotni = 0,
+		cistyPrijem = 0,
+		danovyBonusNaDeti = 0,
+		socialniPojisteni = 0,
+		zdravotniPojisteniZamestnanec = 0,
+		zdravotniPojisteniZamestnavatel = 0,
+		zaplacenaDan = 0;
 
 	// na nulové vstupy nulové výstupy
 	if (prijemPrace1[0] == 0 && prijemPrace2[0] == 0) {
@@ -294,28 +343,15 @@ function spocitejPrijemDospeleho(prijemPrace1 = [0, 0, 0, 0, 0], prijemPrace2 = 
 	};
 
 	cistyPrijem = prijemPrace1[0] + prijemPrace2[0];
-	cistyPrijemBezBonusuNaDeti = prijemPrace1[1] + prijemPrace2[1];
+	danovyBonusNaDeti = prijemPrace1[1] + prijemPrace2[1];
 	socialniPojisteni = prijemPrace1[2] + prijemPrace2[2];
-	zdravotniPojisteni = prijemPrace1[3] + prijemPrace2[3];
-	zalohaNaDan = prijemPrace1[4] + prijemPrace2[4];
+	zdravotniPojisteniZamestnanec = prijemPrace1[3] + prijemPrace2[3];
+	zdravotniPojisteniZamestnavatel = prijemPrace1[4] + prijemPrace2[4];
+	doplatekNaZdravotni = prijemPrace1[5] + prijemPrace2[5];
+	zaplacenaDan = prijemPrace1[6] + prijemPrace2[6];
 
-	// dopočet pojištění do minimálního, pokud je nižší
-	if(zdravotniPojisteni < minimalniPojisteni) {
+	return([cistyPrijem, danovyBonusNaDeti, socialniPojisteni, zdravotniPojisteniZamestnanec, zdravotniPojisteniZamestnavatel, doplatekNaZdravotni, zaplacenaDan]);
 
-		doplatekZdravotniho = minimalniPojisteni - zdravotniPojisteni;
-		zdravotniPojisteni = minimalniPojisteni;
-
-		// vytvoření fikce příjmu pro dávky HN
-		fikceCistehoPrijmu = cistyPrijem;
-		fikceCistehoPrijmuBezBonusuNaDeti = cistyPrijemBezBonusuNaDeti;
-
-		// snížení reálného příjmu o doplatek
-		cistyPrijem = cistyPrijem - doplatekZdravotniho;
-		cistyPrijemBezBonusuNaDeti = cistyPrijemBezBonusuNaDeti - doplatekZdravotniho;
-
-	}
-
-	return([cistyPrijem, cistyPrijemBezBonusuNaDeti, socialniPojisteni, zdravotniPojisteni, zalohaNaDan, fikceCistehoPrijmu, fikceCistehoPrijmuBezBonusuNaDeti]);
 }
 //IT
 
@@ -334,30 +370,28 @@ výstupy:
 
 */
 
+//ED
 function spocitejCistyPrijemDomacnostiZeZamestnani(prijemPrvnihoDospeleho = [0, 0, 0, 0, 0, 0, 0], prijemDruhehoDospeleho = [0, 0, 0, 0, 0, 0, 0],
 	prijemTretihoDospeleho = [0, 0, 0, 0, 0, 0, 0]) {
 
-	var cistyPrijemDomacnosti = 0,
-		cistyPrijemDomacnostiBezBonusuNaDeti = 0,
-		fikceCistehoPrijmuDomacnosti = 0,
-		fikceCistehoPrijmuDomacnostiBezBonusuNaDeti = 0;
+	var cistyPrijem = 0,
+		bonusNaDeti = 0,
+		doplatekNaZdravotni = 0;
 
 	// na nulové vstupy nulové výstupy
 	if (prijemPrvnihoDospeleho[0] == 0 && prijemDruhehoDospeleho[0] == 0 && prijemTretihoDospeleho[0] == 0) {
-		return([0, 0, 0, 0]);
+		return([0, 0, 0]);
 	};
 
-	cistyPrijemDomacnosti = prijemPrvnihoDospeleho[0] + prijemDruhehoDospeleho[0] + prijemTretihoDospeleho[0];
+	cistyPrijem = prijemPrvnihoDospeleho[0] + prijemDruhehoDospeleho[0] + prijemTretihoDospeleho[0];
 
-	cistyPrijemDomacnostiBezBonusuNaDeti = prijemPrvnihoDospeleho[1] + prijemDruhehoDospeleho[1] + prijemTretihoDospeleho[1];
+	bonusNaDeti = prijemPrvnihoDospeleho[1] + prijemDruhehoDospeleho[1] + prijemTretihoDospeleho[1];
 
-	fikceCistehoPrijmuDomacnosti = prijemPrvnihoDospeleho[5] + prijemDruhehoDospeleho[5] + prijemTretihoDospeleho[5];
+	doplatekNaZdravotni = prijemPrvnihoDospeleho[5] + prijemDruhehoDospeleho[5] + prijemTretihoDospeleho[5];
 
-	fikceCistehoPrijmuDomacnostiBezBonusuNaDeti = prijemPrvnihoDospeleho[6] + prijemDruhehoDospeleho[6] + prijemTretihoDospeleho[6];
-
-	return([cistyPrijemDomacnosti, cistyPrijemDomacnostiBezBonusuNaDeti, fikceCistehoPrijmuDomacnosti, fikceCistehoPrijmuDomacnostiBezBonusuNaDeti]);
+	return([cistyPrijem, bonusNaDeti, doplatekNaZdravotni]);
 }
-
+//IT
 
 
 /*
@@ -438,7 +472,8 @@ poznámky:
 
 */
 
-function spocitejPridavkyNaDeti(cistyPrijemDomacnosti = [0, 0, 0, 0], prijemPrvnihoDospeleho = [0, 0, 0, 0, 0, 0, 0], prijemDruhehoDospeleho = [0, 0, 0, 0, 0, 0, 0],
+//ED
+function spocitejPridavkyNaDeti(cistyPrijemDomacnosti = [0, 0, 0], prijemPrvnihoDospeleho = [0, 0, 0, 0, 0, 0, 0], prijemDruhehoDospeleho = [0, 0, 0, 0, 0, 0, 0],
 	prijemTretihoDospeleho = [0, 0, 0, 0, 0, 0, 0], zivotniMinimum = [0, 0], pocetDetiPod6 = 0, pocetDeti6az15 = 0, pocetDeti15az26 = 0, narokNaVyssiDavky = false) {
 
 	var pridavkyNaDeti = 0,
@@ -464,7 +499,7 @@ function spocitejPridavkyNaDeti(cistyPrijemDomacnosti = [0, 0, 0, 0], prijemPrvn
 
 	return(pridavkyNaDeti)
 }
-
+//IT
 
 
 /*
@@ -697,7 +732,8 @@ výstupy:
 
 */
 
-function spocitejPrispevekNaBydleni(cistyPrijemDomacnosti = [0, 0, 0, 0], nakladyNaBydleniProSSP = [0, 0], zivotniMinimum = [0, 0], duchody = 0, rodicovska = 0,
+//ED
+function spocitejPrispevekNaBydleni(cistyPrijemDomacnosti = [0, 0, 0], nakladyNaBydleniProSSP = [0, 0], zivotniMinimum = [0, 0], duchody = 0, rodicovska = 0,
 	pridavkyNaDeti = 0, podporaVNezamestnanosti = 0, nemocenska = 0, ostatniPrijmy = 0, velikostObce = 1, ubytovna = false) {
 
 	var koeficientNakladu = 0,
@@ -717,7 +753,7 @@ function spocitejPrispevekNaBydleni(cistyPrijemDomacnosti = [0, 0, 0, 0], naklad
 	uznatelneNakladyProSSP = nakladyNaBydleniProSSP[0];
 
 	// pro příspěvek na bydlení se počítá čistý příjem domácnosti bez bonusu na děti
-	cistyPrijemBezBonusuNaDeti = cistyPrijemDomacnosti[1];
+	cistyPrijemBezBonusuNaDeti = cistyPrijemDomacnosti[0] - cistyPrijemDomacnosti[1];
 
 	// koeficient nákladů na bydlení: v Praze 0,35, mimo Prahu 0,3
 	if (velikostObce == 1) {
@@ -745,8 +781,7 @@ function spocitejPrispevekNaBydleni(cistyPrijemDomacnosti = [0, 0, 0, 0], naklad
 
 return(prispevekNaBydleni);
 }
-
-
+//IT
 
 /*
 
@@ -770,7 +805,8 @@ poznámky:
 
 */
 
-function spocitejPrispevekNaZivobyti(cistyPrijemDomacnosti = [0, 0, 0, 0], nakladyNaBydleniProHN = [0, 0], zivotniMinimum = [0, 0], duchody = 0, rodicovska = 0, pridavkyNaDeti = 0,
+//ED
+function spocitejPrispevekNaZivobyti(cistyPrijemDomacnosti = [0, 0, 0], nakladyNaBydleniProHN = [0, 0], zivotniMinimum = [0, 0], duchody = 0, rodicovska = 0, pridavkyNaDeti = 0,
 	podporaVNezamestnanosti = 0, nemocenska = 0, ostatniPrijmy = 0) {
 
 	var castkaZivobyti = 0,
@@ -787,8 +823,8 @@ function spocitejPrispevekNaZivobyti(cistyPrijemDomacnosti = [0, 0, 0, 0], nakla
 	// náklady na bydlení pro SSP
 	uznatelneNakladyProHN = nakladyNaBydleniProHN[0];
 
-	// pro příspěvek na živobytí se počítá čistý příjem domácnosti bez bonusu na děti
-	cistyPrijemBezBonusuNaDeti = cistyPrijemDomacnosti[3];
+	// pro příspěvek na živobytí se počítá čistý příjem domácnosti bez bonusu na děti; u OBZP se navíc odečítá doplatek na zdravotní
+	cistyPrijemBezBonusuNaDeti = cistyPrijemDomacnosti[0] - cistyPrijemDomacnosti[1] - cistyPrijemDomacnosti[2];
 
 	castkaZivobyti = zivotniMinimumProHN;
 
@@ -809,7 +845,7 @@ function spocitejPrispevekNaZivobyti(cistyPrijemDomacnosti = [0, 0, 0, 0], nakla
 
 	return(prispevekNaZivobyti);
 }
-
+//IT
 
 
 /*
@@ -833,7 +869,8 @@ poznámky:
 
 */
 
-function spocitejDoplatekNaBydleni(cistyPrijemDomacnosti = [0, 0, 0, 0], nakladyNaBydleniProHN = [0, 0], zivotniMinimum = [0, 0], prispevekNaZivobyti = 0, prispevekNaBydleni = 0, duchody = 0,
+//ED
+function spocitejDoplatekNaBydleni(cistyPrijemDomacnosti = [0, 0, 0], nakladyNaBydleniProHN = [0, 0], zivotniMinimum = [0, 0], prispevekNaZivobyti = 0, prispevekNaBydleni = 0, duchody = 0,
 	rodicovska = 0, pridavkyNaDeti = 0, podporaVNezamestnanosti = 0, nemocenska = 0, ostatniPrijmy = 0) {
 
 	var castkaZivobyti = 0,
@@ -849,8 +886,8 @@ function spocitejDoplatekNaBydleni(cistyPrijemDomacnosti = [0, 0, 0, 0], naklady
 	// náklady na bydlení pro SSP
 	uznatelneNakladyProHN = nakladyNaBydleniProHN[0];
 
-	// pro doplatek na bydlení se počítá čistý příjem domácnosti bez bonusu na děti
-	cistyPrijemBezBonusuNaDeti = cistyPrijemDomacnosti[3];
+	// pro příspěvek na živobytí se počítá čistý příjem domácnosti bez bonusu na děti; u OBZP se navíc odečítá doplatek na zdravotní
+	cistyPrijemBezBonusuNaDeti = cistyPrijemDomacnosti[0] - cistyPrijemDomacnosti[1] - cistyPrijemDomacnosti[2];
 
 	castkaZivobyti = zivotniMinimumProHN;
 
@@ -872,7 +909,7 @@ function spocitejDoplatekNaBydleni(cistyPrijemDomacnosti = [0, 0, 0, 0], naklady
 
 	return(doplatekNaBydleni);
 }
-
+//IT
 
 
 /*
@@ -886,6 +923,7 @@ poznámky:
 
 */
 
+//ED
 function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0, 0, 0], duchody = 0, rodicovska = 0, podporaVNezamestnanosti = 0, nemocenska = 0, ostatniPrijmy = 0,
 	prednostniExekuce = 0, neprednostniExekuce = 0, dalsiVyzivovaneOsoby = 0) {
 
@@ -909,10 +947,10 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0, 0, 0
 		pomerExekuci = 0;
 
 	// je potřeba spočítat daňový bonus, ten je později možno exekuovat
-	danovyBonusNaDetiPredExekuci = prijemDospeleho[0] - prijemDospeleho[1];
+	danovyBonusNaDetiPredExekuci = prijemDospeleho[1];
 
 	// pro exekuci se počítá s příjmem bez bonusu
-	prijemDospelehoBezDanovehoBonusuPredExekuci = prijemDospeleho[1];
+	prijemDospelehoBezDanovehoBonusuPredExekuci = prijemDospeleho[0] - prijemDospeleho[1];
 
 	// do výpočtu příjmů pro exekuci vstupují i exekuovatelné dávky; tím se smaže informace o jejich rozdělení, ale líp to neumíme
 	prijmyDospelehoPredExekuci = prijemDospelehoBezDanovehoBonusuPredExekuci + duchody + rodicovska + podporaVNezamestnanosti + nemocenska + ostatniPrijmy;
@@ -989,7 +1027,7 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0, 0, 0
 	}
 
 }
-
+//IT
 
 
 /*
@@ -997,6 +1035,8 @@ function spocitejPrijemDospelehoPoExekuci(prijemDospeleho = [0, 0, 0, 0, 0, 0, 0
 spočítej příjem domácnosti po exekuci
 
 */
+
+//ED
 function spocitejPrijemDomacnostiPoExekuci(prijemPrvnihoDospelehoPoExekuci = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], prijemDruhehoDospelehoPoExekuci = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	prijemTretihoDospelehoPoExekuci = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) {
 
@@ -1026,7 +1066,7 @@ function spocitejPrijemDomacnostiPoExekuci(prijemPrvnihoDospelehoPoExekuci = [0,
 		rodicovskaDomacnostiPoExekuci, podporaDomacnostiVNezamestnanostiPoExekuci, nemocenskaDomacnostiPoExekuci, ostatniPrijmyDomacnostiPoExekuci, exekuceDomacnosti]);
 
 }
-
+//IT
 
 
 /*
@@ -1060,7 +1100,7 @@ výstupy:
 */
 
 
-
+//ED
 function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 
 	/* výpočet:
@@ -1077,85 +1117,106 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 
 	if(prvniDospelyPrvniZamestnavatel[1] == 0) {
 		var rodinkaPrijemPrvniDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaHPP(prvniDospelyPrvniZamestnavatel[0], prvniDospelyPrvniZamestnavatel[4]),
+			prijem = spocitejSlozkyNaHPP(prvniDospelyPrvniZamestnavatel[0], prvniDospelyPrvniZamestnavatel[4], false),
 			ruzovyPapir = prvniDospelyPrvniZamestnavatel[2], pocetVyzivovanychDeti = prvniDospelyPrvniZamestnavatel[3])
 	} else if (prvniDospelyPrvniZamestnavatel[1] == 1) {
 		var rodinkaPrijemPrvniDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPC(prvniDospelyPrvniZamestnavatel[0]),
+			prijem = spocitejSlozkyNaDPC(prvniDospelyPrvniZamestnavatel[0], prvniDospelyPrvniZamestnavatel[4], false),
 			ruzovyPapir = prvniDospelyPrvniZamestnavatel[2], pocetVyzivovanychDeti = prvniDospelyPrvniZamestnavatel[3])
 	} else if (prvniDospelyPrvniZamestnavatel[1] == 2) {
 		var rodinkaPrijemPrvniDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPP(prvniDospelyPrvniZamestnavatel[0], prvniDospelyPrvniZamestnavatel[4]),
+			prijem = spocitejSlozkyNaDPP(prvniDospelyPrvniZamestnavatel[0], prvniDospelyPrvniZamestnavatel[4], false),
 			ruzovyPapir = prvniDospelyPrvniZamestnavatel[2], pocetVyzivovanychDeti = prvniDospelyPrvniZamestnavatel[3])
 	};
 
+	//pokud si v prvním úvazku platí zdravotní, v druhém nemusí
+	if(rodinkaPrijemPrvniDospelyPrvniPrace[3] > 0) {
+		var rodinkaPrijemPrvniDospelyPrvniPracePojisteni = true;
+	} else {
+		var rodinkaPrijemPrvniDospelyPrvniPracePojisteni = false;
+	}
+
 	if(prvniDospelyDruhyZamestnavatel[1] == 0) {
 		var rodinkaPrijemPrvniDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaHPP(prvniDospelyDruhyZamestnavatel[0], prvniDospelyDruhyZamestnavatel[4]),
+			prijem = spocitejSlozkyNaHPP(prvniDospelyDruhyZamestnavatel[0], prvniDospelyDruhyZamestnavatel[4], rodinkaPrijemPrvniDospelyPrvniPracePojisteni),
 			ruzovyPapir = prvniDospelyDruhyZamestnavatel[2], pocetVyzivovanychDeti = prvniDospelyDruhyZamestnavatel[3])
 	} else if (prvniDospelyDruhyZamestnavatel[1] == 1) {
 		var rodinkaPrijemPrvniDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPC(prvniDospelyDruhyZamestnavatel[0]),
+			prijem = spocitejSlozkyNaDPC(prvniDospelyDruhyZamestnavatel[0], prvniDospelyDruhyZamestnavatel[4], rodinkaPrijemPrvniDospelyPrvniPracePojisteni),
 			ruzovyPapir = prvniDospelyDruhyZamestnavatel[2], pocetVyzivovanychDeti = prvniDospelyDruhyZamestnavatel[3])
 	} else if (prvniDospelyDruhyZamestnavatel[1] == 2) {
 		var rodinkaPrijemPrvniDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPP(prvniDospelyDruhyZamestnavatel[0], prvniDospelyDruhyZamestnavatel[4]),
+			prijem = spocitejSlozkyNaDPP(prvniDospelyDruhyZamestnavatel[0], prvniDospelyDruhyZamestnavatel[4], rodinkaPrijemPrvniDospelyPrvniPracePojisteni),
 			ruzovyPapir = prvniDospelyDruhyZamestnavatel[2], pocetVyzivovanychDeti = prvniDospelyDruhyZamestnavatel[3])
 	};
 
 	if(druhyDospelyPrvniZamestnavatel[1] == 0) {
 		var rodinkaPrijemDruhyDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaHPP(druhyDospelyPrvniZamestnavatel[0], druhyDospelyPrvniZamestnavatel[4]),
+			prijem = spocitejSlozkyNaHPP(druhyDospelyPrvniZamestnavatel[0], druhyDospelyPrvniZamestnavatel[4], false),
 			ruzovyPapir = druhyDospelyPrvniZamestnavatel[2], pocetVyzivovanychDeti = druhyDospelyPrvniZamestnavatel[3])
 	} else if (druhyDospelyPrvniZamestnavatel[1] == 1) {
 		var rodinkaPrijemDruhyDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPC(druhyDospelyPrvniZamestnavatel[0]),
+			prijem = spocitejSlozkyNaDPC(druhyDospelyPrvniZamestnavatel[0], druhyDospelyPrvniZamestnavatel[4], false),
 			ruzovyPapir = druhyDospelyPrvniZamestnavatel[2], pocetVyzivovanychDeti = druhyDospelyPrvniZamestnavatel[3])
 	} else if (druhyDospelyPrvniZamestnavatel[1] == 2) {
 		var rodinkaPrijemDruhyDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPP(druhyDospelyPrvniZamestnavatel[0], druhyDospelyPrvniZamestnavatel[4]),
+			prijem = spocitejSlozkyNaDPP(druhyDospelyPrvniZamestnavatel[0], druhyDospelyPrvniZamestnavatel[4], false),
 			ruzovyPapir = druhyDospelyPrvniZamestnavatel[2], pocetVyzivovanychDeti = druhyDospelyPrvniZamestnavatel[3])
 	};
 
+	//pokud si v prvním úvazku platí zdravotní, v druhém nemusí
+	if(rodinkaPrijemDruhyDospelyPrvniPrace[3] > 0) {
+		var rodinkaPrijemDruhyDospelyPrvniPracePojisteni = true;
+	} else {
+		var rodinkaPrijemDruhyDospelyPrvniPracePojisteni = false;
+	}
+
 	if(druhyDospelyDruhyZamestnavatel[1] == 0) {
 		var rodinkaPrijemDruhyDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaHPP(druhyDospelyDruhyZamestnavatel[0], druhyDospelyDruhyZamestnavatel[4]),
+			prijem = spocitejSlozkyNaHPP(druhyDospelyDruhyZamestnavatel[0], druhyDospelyDruhyZamestnavatel[4], rodinkaPrijemDruhyDospelyPrvniPracePojisteni),
 			ruzovyPapir = druhyDospelyDruhyZamestnavatel[2], pocetVyzivovanychDeti = druhyDospelyDruhyZamestnavatel[3])
 	} else if (druhyDospelyDruhyZamestnavatel[1] == 1) {
 		var rodinkaPrijemDruhyDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPC(druhyDospelyDruhyZamestnavatel[0]),
+			prijem = spocitejSlozkyNaDPC(druhyDospelyDruhyZamestnavatel[0], druhyDospelyDruhyZamestnavatel[4], rodinkaPrijemDruhyDospelyPrvniPracePojisteni),
 			ruzovyPapir = druhyDospelyDruhyZamestnavatel[2], pocetVyzivovanychDeti = druhyDospelyDruhyZamestnavatel[3])
 	} else if (druhyDospelyDruhyZamestnavatel[1] == 2) {
 		var rodinkaPrijemDruhyDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPP(druhyDospelyDruhyZamestnavatel[0], druhyDospelyDruhyZamestnavatel[4]),
+			prijem = spocitejSlozkyNaDPP(druhyDospelyDruhyZamestnavatel[0], druhyDospelyDruhyZamestnavatel[4], rodinkaPrijemDruhyDospelyPrvniPracePojisteni),
 			ruzovyPapir = druhyDospelyDruhyZamestnavatel[2], pocetVyzivovanychDeti = druhyDospelyDruhyZamestnavatel[3])
 	};
 
 	if(tretiDospelyPrvniZamestnavatel[1] == 0) {
 		var rodinkaPrijemTretiDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaHPP(tretiDospelyPrvniZamestnavatel[0], tretiDospelyPrvniZamestnavatel[4]),
+			prijem = spocitejSlozkyNaHPP(tretiDospelyPrvniZamestnavatel[0], tretiDospelyPrvniZamestnavatel[4], false),
 			ruzovyPapir = tretiDospelyPrvniZamestnavatel[2], pocetVyzivovanychDeti = tretiDospelyPrvniZamestnavatel[3])
 	} else if (tretiDospelyPrvniZamestnavatel[1] == 1) {
 		var rodinkaPrijemTretiDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPC(tretiDospelyPrvniZamestnavatel[0]),
+			prijem = spocitejSlozkyNaDPC(tretiDospelyPrvniZamestnavatel[0], tretiDospelyPrvniZamestnavatel[4], false),
 			ruzovyPapir = tretiDospelyPrvniZamestnavatel[2], pocetVyzivovanychDeti = tretiDospelyPrvniZamestnavatel[3])
 	} else if (tretiDospelyPrvniZamestnavatel[2] == 0) {
 		var rodinkaPrijemTretiDospelyPrvniPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPP(tretiDospelyPrvniZamestnavatel[0], tretiDospelyPrvniZamestnavatel[4]),
+			prijem = spocitejSlozkyNaDPP(tretiDospelyPrvniZamestnavatel[0], tretiDospelyPrvniZamestnavatel[4], false),
 			ruzovyPapir = tretiDospelyPrvniZamestnavatel[2], pocetVyzivovanychDeti = tretiDospelyPrvniZamestnavatel[3])
 	};
 
+	//pokud si v prvním úvazku platí zdravotní, v druhém nemusí
+	if(rodinkaPrijemTretiDospelyPrvniPrace[3] > 0) {
+		var rodinkaPrijemTretiDospelyPrvniPracePojisteni = true;
+	} else {
+		var rodinkaPrijemTretiDospelyPrvniPracePojisteni = false;
+	}
+
 	if(tretiDospelyDruhyZamestnavatel[1] == 0) {
 		var rodinkaPrijemTretiDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaHPP(tretiDospelyDruhyZamestnavatel[0], tretiDospelyDruhyZamestnavatel[4]),
+			prijem = spocitejSlozkyNaHPP(tretiDospelyDruhyZamestnavatel[0], tretiDospelyDruhyZamestnavatel[4], rodinkaPrijemTretiDospelyPrvniPracePojisteni),
 			ruzovyPapir = tretiDospelyDruhyZamestnavatel[2], pocetVyzivovanychDeti = tretiDospelyDruhyZamestnavatel[3])
 	} else if (tretiDospelyDruhyZamestnavatel[1] == 1) {
 		var rodinkaPrijemTretiDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPC(tretiDospelyDruhyZamestnavatel[0]),
+			prijem = spocitejSlozkyNaDPC(tretiDospelyDruhyZamestnavatel[0], tretiDospelyDruhyZamestnavatel[4], rodinkaPrijemTretiDospelyPrvniPracePojisteni),
 			ruzovyPapir = tretiDospelyDruhyZamestnavatel[2], pocetVyzivovanychDeti = tretiDospelyDruhyZamestnavatel[3])
 	} else if (tretiDospelyDruhyZamestnavatel[1] == 2) {
 		var rodinkaPrijemTretiDospelyDruhaPrace = spocitejPrijemUZamestnavatele(
-			prijem = spocitejSlozkyNaDPP(tretiDospelyDruhyZamestnavatel[0], tretiDospelyDruhyZamestnavatel[4]),
+			prijem = spocitejSlozkyNaDPP(tretiDospelyDruhyZamestnavatel[0], tretiDospelyDruhyZamestnavatel[4], rodinkaPrijemTretiDospelyPrvniPracePojisteni),
 			ruzovyPapir = tretiDospelyDruhyZamestnavatel[2], pocetVyzivovanychDeti = tretiDospelyDruhyZamestnavatel[3])
 	};
 
@@ -1183,18 +1244,22 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 		pocetDeti15az26 = slozeniDomacnosti[3],
 		snizeneMinimum = socialOptional[0]);
 
-	var rodinkaPridavkyNaDeti = spocitejPridavkyNaDeti(
-		cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
-		prijemPrvnihoDospeleho = rodinkaPrijemPrvnihoDospeleho,
-		prijemDruhehoDospeleho = rodinkaPrijemDruhehoDospeleho,
-		prijemTretihoDospeleho = rodinkaPrijemTretihoDospeleho,
-		zivotniMinimum = rodinkaZivotniMinimum,
-		pocetDetiPod6 = slozeniDomacnosti[1],
-		pocetDeti6az15 = slozeniDomacnosti[2],
-		pocetDeti15az26 = slozeniDomacnosti[3],
-		narokNaVyssiDavky = socialOptional[1]);
+	// pokud je nechtějí, nedostanou je
+	if(pozadovaneDavky[0]) {
+		var rodinkaPridavkyNaDeti = spocitejPridavkyNaDeti(
+			cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
+			prijemPrvnihoDospeleho = rodinkaPrijemPrvnihoDospeleho,
+			prijemDruhehoDospeleho = rodinkaPrijemDruhehoDospeleho,
+			prijemTretihoDospeleho = rodinkaPrijemTretihoDospeleho,
+			zivotniMinimum = rodinkaZivotniMinimum,
+			pocetDetiPod6 = slozeniDomacnosti[1],
+			pocetDeti6az15 = slozeniDomacnosti[2],
+			pocetDeti15az26 = slozeniDomacnosti[3],
+			narokNaVyssiDavky = socialOptional[1]);
+	} else {
+		var rodinkaPridavkyNaDeti = 0;
+	}
 
-//ED
 	var rodinkaNakladyNaBydleniProSSP = spocitejNakladyNaBydleniProSSP(
 		najem = bydleni[0],
 		poplatky = bydleni[1],
@@ -1211,7 +1276,6 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 		ubytovna = bydleni[4],
 		velikostObce = bydleni[5],
 		mistneObvykleNaklady = bydleni[6]);
-//IT
 
 	var rodinkaDuchody =  parseFloat(prvniDospelyDalsiPrijmy[0]) + parseFloat(druhyDospelyDalsiPrijmy[0]) + parseFloat(tretiDospelyDalsiPrijmy[0]);
 
@@ -1223,44 +1287,57 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 
 	var rodinkaOstatniPrijmy = parseFloat(prvniDospelyDalsiPrijmy[4]) + parseFloat(druhyDospelyDalsiPrijmy[4]) + parseFloat(tretiDospelyDalsiPrijmy[4]);
 
-//ED
-	var rodinkaPrispevekNaBydleni = spocitejPrispevekNaBydleni(
-		cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
-		nakladyNaBydleniProSSP = rodinkaNakladyNaBydleniProSSP,
-		zivotniMinimum = rodinkaZivotniMinimum,
-		duchody = rodinkaDuchody,
-		rodicovska = rodinkaRodicovska,
-		pridavkyNaDeti = rodinkaPridavkyNaDeti,
-		podporaVNezamestnanosti = rodinkaPodporaVNezamestnanosti,
-		nemocenska = rodinkaNemocenska,
-		ostatniPrijmy = rodinkaOstatniPrijmy,
-		velikostObce = bydleni[5],
-		ubytovna = bydleni[4]);
-//IT
+	// pokud je nechtějí, nedostanou je
+	if(pozadovaneDavky[1]) {
+		var rodinkaPrispevekNaBydleni = spocitejPrispevekNaBydleni(
+			cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
+			nakladyNaBydleniProSSP = rodinkaNakladyNaBydleniProSSP,
+			zivotniMinimum = rodinkaZivotniMinimum,
+			duchody = rodinkaDuchody,
+			rodicovska = rodinkaRodicovska,
+			pridavkyNaDeti = rodinkaPridavkyNaDeti,
+			podporaVNezamestnanosti = rodinkaPodporaVNezamestnanosti,
+			nemocenska = rodinkaNemocenska,
+			ostatniPrijmy = rodinkaOstatniPrijmy,
+			velikostObce = bydleni[5],
+			ubytovna = bydleni[4]);
+	} else {
+		var rodinkaPrispevekNaBydleni = 0;
+	}
 
-	var rodinkaPrispevekNaZivobyti = spocitejPrispevekNaZivobyti(
-		cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
-		nakladyNaBydleniProHN = rodinkaNakladyNaBydleniProHN,
-		zivotniMinimum = rodinkaZivotniMinimum,
-		duchody = rodinkaDuchody,
-		rodicovska = rodinkaRodicovska,
-		pridavkyNaDeti = rodinkaPridavkyNaDeti,
-		podporaVNezamestnanosti = rodinkaPodporaVNezamestnanosti,
-		nemocenska = rodinkaNemocenska,
-		ostatniPrijmy = rodinkaOstatniPrijmy);
+	// pokud je nechtějí, nedostanou je
+	if(pozadovaneDavky[2]) {
+		var rodinkaPrispevekNaZivobyti = spocitejPrispevekNaZivobyti(
+			cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
+			nakladyNaBydleniProHN = rodinkaNakladyNaBydleniProHN,
+			zivotniMinimum = rodinkaZivotniMinimum,
+			duchody = rodinkaDuchody,
+			rodicovska = rodinkaRodicovska,
+			pridavkyNaDeti = rodinkaPridavkyNaDeti,
+			podporaVNezamestnanosti = rodinkaPodporaVNezamestnanosti,
+			nemocenska = rodinkaNemocenska,
+			ostatniPrijmy = rodinkaOstatniPrijmy);
+	} else {
+		var rodinkaPrispevekNaZivobyti = 0;
+	}
 
-	var rodinkaDoplatekNaBydleni = spocitejDoplatekNaBydleni(
-		cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
-		nakladyNaBydleniProHN = rodinkaNakladyNaBydleniProHN,
-		zivotniMinimum = rodinkaZivotniMinimum,
-		prispevekNaZivobyti = rodinkaPrispevekNaZivobyti,
-		prispevekNaBydleni = rodinkaPrispevekNaBydleni,
-		duchody = rodinkaDuchody,
-		rodicovska = rodinkaRodicovska,
-		pridavkyNaDeti = rodinkaPridavkyNaDeti,
-		podporaVNezamestnanosti = rodinkaPodporaVNezamestnanosti,
-		nemocenska = rodinkaNemocenska,
-		ostatniPrijmy = rodinkaOstatniPrijmy);
+	// pokud je nechtějí, nedostanou je
+	if(pozadovaneDavky[3]) {
+		var rodinkaDoplatekNaBydleni = spocitejDoplatekNaBydleni(
+			cistyPrijemDomacnosti = rodinkaCistyPrijemDomacnosti,
+			nakladyNaBydleniProHN = rodinkaNakladyNaBydleniProHN,
+			zivotniMinimum = rodinkaZivotniMinimum,
+			prispevekNaZivobyti = rodinkaPrispevekNaZivobyti,
+			prispevekNaBydleni = rodinkaPrispevekNaBydleni,
+			duchody = rodinkaDuchody,
+			rodicovska = rodinkaRodicovska,
+			pridavkyNaDeti = rodinkaPridavkyNaDeti,
+			podporaVNezamestnanosti = rodinkaPodporaVNezamestnanosti,
+			nemocenska = rodinkaNemocenska,
+			ostatniPrijmy = rodinkaOstatniPrijmy);
+	} else {
+		var rodinkaDoplatekNaBydleni = 0;
+	}
 
 	var rodinkaPrijemPrvnihoDospelehoPoExekuci = spocitejPrijemDospelehoPoExekuci(
 		prijemDospeleho = rodinkaPrijemPrvnihoDospeleho,
@@ -1358,22 +1435,18 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	// 17: srážky ze mzdy
 	prijmyAVydajeRodinyPoZapocteniDavek[17] = Math.round(rodinkaPrijemPoExekuci[9]);
 
-	// 18: kontrola, disponibilní příjem včetně dávek a výdajů na nájem
-	prijmyAVydajeRodinyPoZapocteniDavek[18] = Math.round(rodinkaPrijemPoExekuci[1] + rodinkaPrijemPoExekuci[3] + rodinkaPridavkyNaDeti + rodinkaPrispevekNaBydleni + rodinkaPrispevekNaZivobyti +
-		rodinkaDoplatekNaBydleni - bydleni[0] - bydleni[1]);
-
 	// proměnné pro statický výpočet dávek
 
-	// 19: čistý příjem 1. dospělého z 1. zaměstnání
-	prijmyAVydajeRodinyPoZapocteniDavek[19] = rodinkaPrijemPrvniDospelyPrvniPrace[1];
+	// 19: čistý příjem 1. dospělého z 1. zaměstnání bez daňového bonusu
+	prijmyAVydajeRodinyPoZapocteniDavek[19] = rodinkaPrijemPrvniDospelyPrvniPrace[0];
 
-	// 20: čistý příjem 1. dospělého z 2. zaměstnání
-	prijmyAVydajeRodinyPoZapocteniDavek[20] = rodinkaPrijemPrvniDospelyDruhaPrace[1];
+	// 20: čistý příjem 1. dospělého z 2. zaměstnání bez daňového bonusu
+	prijmyAVydajeRodinyPoZapocteniDavek[20] = rodinkaPrijemPrvniDospelyDruhaPrace[0];
 
 	// 21:
 
 	// 22: daňový bonus 1. dospělého
-	prijmyAVydajeRodinyPoZapocteniDavek[22] = rodinkaPrijemPrvnihoDospeleho[0] - rodinkaPrijemPrvnihoDospeleho[1];
+	prijmyAVydajeRodinyPoZapocteniDavek[22] = rodinkaPrijemPrvnihoDospeleho[1];
 
 	// 23: rodičovská 1. dospělého
 	prijmyAVydajeRodinyPoZapocteniDavek[23] = prvniDospelyDalsiPrijmy[1];
@@ -1387,19 +1460,19 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	// 26: exekuce 1. dospělého
 	prijmyAVydajeRodinyPoZapocteniDavek[26] = rodinkaPrijemPrvnihoDospelehoPoExekuci[9];
 
-	// 27: čistý příjem po exekuci 1. dospělého
+	// 27: čistý příjem po exekuci 1. dospělého vč. bonusu
 	prijmyAVydajeRodinyPoZapocteniDavek[27] = prijmyAVydajeRodinyPoZapocteniDavek[0] + prijmyAVydajeRodinyPoZapocteniDavek[1];
 
-	// 28: čistý příjem 2. dospělého z 1. zaměstnání
-	prijmyAVydajeRodinyPoZapocteniDavek[28] = rodinkaPrijemDruhyDospelyPrvniPrace[1];
+	// 28: čistý příjem 2. dospělého z 1. zaměstnání bez daňového bonusu
+	prijmyAVydajeRodinyPoZapocteniDavek[28] = rodinkaPrijemDruhyDospelyPrvniPrace[0];
 
-	// 29: čistý příjem 2. dospělého z 2. zaměstnání
-	prijmyAVydajeRodinyPoZapocteniDavek[29] = rodinkaPrijemDruhyDospelyDruhaPrace[1];
+	// 29: čistý příjem 2. dospělého z 2. zaměstnání bez daňového bonusu
+	prijmyAVydajeRodinyPoZapocteniDavek[29] = rodinkaPrijemDruhyDospelyDruhaPrace[0];
 
 	// 30:
 
 	// 31: daňový bonus 2. dospělého
-	prijmyAVydajeRodinyPoZapocteniDavek[31] = rodinkaPrijemDruhehoDospeleho[0] - rodinkaPrijemDruhehoDospeleho[1];
+	prijmyAVydajeRodinyPoZapocteniDavek[31] = rodinkaPrijemDruhehoDospeleho[1];
 
 	// 32: rodičovská 2. dospělého
 	prijmyAVydajeRodinyPoZapocteniDavek[32] = druhyDospelyDalsiPrijmy[1];
@@ -1413,19 +1486,19 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	// 35: exekuce 2. dospělého
 	prijmyAVydajeRodinyPoZapocteniDavek[35] = rodinkaPrijemDruhehoDospelehoPoExekuci[9];
 
-	// 36: čistý příjem po exekuci 2. dospělého
+	// 36: čistý příjem po exekuci 2. dospělého vč. bonusu
 	prijmyAVydajeRodinyPoZapocteniDavek[36] = prijmyAVydajeRodinyPoZapocteniDavek[2] + prijmyAVydajeRodinyPoZapocteniDavek[3];
 
-	// 37: čistý příjem 2. dospělého z 1. zaměstnání
-	prijmyAVydajeRodinyPoZapocteniDavek[37] = rodinkaPrijemTretiDospelyPrvniPrace[1];
+	// 37: čistý příjem 2. dospělého z 1. zaměstnání bez daňového bonusu
+	prijmyAVydajeRodinyPoZapocteniDavek[37] = rodinkaPrijemTretiDospelyPrvniPrace[0];
 
-	// 38: čistý příjem 2. dospělého z 2. zaměstnání
-	prijmyAVydajeRodinyPoZapocteniDavek[38] = rodinkaPrijemTretiDospelyDruhaPrace[1];
+	// 38: čistý příjem 2. dospělého z 2. zaměstnání bez daňového bonusu
+	prijmyAVydajeRodinyPoZapocteniDavek[38] = rodinkaPrijemTretiDospelyDruhaPrace[0];
 
 	// 39:
 
 	// 40: daňový bonus 3. dospělého
-	prijmyAVydajeRodinyPoZapocteniDavek[40] = rodinkaPrijemTretihoDospeleho[0] - rodinkaPrijemTretihoDospeleho[1];
+	prijmyAVydajeRodinyPoZapocteniDavek[40] = rodinkaPrijemTretihoDospeleho[1];
 
 	// 41: rodičovská 3. dospělého
 	prijmyAVydajeRodinyPoZapocteniDavek[41] = tretiDospelyDalsiPrijmy[1];
@@ -1439,7 +1512,7 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	// 44: exekuce 3. dospělého
 	prijmyAVydajeRodinyPoZapocteniDavek[44] = rodinkaPrijemTretihoDospelehoPoExekuci[9];
 
-	// 45: čistý příjem po exekuci 3. dospělého
+	// 45: čistý příjem po exekuci 3. dospělého vč. bonusu
 	prijmyAVydajeRodinyPoZapocteniDavek[45] = prijmyAVydajeRodinyPoZapocteniDavek[4] + prijmyAVydajeRodinyPoZapocteniDavek[5];
 
 	// 46: přídavky na děti
@@ -1464,8 +1537,15 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	// 52: poplatky
 	prijmyAVydajeRodinyPoZapocteniDavek[52] = prijmyAVydajeRodinyPoZapocteniDavek[16];
 
+	// 55: doplatek na zdravotní OBZP
+	prijmyAVydajeRodinyPoZapocteniDavek[55] = rodinkaCistyPrijemDomacnosti[2];
+
 	// 53: celkem výdaje
-	prijmyAVydajeRodinyPoZapocteniDavek[53] = prijmyAVydajeRodinyPoZapocteniDavek[51] + prijmyAVydajeRodinyPoZapocteniDavek[52];
+	prijmyAVydajeRodinyPoZapocteniDavek[53] = prijmyAVydajeRodinyPoZapocteniDavek[51] + prijmyAVydajeRodinyPoZapocteniDavek[52] + prijmyAVydajeRodinyPoZapocteniDavek[55];
+
+	// 18: kontrola, disponibilní příjem včetně dávek a výdajů na nájem
+	prijmyAVydajeRodinyPoZapocteniDavek[18] = Math.round(rodinkaPrijemPoExekuci[1] + rodinkaPrijemPoExekuci[3] + rodinkaPridavkyNaDeti + rodinkaPrispevekNaBydleni +
+		rodinkaPrispevekNaZivobyti + rodinkaDoplatekNaBydleni - bydleni[0] - bydleni[1] - prijmyAVydajeRodinyPoZapocteniDavek[55]);
 
 	// 54: celkem disponibilní příjem domácnosti
 	prijmyAVydajeRodinyPoZapocteniDavek[54] = prijmyAVydajeRodinyPoZapocteniDavek[18];
@@ -1473,3 +1553,4 @@ function spocitejPrijmyAVydajeRodinyPoZapocteniDavek() {
 	return(prijmyAVydajeRodinyPoZapocteniDavek);
 
 }
+//IT

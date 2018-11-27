@@ -37,11 +37,13 @@ var colors = [
 	// 16: poplatky
 	'#fb9a99',
 	// 17: srážky ze mzdy
-	'#e31a1c'
+	'#e31a1c',
+	// 18: doplatek na zdravotní pojištění
+	'#e6e61a'
 ];
 
 
-
+//ED
 function dynamickyModelujRodinu(simulace = 0) {
 
 	/* simulace:
@@ -55,8 +57,11 @@ function dynamickyModelujRodinu(simulace = 0) {
 
 	*/
 
-	// záloha nezávislé proměnné, která se pak vrátí do globální proměnné
-	var backup,
+	// záloha nezávislých proměnných, které se pak vrátí do globální proměnné
+	var backup1,
+		backup2,
+		backup3,
+		backup4,
 
 	// pro graf
 		nazevNezavislePromenne,
@@ -86,29 +91,56 @@ function dynamickyModelujRodinu(simulace = 0) {
 		najem = [],
 		poplatky = [],
 		exekuce = [],
+		doplatekNaZdravotni = [],
 		prijemRodiny = [];
 
 	if (simulace == 1) {
 		nazevNezavislePromenne = 'hrubý příjem prvního dospělého na HPP';
-		backup = prvniDospelyPrvniZamestnavatel[0];
+		// záloha proměnných, nastavení ostatních příjmů na nulu a typ smlouvy na HPP
+		backup1 = prvniDospelyPrvniZamestnavatel[0];
+		backup2 = prvniDospelyPrvniZamestnavatel[1];
+		backup3 = prvniDospelyDruhyZamestnavatel[0];
+		backup4 = prvniDospelyDruhyZamestnavatel[1];
+		prvniDospelyPrvniZamestnavatel[0] = 0;
+		prvniDospelyPrvniZamestnavatel[1] = 0;
+		prvniDospelyDruhyZamestnavatel[0] = 0;
+		prvniDospelyDruhyZamestnavatel[1] = 0;
 		intervalMin = 13000;
 		intervalMax = 30000;
 	} else if (simulace == 2) {
 		nazevNezavislePromenne = 'hrubý příjem prvního dospělého na DPČ';
-		backup = prvniDospelyPrvniZamestnavatel[2];
+		// záloha proměnných, nastavení ostatních příjmů na nulu a typ smlouvy na DPČ
+		backup1 = prvniDospelyPrvniZamestnavatel[0];
+		backup2 = prvniDospelyPrvniZamestnavatel[1];
+		backup3 = prvniDospelyDruhyZamestnavatel[0];
+		backup4 = prvniDospelyDruhyZamestnavatel[1];
+		prvniDospelyPrvniZamestnavatel[0] = 0;
+		prvniDospelyPrvniZamestnavatel[1] = 1;
+		prvniDospelyDruhyZamestnavatel[0] = 0;
+		prvniDospelyDruhyZamestnavatel[1] = 0;
 		intervalMin = 0;
 		intervalMax = 20000;
 	} else if (simulace == 3) {
 		nazevNezavislePromenne = 'hrubý příjem prvního dospělého na DPP';
-		backup = prvniDospelyPrvniZamestnavatel[4];
+		// záloha proměnných, nastavení ostatních příjmů na nulu a typ smlouvy na DPP
+		backup1 = prvniDospelyPrvniZamestnavatel[0];
+		backup2 = prvniDospelyPrvniZamestnavatel[1];
+		backup3 = prvniDospelyDruhyZamestnavatel[0];
+		backup4 = prvniDospelyDruhyZamestnavatel[1];
+		prvniDospelyPrvniZamestnavatel[0] = 0;
+		prvniDospelyPrvniZamestnavatel[1] = 2;
+		prvniDospelyDruhyZamestnavatel[0] = 0;
+		prvniDospelyDruhyZamestnavatel[1] = 0;
 		intervalMin = 0;
 		intervalMax = 20000;
 	} else if (simulace == 4) {
+		// záloha proměnných, nastavení nájmu na nulu
 		nazevNezavislePromenne = 'nájem';
-		backup = bydleni[0];
+		backup1 = bydleni[0];
+		bydleni[0] = 0;
 		intervalMin = 0;
 		intervalMax = 20000;
-	} else if (simulace == 5) {
+	} /* else if (simulace == 5) {
 		nazevNezavislePromenne = 'důchod';
 		backup = prvniDospelyDalsiPrijmy[0];
 		intervalMin = 0;
@@ -118,7 +150,7 @@ function dynamickyModelujRodinu(simulace = 0) {
 		backup = prvniDospelyDalsiPrijmy[1];
 		intervalMin = 0;
 		intervalMax = 10000;
-	}
+	} */
 
 	// u HPP nejdřív spočítat situaci s nulovou a minimální mzdou
 	if (simulace == 1) {
@@ -145,6 +177,7 @@ function dynamickyModelujRodinu(simulace = 0) {
 			najem.push(-prijmyAVydajeRodinyPoZapocteniDavek[15]);
 			poplatky.push(-prijmyAVydajeRodinyPoZapocteniDavek[16]);
 			exekuce.push(-prijmyAVydajeRodinyPoZapocteniDavek[17]);
+			doplatekNaZdravotni.push(-prijmyAVydajeRodinyPoZapocteniDavek[55]);
 			prijemRodiny.push(prijmyAVydajeRodinyPoZapocteniDavek[18]);
 
 		}
@@ -158,16 +191,16 @@ function dynamickyModelujRodinu(simulace = 0) {
 		if (simulace == 1) {
 			prvniDospelyPrvniZamestnavatel[0] = i;
 		} else if (simulace == 2) {
-			prvniDospelyPrvniZamestnavatel[2] = i;
+			prvniDospelyPrvniZamestnavatel[0] = i;
 		} else if (simulace == 3) {
-			prvniDospelyPrvniZamestnavatel[4] = i;
+			prvniDospelyPrvniZamestnavatel[0] = i;
 		} else if (simulace == 4) {
 			bydleni[0] = i;
-		} else if (simulace == 5) {
+		} /* else if (simulace == 5) {
 			prvniDospelyDalsiPrijmy[0] = i;
 		} else if (simulace == 6) {
 			prvniDospelyDalsiPrijmy[1] = i;
-		}
+		} */
 
 		nezavisla.push(i)
 
@@ -202,24 +235,34 @@ function dynamickyModelujRodinu(simulace = 0) {
 		najem.push(-prijmyAVydajeRodinyPoZapocteniDavek[15]);
 		poplatky.push(-prijmyAVydajeRodinyPoZapocteniDavek[16]);
 		exekuce.push(-prijmyAVydajeRodinyPoZapocteniDavek[17]);
+		doplatekNaZdravotni.push(-prijmyAVydajeRodinyPoZapocteniDavek[55]);
 		prijemRodiny.push(prijmyAVydajeRodinyPoZapocteniDavek[18]);
 
 	}
 
 	// vrácení původních hodnot do globální proměnné
 	if (simulace == 1) {
-		prvniDospelyPrvniZamestnavatel[0] = backup;
+		prvniDospelyPrvniZamestnavatel[0] = backup1;
+		prvniDospelyPrvniZamestnavatel[1] = backup2;
+		prvniDospelyDruhyZamestnavatel[0] = backup3;
+		prvniDospelyDruhyZamestnavatel[1] = backup4;
 	} else if (simulace == 2) {
-		prvniDospelyPrvniZamestnavatel[2] = backup;
+		prvniDospelyPrvniZamestnavatel[0] = backup1;
+		prvniDospelyPrvniZamestnavatel[1] = backup2;
+		prvniDospelyDruhyZamestnavatel[0] = backup3;
+		prvniDospelyDruhyZamestnavatel[1] = backup4;
 	} else if (simulace == 3) {
-		prvniDospelyPrvniZamestnavatel[4] = backup;
+		prvniDospelyPrvniZamestnavatel[0] = backup1;
+		prvniDospelyPrvniZamestnavatel[1] = backup2;
+		prvniDospelyDruhyZamestnavatel[0] = backup3;
+		prvniDospelyDruhyZamestnavatel[1] = backup4;
 	} else if (simulace == 4) {
-		bydleni[0] = backup;
-	} else if (simulace == 5) {
+		bydleni[0] = backup1;
+	} /* else if (simulace == 5) {
 		prvniDospelyDalsiPrijmy[0] = backup;
 	} else if (simulace == 6) {
 		prvniDospelyDalsiPrijmy[1] = backup;
-	}
+	} */
 
 	// vytvoření divu pro graf
 	var text = '<div id="graf" style="width:100%; height:100%">';
@@ -227,15 +270,16 @@ function dynamickyModelujRodinu(simulace = 0) {
 
 	nakresliGraf(nezavisla, nazevNezavislePromenne, prvniDospelyPoExekuci, prvniDospelyDanovyBonus, druhyDospelyPoExekuci, druhyDospelyDanovyBonus,
 		tretiDospelyPoExekuci, tretiDospelyDanovyBonus, pridavkyNaDeti, prispevekNaBydleni, prispevekNaZivobyti, doplatekNaBydleni, duchody,
-		rodicovska, podporaVNezamestnanosti, nemocenska, ostatniPrijmy, najem, poplatky, exekuce, prijemRodiny);
+		rodicovska, podporaVNezamestnanosti, nemocenska, ostatniPrijmy, najem, poplatky, exekuce, doplatekNaZdravotni, prijemRodiny);
 
 }
-
+//IT
 
 
 function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospelyDanovyBonus = [], druhyDospelyPoExekuci = [], druhyDospelyDanovyBonus = [],
-		tretiDospelyPoExekuci = [], tretiDospelyDanovyBonus = [], pridavkyNaDeti = [], prispevekNaBydleni = [], prispevekNaZivobyti, doplatekNaBydleni = [], duchody = [],
-		rodicovska = [], podporaVNezamestnanosti = [], nemocenska = [], ostatniPrijmy = [], najem = [], poplatky = [], exekuce = [], prijemRodiny = []) {
+		tretiDospelyPoExekuci = [], tretiDospelyDanovyBonus = [], pridavkyNaDeti = [], prispevekNaBydleni = [], prispevekNaZivobyti, doplatekNaBydleni = [],
+		duchody = [], rodicovska = [], podporaVNezamestnanosti = [], nemocenska = [], ostatniPrijmy = [], najem = [], poplatky = [], exekuce = [],
+		doplatekNaZdravotni = [], prijemRodiny = []) {
 
 	var chart = Highcharts.chart('graf', {
 
@@ -295,7 +339,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 0,
 					y: (prvniDospelyPoExekuci[0] +  druhyDospelyPoExekuci[0] + tretiDospelyPoExekuci[0] + prvniDospelyDanovyBonus[0] + druhyDospelyDanovyBonus[1] + tretiDospelyDanovyBonus[2] +
 					pridavkyNaDeti[0] + prispevekNaBydleni[0] + prispevekNaZivobyti[0] + doplatekNaBydleni[0] + duchody[0] + rodicovska[0] + podporaVNezamestnanosti[0] +
-					nemocenska[0] + ostatniPrijmy[0] + najem[0] + poplatky[0])
+					nemocenska[0] + ostatniPrijmy[0] + najem[0] + poplatky[0] + doplatekNaZdravotni[0])
 				},
 				text: '{point.y}'
 			}, {
@@ -305,7 +349,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 1,
 					y: (prvniDospelyPoExekuci[1] +  druhyDospelyPoExekuci[1] + tretiDospelyPoExekuci[1] + prvniDospelyDanovyBonus[1] + druhyDospelyDanovyBonus[1] + tretiDospelyDanovyBonus[2] +
 					pridavkyNaDeti[1] + prispevekNaBydleni[1] + prispevekNaZivobyti[1] + doplatekNaBydleni[1] + duchody[1] + rodicovska[1] + podporaVNezamestnanosti[1] +
-					nemocenska[1] + ostatniPrijmy[1] + najem[1] + poplatky[1])
+					nemocenska[1] + ostatniPrijmy[1] + najem[1] + poplatky[1] + doplatekNaZdravotni[1])
 				},
 				text: '{point.y}'
 			}, {
@@ -315,7 +359,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 2,
 					y: (prvniDospelyPoExekuci[2] +  druhyDospelyPoExekuci[2] + tretiDospelyPoExekuci[2] + prvniDospelyDanovyBonus[2] + druhyDospelyDanovyBonus[2] + tretiDospelyDanovyBonus[2] +
 					pridavkyNaDeti[2] + prispevekNaBydleni[2] + prispevekNaZivobyti[2] + doplatekNaBydleni[2] + duchody[2] + rodicovska[2] + podporaVNezamestnanosti[2] +
-					nemocenska[2] + ostatniPrijmy[2] + najem[2] + poplatky[2])
+					nemocenska[2] + ostatniPrijmy[2] + najem[2] + poplatky[2] + doplatekNaZdravotni[2])
 				},
 				text: '{point.y}'
 			}, {
@@ -325,7 +369,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 3,
 					y: (prvniDospelyPoExekuci[3] +  druhyDospelyPoExekuci[3] + tretiDospelyPoExekuci[3] + prvniDospelyDanovyBonus[3] + druhyDospelyDanovyBonus[3] + tretiDospelyDanovyBonus[3] +
 					pridavkyNaDeti[3] + prispevekNaBydleni[3] + prispevekNaZivobyti[3] + doplatekNaBydleni[3] + duchody[3] + rodicovska[3] + podporaVNezamestnanosti[3] +
-					nemocenska[3] + ostatniPrijmy[3] + najem[3] + poplatky[3])
+					nemocenska[3] + ostatniPrijmy[3] + najem[3] + poplatky[3] + doplatekNaZdravotni[3])
 				},
 				text: '{point.y}'
 			}, {
@@ -335,7 +379,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 4,
 					y: (prvniDospelyPoExekuci[4] +  druhyDospelyPoExekuci[4] + tretiDospelyPoExekuci[4] + prvniDospelyDanovyBonus[4] + druhyDospelyDanovyBonus[4] + tretiDospelyDanovyBonus[4] +
 					pridavkyNaDeti[4] + prispevekNaBydleni[4] + prispevekNaZivobyti[4] + doplatekNaBydleni[4] + duchody[4] + rodicovska[4] + podporaVNezamestnanosti[4] +
-					nemocenska[4] + ostatniPrijmy[4] + najem[4] + poplatky[4])
+					nemocenska[4] + ostatniPrijmy[4] + najem[4] + poplatky[4] + doplatekNaZdravotni[4])
 				},
 				text: '{point.y}'
 			}, {
@@ -345,7 +389,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 5,
 					y: (prvniDospelyPoExekuci[5] +  druhyDospelyPoExekuci[5] + tretiDospelyPoExekuci[5] + prvniDospelyDanovyBonus[5] + druhyDospelyDanovyBonus[5] + tretiDospelyDanovyBonus[5] +
 					pridavkyNaDeti[5] + prispevekNaBydleni[5] + prispevekNaZivobyti[5] + doplatekNaBydleni[5] + duchody[5] + rodicovska[5] + podporaVNezamestnanosti[5] +
-					nemocenska[5] + ostatniPrijmy[5] + najem[5] + poplatky[5])
+					nemocenska[5] + ostatniPrijmy[5] + najem[5] + poplatky[5] + doplatekNaZdravotni[5])
 				},
 				text: '{point.y}'
 			}, {
@@ -355,7 +399,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 6,
 					y: (prvniDospelyPoExekuci[6] +  druhyDospelyPoExekuci[6] + tretiDospelyPoExekuci[6] + prvniDospelyDanovyBonus[6] + druhyDospelyDanovyBonus[6] + tretiDospelyDanovyBonus[6] +
 					pridavkyNaDeti[6] + prispevekNaBydleni[6] + prispevekNaZivobyti[6] + doplatekNaBydleni[6] + duchody[6] + rodicovska[6] + podporaVNezamestnanosti[6] +
-					nemocenska[6] + ostatniPrijmy[6] + najem[6] + poplatky[6])
+					nemocenska[6] + ostatniPrijmy[6] + najem[6] + poplatky[6] + doplatekNaZdravotni[6])
 				},
 				text: '{point.y}'
 			}, {
@@ -365,7 +409,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 7,
 					y: (prvniDospelyPoExekuci[7] +  druhyDospelyPoExekuci[7] + tretiDospelyPoExekuci[7] + prvniDospelyDanovyBonus[7] + druhyDospelyDanovyBonus[7] + tretiDospelyDanovyBonus[7] +
 					pridavkyNaDeti[7] + prispevekNaBydleni[7] + prispevekNaZivobyti[7] + doplatekNaBydleni[7] + duchody[7] + rodicovska[7] + podporaVNezamestnanosti[7] +
-					nemocenska[7] + ostatniPrijmy[7] + najem[7] + poplatky[7])
+					nemocenska[7] + ostatniPrijmy[7] + najem[7] + poplatky[7] + doplatekNaZdravotni[7])
 				},
 				text: '{point.y}'
 			}, {
@@ -375,7 +419,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 8,
 					y: (prvniDospelyPoExekuci[8] +  druhyDospelyPoExekuci[8] + tretiDospelyPoExekuci[8] + prvniDospelyDanovyBonus[8] + druhyDospelyDanovyBonus[8] + tretiDospelyDanovyBonus[8] +
 					pridavkyNaDeti[8] + prispevekNaBydleni[8] + prispevekNaZivobyti[8] + doplatekNaBydleni[8] + duchody[8] + rodicovska[8] + podporaVNezamestnanosti[8] +
-					nemocenska[8] + ostatniPrijmy[8] + najem[8] + poplatky[8])
+					nemocenska[8] + ostatniPrijmy[8] + najem[8] + poplatky[8] + doplatekNaZdravotni[8])
 				},
 				text: '{point.y}'
 			}, {
@@ -385,7 +429,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 9,
 					y: (prvniDospelyPoExekuci[9] +  druhyDospelyPoExekuci[9] + tretiDospelyPoExekuci[9] + prvniDospelyDanovyBonus[9] + druhyDospelyDanovyBonus[9] + tretiDospelyDanovyBonus[9] +
 					pridavkyNaDeti[9] + prispevekNaBydleni[9] + prispevekNaZivobyti[9] + doplatekNaBydleni[9] + duchody[9] + rodicovska[9] + podporaVNezamestnanosti[9] +
-					nemocenska[9] + ostatniPrijmy[9] + najem[9] + poplatky[9])
+					nemocenska[9] + ostatniPrijmy[9] + najem[9] + poplatky[9] + doplatekNaZdravotni[9])
 				},
 				text: '{point.y}'
 			}, {
@@ -395,7 +439,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 10,
 					y: (prvniDospelyPoExekuci[10] +  druhyDospelyPoExekuci[10] + tretiDospelyPoExekuci[10] + prvniDospelyDanovyBonus[10] + druhyDospelyDanovyBonus[10] + tretiDospelyDanovyBonus[10] +
 					pridavkyNaDeti[10] + prispevekNaBydleni[10] + prispevekNaZivobyti[10] + doplatekNaBydleni[10] + duchody[10] + rodicovska[10] + podporaVNezamestnanosti[10] +
-					nemocenska[10] + ostatniPrijmy[10] + najem[10] + poplatky[10])
+					nemocenska[10] + ostatniPrijmy[10] + najem[10] + poplatky[10] + doplatekNaZdravotni[10])
 				},
 				text: '{point.y}'
 			}, {
@@ -405,7 +449,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 11,
 					y: (prvniDospelyPoExekuci[11] +  druhyDospelyPoExekuci[11] + tretiDospelyPoExekuci[11] + prvniDospelyDanovyBonus[11] + druhyDospelyDanovyBonus[11] + tretiDospelyDanovyBonus[11] +
 					pridavkyNaDeti[11] + prispevekNaBydleni[11] + prispevekNaZivobyti[11] + doplatekNaBydleni[11] + duchody[11] + rodicovska[11] + podporaVNezamestnanosti[11] +
-					nemocenska[11] + ostatniPrijmy[11] + najem[11] + poplatky[11])
+					nemocenska[11] + ostatniPrijmy[11] + najem[11] + poplatky[11] + doplatekNaZdravotni[11])
 				},
 				text: '{point.y}'
 			}, {
@@ -415,7 +459,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 12,
 					y: (prvniDospelyPoExekuci[12] +  druhyDospelyPoExekuci[12] + tretiDospelyPoExekuci[12] + prvniDospelyDanovyBonus[12] + druhyDospelyDanovyBonus[12] + tretiDospelyDanovyBonus[12] +
 					pridavkyNaDeti[12] + prispevekNaBydleni[12] + prispevekNaZivobyti[12] + doplatekNaBydleni[12] + duchody[12] + rodicovska[12] + podporaVNezamestnanosti[12] +
-					nemocenska[12] + ostatniPrijmy[12] + najem[12] + poplatky[12])
+					nemocenska[12] + ostatniPrijmy[12] + najem[12] + poplatky[12] + doplatekNaZdravotni[12])
 				},
 				text: '{point.y}'
 			}, {
@@ -425,7 +469,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 13,
 					y: (prvniDospelyPoExekuci[13] +  druhyDospelyPoExekuci[13] + tretiDospelyPoExekuci[13] + prvniDospelyDanovyBonus[13] + druhyDospelyDanovyBonus[13] + tretiDospelyDanovyBonus[13] +
 					pridavkyNaDeti[13] + prispevekNaBydleni[13] + prispevekNaZivobyti[13] + doplatekNaBydleni[13] + duchody[13] + rodicovska[13] + podporaVNezamestnanosti[13] +
-					nemocenska[13] + ostatniPrijmy[13] + najem[13] + poplatky[13])
+					nemocenska[13] + ostatniPrijmy[13] + najem[13] + poplatky[13] + doplatekNaZdravotni[13])
 				},
 				text: '{point.y}'
 			}, {
@@ -435,7 +479,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 14,
 					y: (prvniDospelyPoExekuci[14] +  druhyDospelyPoExekuci[14] + tretiDospelyPoExekuci[14] + prvniDospelyDanovyBonus[14] + druhyDospelyDanovyBonus[14] + tretiDospelyDanovyBonus[14] +
 					pridavkyNaDeti[14] + prispevekNaBydleni[14] + prispevekNaZivobyti[14] + doplatekNaBydleni[14] + duchody[14] + rodicovska[14] + podporaVNezamestnanosti[14] +
-					nemocenska[14] + ostatniPrijmy[14] + najem[14] + poplatky[14])
+					nemocenska[14] + ostatniPrijmy[14] + najem[14] + poplatky[14] + doplatekNaZdravotni[14])
 				},
 				text: '{point.y}'
 			}, {
@@ -445,7 +489,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 15,
 					y: (prvniDospelyPoExekuci[15] +  druhyDospelyPoExekuci[15] + tretiDospelyPoExekuci[15] + prvniDospelyDanovyBonus[15] + druhyDospelyDanovyBonus[15] + tretiDospelyDanovyBonus[15] +
 					pridavkyNaDeti[15] + prispevekNaBydleni[15] + prispevekNaZivobyti[15] + doplatekNaBydleni[15] + duchody[15] + rodicovska[15] + podporaVNezamestnanosti[15] +
-					nemocenska[15] + ostatniPrijmy[15] + najem[15] + poplatky[15])
+					nemocenska[15] + ostatniPrijmy[15] + najem[15] + poplatky[15] + doplatekNaZdravotni[15])
 				},
 				text: '{point.y}'
 			}, {
@@ -455,7 +499,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 16,
 					y: (prvniDospelyPoExekuci[16] +  druhyDospelyPoExekuci[16] + tretiDospelyPoExekuci[16] + prvniDospelyDanovyBonus[16] + druhyDospelyDanovyBonus[16] + tretiDospelyDanovyBonus[16] +
 					pridavkyNaDeti[16] + prispevekNaBydleni[16] + prispevekNaZivobyti[16] + doplatekNaBydleni[16] + duchody[16] + rodicovska[16] + podporaVNezamestnanosti[16] +
-					nemocenska[16] + ostatniPrijmy[16] + najem[16] + poplatky[16])
+					nemocenska[16] + ostatniPrijmy[16] + najem[16] + poplatky[16] + doplatekNaZdravotni[16])
 				},
 				text: '{point.y}'
 			}, {
@@ -465,7 +509,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 17,
 					y: (prvniDospelyPoExekuci[17] +  druhyDospelyPoExekuci[17] + tretiDospelyPoExekuci[17] + prvniDospelyDanovyBonus[17] + druhyDospelyDanovyBonus[17] + tretiDospelyDanovyBonus[17] +
 					pridavkyNaDeti[17] + prispevekNaBydleni[17] + prispevekNaZivobyti[17] + doplatekNaBydleni[17] + duchody[17] + rodicovska[17] + podporaVNezamestnanosti[17] +
-					nemocenska[17] + ostatniPrijmy[17] + najem[17] + poplatky[17])
+					nemocenska[17] + ostatniPrijmy[17] + najem[17] + poplatky[17] + doplatekNaZdravotni[17])
 				},
 				text: '{point.y}'
 			}, {
@@ -475,7 +519,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 18,
 					y: (prvniDospelyPoExekuci[18] +  druhyDospelyPoExekuci[18] + tretiDospelyPoExekuci[18] + prvniDospelyDanovyBonus[18] + druhyDospelyDanovyBonus[18] + tretiDospelyDanovyBonus[18] +
 					pridavkyNaDeti[18] + prispevekNaBydleni[18] + prispevekNaZivobyti[18] + doplatekNaBydleni[18] + duchody[18] + rodicovska[18] + podporaVNezamestnanosti[18] +
-					nemocenska[18] + ostatniPrijmy[18] + najem[18] + poplatky[18])
+					nemocenska[18] + ostatniPrijmy[18] + najem[18] + poplatky[18] + doplatekNaZdravotni[18])
 				},
 				text: '{point.y}'
 			}, {
@@ -485,7 +529,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 19,
 					y: (prvniDospelyPoExekuci[19] +  druhyDospelyPoExekuci[19] + tretiDospelyPoExekuci[19] + prvniDospelyDanovyBonus[19] + druhyDospelyDanovyBonus[19] + tretiDospelyDanovyBonus[19] +
 					pridavkyNaDeti[19] + prispevekNaBydleni[19] + prispevekNaZivobyti[19] + doplatekNaBydleni[19] + duchody[19] + rodicovska[19] + podporaVNezamestnanosti[19] +
-					nemocenska[19] + ostatniPrijmy[19] + najem[19] + poplatky[19])
+					nemocenska[19] + ostatniPrijmy[19] + najem[19] + poplatky[19] + doplatekNaZdravotni[19])
 				},
 				text: '{point.y}'
 			}, {
@@ -495,7 +539,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 					x: 20,
 					y: (prvniDospelyPoExekuci[20] +  druhyDospelyPoExekuci[20] + tretiDospelyPoExekuci[20] + prvniDospelyDanovyBonus[20] + druhyDospelyDanovyBonus[20] + tretiDospelyDanovyBonus[20] +
 					pridavkyNaDeti[20] + prispevekNaBydleni[20] + prispevekNaZivobyti[20] + doplatekNaBydleni[20] + duchody[20] + rodicovska[20] + podporaVNezamestnanosti[20] +
-					nemocenska[20] + ostatniPrijmy[20] + najem[20] + poplatky[20])
+					nemocenska[20] + ostatniPrijmy[20] + najem[20] + poplatky[20] + doplatekNaZdravotni[20])
 				},
 				text: '{point.y}'
 			}]
@@ -632,6 +676,11 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 			name: 'poplatky',
 			data: poplatky,
 			color: colors[16],
+			stacking: 'stacked'
+		}, {
+			name: 'doplatek na zdravotní pojištění',
+			data: doplatekNaZdravotni,
+			color: colors[18],
 			stacking: 'stacked'
 		}, {
 			type: 'spline',

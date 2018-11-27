@@ -1,4 +1,4 @@
-
+//ED
 function vyplnSlozeniDomacnosti() {
 
 	var text = '<div class="mw-text">';
@@ -39,7 +39,7 @@ function vyplnSlozeniDomacnosti() {
 	document.getElementById("snizeneZivotniMinimum").value = socialOptional[0];
 
 }
-
+//IT
 
 //ED
 function vyplnPrijmyPrvnihoDospeleho() {
@@ -124,7 +124,7 @@ function vyplnPrijmyPrvnihoDospeleho() {
 }
 //IT
 
-
+//ED
 function pridejZamestnavatelePrvnihoDospeleho() {
 
 	var text = '<h3>Druhý zaměstnavatel</h3>';
@@ -191,9 +191,9 @@ function pridejZamestnavatelePrvnihoDospeleho() {
 	};
 
 }
+//IT
 
-
-
+//ED
 function pridejDalsiPrijmyPrvnihoDospeleho() {
 
 	var text = '<h3>Jiné příjmy</h3>';
@@ -228,9 +228,9 @@ function pridejDalsiPrijmyPrvnihoDospeleho() {
 	document.getElementById("prvniDospelyOstatniPrijmy").value = prvniDospelyDalsiPrijmy[4];
 
 }
+//IT
 
-
-
+//ED
 function vyplnPrijmyDruhehoDospeleho() {
 
 	var text = '<div class="mw-text">';
@@ -312,9 +312,9 @@ function vyplnPrijmyDruhehoDospeleho() {
 	};
 
 }
+//IT
 
-
-
+//ED
 function pridejZamestnavateleDruhehoDospeleho() {
 
 	var text = '<h3>Druhý zaměstnavatel</h3>';
@@ -380,9 +380,9 @@ function pridejZamestnavateleDruhehoDospeleho() {
 	};
 
 }
+//IT
 
-
-
+//ED
 function pridejDalsiPrijmyDruhehoDospeleho() {
 
 	var text = '<h3>Jiné příjmy</h3>';
@@ -417,9 +417,9 @@ function pridejDalsiPrijmyDruhehoDospeleho() {
 	document.getElementById("druhyDospelyOstatniPrijmy").value = druhyDospelyDalsiPrijmy[4];
 
 }
+//IT
 
-
-
+//ED
 function vyplnPrijmyTretihoDospeleho() {
 
 	var text = '<div class="mw-text">';
@@ -500,9 +500,9 @@ function vyplnPrijmyTretihoDospeleho() {
 	};
 
 }
+//IT
 
-
-
+//ED
 function pridejZamestnavateleTretihoDospeleho() {
 
 	var text = '<h3>Druhý zaměstnavatel</h3>';
@@ -568,9 +568,9 @@ function pridejZamestnavateleTretihoDospeleho() {
 	};
 
 }
+//IT
 
-
-
+//ED
 function pridejDalsiPrijmyTretihoDospeleho() {
 
 	var text = '<h3>Jiné příjmy</h3>';
@@ -605,9 +605,9 @@ function pridejDalsiPrijmyTretihoDospeleho() {
 	document.getElementById("tretiDospelyOstatniPrijmy").value = tretiDospelyDalsiPrijmy[4];
 
 }
+//IT
 
-
-
+//ED
 function vyplnExekuce() {
 
 	var text = '<div class="mw-text">';
@@ -793,7 +793,7 @@ function vyplnExekuce() {
 	};
 
 }
-
+//IT
 
 //ED
 function vyplnNakladyNaBydleni() {
@@ -865,6 +865,7 @@ function vyplnNakladyNaBydleni() {
 }
 //IT
 
+//ED
 function vyplnZadostODavky() {
 
 	var text = '<div class="mw-text">';
@@ -890,6 +891,7 @@ function vyplnZadostODavky() {
 	document.getElementById("chciDoplatekNaBydleni").checked = pozadovaneDavky[3];
 
 }
+//IT
 
 //ED
 function prepisFormular(promenna = 'dummy', poradi = 0, hodnota = 0) {

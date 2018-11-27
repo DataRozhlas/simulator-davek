@@ -31,18 +31,15 @@ var prvniDospelyPrvniZamestnavatel = [0, 0, false, 0, false],
 	bydleni = [0, 0, true, false, false, 1, 0],
 //IT
 
+//ED
 // chce přídavky na děti?, chce příspěvek na bydlení?, chce příspěvek na živobytí?, chce doplatek na bydlení?
 	pozadovaneDavky = [true, true, true, true];
+//IT
 
 // testovací rodinka
 
 //ED
-/*
 prvniDospelyPrvniZamestnavatel = [0, 0, true, 2, false];
-prvniDospelyDalsiPrijmy = [0, 0, 0, 0, 0];
-prvniDospelyExekuce = [false, false, 0];
-druhyDospelyExekuce = [false, false, 0];
 slozeniDomacnosti = [2, 2, 0, 0, 0, 0];
-bydleni = [8000, 2000, true, false, false, 3, 0];
-*/
+bydleni = [8000, 2000, true, false, false, 1, 0];
 //IT
