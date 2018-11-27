@@ -1,0 +1,81 @@
+// == BUTTONS ==
+$button-padding: 10px 55px;
+$button-font-weight: 500;
+$button-padding-small: 10px 20px;
+
+.button-inline{
+	color: $secondary-color;
+	@include transition(all 0.4s);
+	&:hover{
+		color: $grey-dark;
+	}
+}
+
+.button-inline-grey{
+	color: $grey-dark;
+	@include transition(all 0.4s);
+	&:hover{
+		color: $secondary-color!important;
+		text-decoration: none;
+	}
+}
+
+@mixin primary-btn($margin: inherit){
+	width: auto;
+	background-color: $primary-color;
+	border: 1px solid $primary-color;
+	color: $color-white;
+	padding: $button-padding;
+	display: inline-block;
+	margin: $margin;
+	font-weight: $button-font-weight;
+	cursor: pointer;
+	@include transition(all 0.4s);
+	a{
+		padding: 25px 45px;
+		color: $color-white;
+	}
+	&:hover{
+		color: $primary-color;
+		border: 1px solid $primary-color !important;
+		background-color: transparent!important;
+		text-decoration: none;
+	}
+}
+@mixin secondary-btn($margin: inherit){
+	width: auto;
+	background-color: transparent;
+	border: 1px solid $primary-color;
+	color:$primary-color;
+	padding: $button-padding;
+	display: inline-block;
+	margin: $margin;
+	font-weight: $button-font-weight;
+	@include transition(all 0.4s);
+	a{
+		padding: 25px 45px;
+		color: #fff;
+	}
+	&:hover{
+		color: $color-white!important;
+		border: 1px solid $primary-color!important;
+		background-color: $primary-color!important;
+		text-decoration: none;
+		i{
+			color: $primary-color!important;
+		}
+	}
+}
+
+.mw-button{
+	background: $color-blue1;
+	border: 0px;
+	color:#fff;
+	margin-top: 20px;
+}
+.mw-button2{
+	background: $color-orange1;
+	border: 0px;
+	color:#fff;
+	margin-top: 20px;
+}

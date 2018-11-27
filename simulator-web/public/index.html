@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta http-equiv="Content-Language" content="cs" />
+   <meta name="description" content="">
+   <meta name="keywords" content="" lang="cs" />
+   <meta name="robots" content="index,follow,snippet,archive" />
+   <meta name="viewport" content="width=device-width, minimum-scale=0.25, maximum-scale=1.6, initial-scale=1.0" />
+   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+   <script type="text/javascript" src="./scripts/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+   <script>var jQuery_1_4 = $.noConflict(true);
+      jQuery_1_4(function(){
+            jQuery_1_4("a[rel^='gallery']").fancybox({
+              'transitionIn'    : 'elastic',
+              'transitionOut'   : 'elastic',
+              'titlePosition'   : 'over',
+              'showNavArrows' :   true
+            });
+         });
+
+   </script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+   <script type="text/javascript" src="./scripts/owlcarousel/dist/owl.carousel.min.js"></script>
+   <script>var jQuery_1_11_0 = $.noConflict(true);</script>
+   <script>
+      jQuery_1_11_0(function(){
+      jQuery_1_11_0(".owl-carousel").owlCarousel({
+       loop:true,
+       margin:30,
+       responsiveClass:true,
+       dots:false,
+       navigation: false,
+       nav: false,
+       responsive:{
+         0:{
+           items:1,
+           nav:true
+         },
+         566:{
+           items:2,
+           nav:true
+         },
+         768:{
+           items:3,
+           nav:true
+         },
+         1000:{
+           items:4,
+           nav:true,
+           loop:false
+         }
+       }
+      })
+      });
+   </script>
+   <link rel="stylesheet" type="text/css" href="./scripts/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+   <link rel="stylesheet" href="./scripts/owlcarousel/dist/assets/owl.carousel.min.css">
+   <link rel="stylesheet" href="./scripts/owlcarousel/dist/assets/owl.theme.default.min.css">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+   <link rel="stylesheet" href="./dist/style.css" type="text/css" media="all" />
+   <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+   <script type="text/javascript" src="https://code.highcharts.com/modules/annotations.js"></script>
+   <script src="./scripts/functions.js" type="text/javascript"></script>
+   <script src="scripts/simulace.js"></script>
+   <script src="scripts/formular.js"></script>
+   <script src="scripts/grafy.js"></script>
+   <script src="scripts/vypocty.js"></script>
+   <title>Web dobrá práce v obci</title>
+</head>
+<body class="p-4">
+   <header class="position-relative z-index-3">
+      <div class="container mw-to-lg-100">
+         <div class="row">
+            <h1 class="col-12 pl-0 color-white font-lg-72 font-40 weight-thin">Kalkulačka <span class="color-blue2">Daně, dávky, exekuce</span></h1>
+            <a class="bg-blue2 font-24 primary-font color-white weight-strong uppercase p-2 mb-0 w-100 w-sm-auto" href="https://www.pracevobci.cz">Web projektu dobrá práce</a>
+         </div>
+         <div class="row">
+            <nav class="navbar justify-content-start col-md-8 col-6 pt-2 pb-0 pb-md-2 px-0 ">
+               <div class="px-0 px-sm-auto d-flex flex-row">
+                  <ul class="nav hidden-sm-down d-md-flex">
+
+                  </ul>
+                  <!--burger menu-->
+                  <div class="burger-block pr-0 pl-0 pr-sm-auto d-block d-md-none align-items-center col-6 text-left" toggle="navbar-collapse">
+                     <div class="align-items-center d-flex d-lg-none text-left primary-color font-20">
+                        <button class="burger-icon hamburger d-lg-none pl-0 active pt-0 flex-row d-flex align-items-center"><i class="fas fa-bars"></i> <span class="pt-1 color-white ml-2 font-24">Menu</span></button>
+                     </div>
+                  </div>
+               </div>
+            </nav>
+            <div class="col-md-4  col-6 pr-0 text-right pt-2 pb-0 pb-md-2"><a href="/facebook.com" class="img-fluid valign-middle"><img src="./dist/images/fb.jpg" class="img-fluid"></a><a href="/twitter.com" class="ml-2"><img src="./dist/images/twitter.jpg"></a></div>
+            <ul class="menu-burger   d-md-none w-100" style="display:none;">
+               <li class="nav-item active"><a href="./kdo-jsme.html" class="nav-link">O projektu</a></li>
+               <li class="nav-item"><a href="./sluzby.html" class="nav-link">Tým</a></li>
+               <li class="nav-item"><a href="./lecebna-rehabilitace.html" class="nav-link">Kontakt</a></li>
+            </ul>
+         </div>
+      </div>
+   </header>
+   <section class="main-block pb-2 mt-2 mt-md-0">
+      <div class="container pt-2 mw-to-lg-100">
+         <div class="row">
+            <!--SIDEBAR-->
+            <div class="col-3 pl-0">
+               <aside class="sidebar">
+                  <section class="work bg-blue2">
+                     <div class="container">
+                        <div class="row">
+                           <a href="#" class="col-12 ml-0  py-2 color-white weight-strong">Jak to funguje</a>
+                        </div>
+                     </div>
+                  </section>
+                  <section class="home-info bg-blue1 mt-2 sidebar">
+                     <div class="container">
+                        <div class="row">
+                           <p class="col-12 color-blue3 weight-strong pt-2">Nastavení domácnosti</p>
+                           <a href="#" class="col-12 ml-0 py-2 color-white weight-strong active align-items-stretch" onclick="vyplnSlozeniDomacnosti()">Členové domácnosti <i class="fas fa-question mt-1 float-right"  data-toggle="popover" data-trigger="hover" title="Členové domácnosti" data-content="
+                            <p>Počet dospělých a nezaopatřených dětí.</p>
+                              - <strong>Počet dospělých</strong> - počet dospělých, kteří skutečně žijí v domácnosti <br>
+                              - <strong>Počet dětí do 6 let</strong> - počet dětí do 6 let včetně, které žijí v domácnosti  <br>
+                              - <strong>Počet dětí od 7 do 15 let</strong> - počet nezaopatřených dětí od 7 do 15 let včetně, které žijí v domácnosti <br>
+                              - <strong>Počet nezaopatřených dětí od 16 do 26 let</strong> - jako nezaopatřené děti se počítají mladí lidé do 26 let, kteří kteří  se soustavně připravují na budoucí povolání (studují) nebo jsou dlouhodobě nemocní.<br>
+                              - <strong>Počet osob bez trvalého bydliště</strong> - pokud v domácnosti žijí osoby, které mají trvalé bydliště jinde, má to vliv na některé dávky.<br>
+                              - <strong>Počet osob se sníženým životním minimem</strong> - úřad může například v důsledku nezájmu o práci snížit životní minimum na existenční.
+                              "></i></a>
+
+                           <a href="#" class="col-12 ml-0 py-2 color-white weight-strong" onclick="vyplnPrijmyPrvnihoDospeleho()">Příjmy <i class="fas fa-question mt-1 float-right"  data-toggle="popover" data-trigger="hover" title="Příjmy" data-content="
+                            <p>Jaké má domácnost příjmy? HPP, DPČ a DPP, důchody, rodičovská, nemocenská nebo podpora v nezaměstnanosti.</p>
+                              - <strong>Výjimka z minimálního základu</strong> - zaměstnanec nemusí platit minimální zdravotní odvody ze mzdy, která je nižší než minimální. To se týká především tzv. Kategorie státních pojištěnců například nezaopatřené děti (zahrnuje i studenty do 26 let), studenty doktorandského studia (bez ohledu na věk), poživatele důchodu (starobní, invalidní, vdodvský/vdovecký,sirotčí), osoby na mateřské/rodičovské dovolené, uchazeči o zaměstnání.<br>
+                              - <strong>Hrubá mzda na HPP</strong> - výše hrubé mzdy na hlavní pracovní poměr (pracovní poměr podle zákoníku práce)<br>
+                              - <strong>Hrubá mzda na DPČ</strong> - výše hrubé mzdy na dohodu o pracovní činnosti<br>
+                              - <strong>Hrubá mzda na DPP</strong> - výše hrubé mzdy na dohodu o provedení práce<br>
+                              - <strong>Platí zdravotní jinde</strong> - zaměstnanec nemusí platit minimální zdravotní odvody ze mzdy, která je nižší než minimální <br>
+                              - <strong>Prohlášení k dani</strong>  - podepsán tzv. růžový papír, znamená to, že jedinec u daného zaměstnavatele uplatňuje slevu na dani a daňové zvýhodnění na dětí<br>
+                              - <strong>Počet dětí k daňovému zvýhodnění</strong> - počet dětí, na které může jedinec uplatni daňové zvýhodnění. Uplatňuje vždy jen jeden z rodičů<br>
+                              - <strong>Důchod</strong> - výše starobního, invalidního nebo pozůstalostního důchodu.<br>
+                              - <strong>Rodičovská / Mateřská</strong>  - výše rodičovského příspěvku nebo peněžité pomoci v mateřství<br>
+                              - <strong>Podpora v nezaměstnanosti</strong> - výše Podpory v nezaměstnanosti <br>
+                              - <strong>Nemocenská</strong> - výše Nemocenského <br>
+                              - <strong>Výživné</strong> - výše výživného (alimentů), které domácnost dostává. <br>
+                              - <strong>Ostatní</strong> - ostatní příjmy "></i></a>
+
+                           <a href="#" class="col-12 ml-0 py-2 color-white weight-strong" onclick="vyplnExekuce()">Exekuce <i class="fas fa-question mt-1 float-right"  data-toggle="popover" data-trigger="hover" title="Exekuce" data-content="
+                            <p>Je někdo z rodiny v exekuci?</p>
+                            - <strong>Přednostní exekuce</strong> - exekuční srážky výživného, exekuce z dluhů na výživném, z dluhů na zdravotním pojistném, náhrady způsobené škody. <br>
+                            - <strong>Nepřednostní exekuce</strong>  - exekuce vzniklé neplněním finančních závazků (typicky nesplácení půjček, dluhy na nájemném, dluhy na nevyplacené mzdě atd.).<br>
+                            - <strong>Další vyživované osoby</strong> - počet osob, které může jedinec uplatnit jako další vyživované osoby (zejména jde o manžela/manželku a vlastní děti)"></i></a>
+
+                           <a href="#" class="col-12 ml-0 py-2 color-white weight-strong" onclick="vyplnNakladyNaBydleni()">Náklady <i class="fas fa-question mt-1 float-right"  data-toggle="popover" data-trigger="hover" title="Náklady" data-content="
+                            <p>Žije domácnost v nájmu, podnájmu, nebo na ubytovně. Jaký je nájem, poplatky za energie a další náklady?</p>
+                              - <strong>Nájem</strong> - měsíční výše nájmu <br>
+                              - <strong>Služby a poplatky</strong> - měsíční výše záloh na služby, energie a další poplatky<br>
+                              - <strong>Nájem</strong> - byt s nájemní smlouvou, kde vzniká nárok na Příspěvek na bydlení<br>
+                              - <strong>Vlastní nebo družstevní byt</strong> - zatrhněte, pokud je některý z členů domácnosti vlastníkem bytu nebo člen družstva<br>
+                              - <strong>Ubytovna, chata nebo podnájem</strong> - byt bez nájemní smlouvy, kde nevzniká nárok na Příspěvek na bydlení<br>
+                              - <strong>Velikost obce</strong> - od tohoto se odvíjí limity pro náklady na bydlení pro výpočet dávek na bydlení<br>
+                              - <strong>Stanovil ÚP místně obvyklé náklady?</strong> - od tohoto se odvíjí limity pro náklady na bydlení pro výpočet Doplatku na bydlení (obvykle nejde o veřejně známé číslo)"></i></a>
+<!-- EDITED -->
+                           <a href="#" class="col-12 ml-0 py-2 color-white weight-strong" onclick="vyplnZadostODavky()">Odmítnutí dávky <i class="fas fa-question mt-1 float-right"  data-toggle="popover" data-trigger="hover" title="Odmítnutí dávky" data-content="
+                              <p>Ne všechny domácnosti žádají o všechny dávky, na které mají nárok - buď o nich neví, nebo je to pro ně příliš administrativně náročné.</p>
+                              - <strong>Přídavky na děti</strong> - možnost odmítnout dávku <br>
+                              - <strong>Příspěvek na bydlení</strong> - možnost odmítnout dávku <br>
+                              - <strong>Příspěvek na živobytí</strong> - možnost odmítnout dávku <br>
+                              - <strong>Doplatek na bydlení</strong> - možnost odmítnout dávku <br>
+                              "></i></a>
+<!-- EDITED -->
+                        </div>
+                     </div>
+                  </section>
+                  <section class="count-home bg-orange1 mt-2 sidebar">
+                     <div class="container">
+                        <div class="row">
+                           <a href="#" class="col-12 ml-0 py-2 color-white weight-strong" onclick="statickyModelujRodinu()">Spočítat rozpočet domácnosti</a>
+                        </div>
+                     </div>
+                  </section>
+                  <section class="change-home bg-orange1 mt-2 sidebar graf">
+                     <div class="container">
+                        <div class="row">
+                           <p class="col-12 color-blue3 weight-strong mt-2">Jak se změní příjem domácnosti</p>
+                           <a class="col-12 ml-0 py-2 color-white weight-strong num2" onclick="dynamickyModelujRodinu(1)">...Pokud jeden dospělý pracuje na plný úvazek (HPP)</a>
+                           <a class="col-12 ml-0 py-2 color-white weight-strong num3" onclick="dynamickyModelujRodinu(2)">...Pokud jeden dospělý pracuje na zkrácený úvazek (DPČ, HPP)</a>
+                           <a class="col-12 ml-0 py-2 color-white weight-strong num4" onclick="dynamickyModelujRodinu(3)">...Pokud jeden dospělý pracuje na zkrácený úvazek (DPP)</a>
+                           <a class="col-12 ml-0 py-2 color-white weight-strong num5" onclick="dynamickyModelujRodinu(4)">...Pokud se mění nájem</a>
+                        </div>
+                     </div>
+                  </section>
+               </aside>
+            </div>
+            <div id="Exekuce" class="col-6 px-0 middle">
+               <section class="form-input pb-2 d-none filter-graf ">
+                  <div class="container bg-blue3 px-4 py-2 mw-to-lg-100">
+                     <div class="row color-blue1 pb-3">
+                        <h2 class="font-24 weight-strong uppercase pl-2">Vstupní data</h2>
+                        <div id="upperwindow2" class="px-3">
+                        </div>
+
+                     </div>
+                  </div>
+               </section>
+               <section class="form-input pb-2">
+                  <div class="container bg-white p-4 mw-to-lg-100">
+                     <!-- First person-->
+                     <div class="row color-blue1">
+                        <button class="mw-button2 position-absolute r-20 t-0 d-none" type="button" onclick="pridejZamestnavatelePrvnihoDospeleho()"> Hotovo</button>
+                        <article id="mainwindow" class=" row col-12 pl-4">
+                           <div class="mw-text w-100">
+                              <p class="weight-strong uppercase col-12 mb-0 font-24 pb-3 pl-2"> Členové domácnosti</p>
+                              <div class="ml-3">
+                                 <div class="formrow d-flex mb-2">
+                                    <div class="formrowtext pr-2">Počet dospělých</div>
+                                    <div class="formrowinput"><input class="inputnr" type="number" min="0" max="3" id="pocetDospelych" onchange="prepisFormular('slozeniDomacnosti', '0', this.value)"></div>
+                                 </div>
+                                 <div class="formrow d-flex mb-2">
+                                    <div class="formrowtext pr-2">Počet dětí do 7 let</div>
+                                    <div class="formrowinput"><input class="inputnr" type="number" min="0" max="5" id="pocetDetiPod6" onchange="prepisFormular('slozeniDomacnosti', '1', this.value)"></div>
+                                 </div>
+                                 <div class="formrow d-flex mb-2">
+                                    <div class="formrowtext pr-2">Počet dětí od 7 do 15 let</div>
+                                    <div class="formrowinput"><input class="inputnr" type="number" min="0" max="5" id="pocetDeti6Az15" onchange="prepisFormular('slozeniDomacnosti', '2', this.value)"></div>
+                                 </div>
+                                 <div class="formrow d-flex mb-2">
+                                    <div class="formrowtext pr-2">Počet nezaopatřených dětí od 16 do 26 let</div>
+                                    <div class="formrowinput"><input class="inputnr" type="number" min="0" max="5" id="pocetDeti15Az26" onchange="prepisFormular('slozeniDomacnosti', '3', this.value)"></div>
+                                 </div>
+                                 <div class="formrow d-flex mb-2">
+                                    <div class="formrowtext pr-2">Počet osob bez trvalého bydliště</div>
+                                    <div class="formrowinput"><input class="inputnr" type="number" min="0" max="18" id="trvaleBydlisteJinde" onchange="prepisFormular('slozeniDomacnosti', '5', this.value)"></div>
+                                 </div>
+                              </div>
+                           </div>
+                        </article>
+                        <!-- content for employer -->
+                     </div>
+                  </div>
+               </section>
+            </div>
+            <div class="col-3 pr-0 info right-side">
+               <section class="form-input pb-2">
+                  <div class="container bg-blue3 p-4 mw-to-lg-100">
+                     <div  class="row color-blue1">
+                        <p class="font-24 weight-strong w-100 pb-3">Vstupní data</p>
+                        <div id="upperwindow">
+                        </div>
+                     </div>
+                  </div>
+               </section>
+
+            </div>
+         </div>
+      </div>
+      </div>
+   </section>
+   <footer>
+      <div class="container bg-white p-4 mw-to-lg-100">
+         <div class="row pb-4">
+            <div class="col-md-4 col-xs-6 col-12 text-md-center text-left">
+               <p><strong>Nová škola, o.p.s.</strong><br>
+                  realizátor projektu<br>
+                  Křižíkova 344/6, 186 00, Praha 8<br>
+                  IČO: 25 76 88 67
+               </p>
+            </div>
+            <div class="col-md-4 col-xs-6 col-12  text-md-center text-left">
+               <p><strong>Nová škola, o.p.s.</strong><br>
+                  realizátor projektu<br>
+                  Křižíkova 344/6, 186 00, Praha 8<br>
+                  IČO: 25 76 88 67
+               </p>
+            </div>
+            <div class="col-md-4 col-xs-6 col-12  text-md-center text-left">
+               <p><strong>Nová škola, o.p.s.</strong><br>
+                  realizátor projektu<br>
+                  Křižíkova 344/6, 186 00, Praha 8<br>
+                  IČO: 25 76 88 67
+               </p>
+            </div>
+         </div>
+         <div class="row align-items-center">
+            <div class="col-lg col-6 text-center">
+               <img class="img-fluid" src="./dist/images/evropska-unie.jpg">
+            </div>
+            <div class="col-lg col-6 text-center">
+               <img class="img-fluid" src="./dist/images/panacek.jpg">
+            </div>
+            <div class="col-lg col-6 text-center">
+               <img class="img-fluid" src="./dist/images/mmc.jpg">
+            </div>
+            <div class="col-lg col-6 text-center">
+               <img class="img-fluid" src="./dist/images/spot.jpg">
+            </div>
+         </div>
+      </div>
+   </footer>
+   <script src="http://localhost:35729/livereload.js"></script>
+   <script src="scripts/owlcarousel/dist/owl.carousel.min.js"></script>
+   <script>
+      $(document).ready(function(){
+      $('[data-toggle="popover"]').popover({
+
+        html : true
+      })
+      });
+   </script>
+</body>
+</html>

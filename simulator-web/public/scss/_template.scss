@@ -1,0 +1,184 @@
+/*CSS Styles for dobra prace*/
+
+
+.footer-nav{
+
+	li{
+		
+		width:50%;
+		@include respond-from(sm){
+			width: auto;
+		}
+	
+	}
+}
+nav{
+	padding-top:0px !important;
+	padding-bottom:0px !important;
+	.nav{
+		display:none ;
+	}
+	a{
+		color: $color-blue2;
+		font-family: $primary-font;
+		font-size: 20px;
+		font-weight: $strong-font-weight;
+		text-transform: uppercase;
+		font-weight: $nav-font-weight;
+
+	}
+	li{
+
+		&.nav-item{
+			text-align:left;
+			&::before{
+				display: none;
+			}
+	
+
+			&.active{
+				position: relative;
+				display: block;
+				z-index: -2;
+				height: 100%;
+
+
+				a{
+					color: #fff;
+					&::before{
+						position: absolute;
+						top: -30px;
+						opacity: 1;
+						left: 0;
+						right: 0;
+						margin: 0 auto;
+						width: 30px;
+						display: block;
+					}
+				
+					
+				}
+			}
+			a{
+				@include transition(all 0.4s);
+				position: relative;
+				padding: 0px 15px 0px 0px;
+			
+				&:hover{
+					color: #fff;
+					&::before, &::after{
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+.owl-nav{
+	        margin-top: 0px;
+    top: 0;
+    position:absolute;
+    bottom: 0;
+    width:100%;
+    z-index:-1;
+
+     @include respond-from(md){
+    	 top: -50px;
+    }
+    @include respond-from(lg){
+    	 top: -40px;
+    }
+    
+
+    .owl-prev{
+    top: 0;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    left:-40px;
+    align-items: center;
+    position:absolute;
+    font-size: 90px !important;
+    /* position: relative; */
+     &:hover{
+    	background: transparent !important; 
+    	color: $color-blue2 !important;
+    	transition: all 0.6s ease;
+
+    }
+    @include respond-from(sm){
+    	font-size: 100px !important;
+    	left: -60px;
+    }
+    @include respond-from(md){
+    	font-size: 140px !important;
+    	left: -70px;
+    }
+    @include respond-from(lg){
+    	 top: -10px;
+    }
+    }
+    .owl-next{
+    top: 0;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    position:absolute;
+    /* position: relative; */
+    right:-40px;
+    font-size: 90px !important;
+
+    &:hover{
+    	background: transparent !important; 
+    	color: $color-blue2 !important;
+    	transition: all 0.6s ease;
+    }
+    @include respond-from(sm){
+    	font-size: 100px !important;
+    	right: -60px;
+    }
+     @include respond-from(md){
+    	font-size: 140px !important;
+    	right: -70px;
+    }
+    @include respond-from(lg){
+    	 top: -10px;
+    }
+    }
+}
+
+
+.link{
+	&:hover{
+		text-decoration:underline;
+	}
+}
+
+.galery{
+	.owl-carousel .owl-item img{
+		&:hover{
+		box-shadow: 0px 0px 30px rgba(0,0,0,0.5);
+    transition: all 0.4s ease-out;
+    z-index: 9999;
+    display: block;
+    width:100%;
+	}	
+	}
+	
+}
+.art-menu-title{
+
+	    max-width: 100%;
+	    max-height:100%;
+    overflow: hidden;
+    line-height: 35px;
+}

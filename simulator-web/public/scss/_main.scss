@@ -1,0 +1,794 @@
+ 	//Custor container width
+
+.closer-container{
+	max-width: $closer-width;
+	margin: 0 auto;
+}
+
+.clear{
+	clear: both;
+	float: none;
+}
+
+.justify-content-flex-center-xs{
+	@include respond-from(xs){
+		justify-content: center;
+	}
+}
+.justify-content-flex-end{
+	@include respond-from(md){
+		justify-content: flex-end;
+	}
+}
+.box-shadow{
+	box-shadow: $box-shadow;
+}
+
+.overflow-x-auto{
+	overflow-x: auto; 
+}
+.overflow-hidden{
+	overflow: hidden;
+}
+
+.object-fit{
+	object-fit: cover;
+}
+
+.filter-none{
+	filter:none!important;
+}
+.transform-none{
+	transform: none!important;
+}
+
+.box-shadow{
+	box-shadow: $box-shadow;
+}
+
+.z-index-{
+	&1{
+		z-index: 1;
+	}
+	&2{
+		z-index: 2;
+	}
+	&3{
+		z-index: 3;
+	}
+	&4{
+		z-index: 4;
+	}
+	&5{
+		z-index: 5;
+	}
+
+
+	&n1{
+		z-index: -1;
+	}
+	&n2{
+		z-index: -2;
+	}
+
+
+}
+
+//Responsive hidden
+.visible {
+
+	&-lg{
+		@include respond-to(lg){display: block;}
+		@include respond-to(md){display: block;}
+		@include respond-to(sm){display: block;}
+		@include respond-to(xs){display: block;}
+	}
+
+	&-md{
+		@include respond-to(lg){display: none;}
+		@include respond-to(md){display: block;}
+		@include respond-to(sm){display: block;}
+		@include respond-to(xs){display: block;}
+	}
+
+	&-sm{
+		@include respond-to(lg){display: none;}
+		@include respond-to(md){display: none;}
+		@include respond-to(sm){display: block;}
+		@include respond-to(xs){display: block;}
+	}
+	&-xs{
+		@include respond-to(lg){display: none;}
+		@include respond-to(md){display: none;}
+		@include respond-to(sm){display: none;}
+		@include respond-to(xs){display: block;}
+	}
+}
+
+.hidden {
+
+	&-bg{
+		@include respond-to(lg){display: none;}
+		@include respond-to(md){display: block;}
+		@include respond-to(sm){display: block;}
+		@include respond-to(xs){display: block;}
+	}
+
+	&-md{
+		@include respond-to(lg){display: block;}
+		@include respond-to(md){display: none;}
+		@include respond-to(sm){display: none;}
+		@include respond-to(xs){display: none;}
+	}
+
+	&-sm{
+		@include respond-to(lg){display: block;}
+		@include respond-to(md){display: block;}
+		@include respond-to(sm){display: none;}
+		@include respond-to(xs){display: none;}
+	}
+	&-xs{
+		@include respond-to(lg){display: block;}
+		@include respond-to(md){display: block;}
+		@include respond-to(sm){display: block;}
+		@include respond-to(xs){display: none;}
+	}
+
+
+}
+
+@function strip-units($number) {
+  @return $number / (100);
+}
+
+@for $i from 1 through 100 {
+    $width: strip-units($i);
+
+    .opacity-#{$i} { 
+        opacity: $width;
+    }
+    .opacity-md-#{$i} { 
+    	@include respond-from(md){
+        opacity: $width;
+    }
+    }
+
+}
+
+@for $i from 1 through 100 {
+    $widt: strip-units($i) * 100%;
+
+    .w-#{$i} { 
+        width: $widt;
+    }
+}
+
+
+
+
+body{
+	background-color: $body-color;
+}
+
+
+.primary-btn{
+	@include primary-btn;
+}
+
+.secondary-btn{
+	@include secondary-btn;
+}
+
+.clear{
+	clear: both;
+	float: none;
+}
+
+table{
+	font-family: $primary-font;
+	font-weight: $primary-font-weight;
+}
+
+/*BORDER*/
+.border-{
+	&left{
+		border-left: 1px solid $border-color;
+	}
+	&right{
+		border-right: 1px solid $border-color;
+	}
+	&top{
+		border-top: 1px solid $border-color;
+	}
+	&bottom{
+		border-bottom: 1px solid $border-color;
+	}	
+	&md-{
+		@include respond-from(md){
+			&right{
+				border-right: 1px solid $border-color;
+			}
+			&left{
+				border-left: 1px solid $border-color;
+			}
+			&bottom{
+				border-bottom: 1px solid $border-color;
+			}
+			&top{
+				border-top: 1px solid $border-color;
+			}
+		}
+	}
+	&lg-{
+		@include respond-from(lg){
+			&right{
+				border-right: 1px solid $border-color;
+			}
+			&left{
+				border-left: 1px solid $border-color;
+			}
+			&bottom{
+				border-bottom: 1px solid $border-color;
+			}
+			&top{
+				border-top: 1px solid $border-color;
+			}
+		}
+	}
+}
+
+.cover-image{
+
+	position: absolute;
+    min-width: 100%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    min-height: 100%;
+    max-width: 120%;
+    z-index: 0;
+    width: auto;
+
+
+}
+
+.gradient-cover{
+
+	  
+
+
+	&:after{
+
+
+		content: "";
+		width:100%;
+		position: absolute;
+		height: 50%;
+		left:0;
+		bottom:0;
+		z-index:1;
+	}
+	&.gr-orange1{
+		p,h1,h2,h3,a,.link{
+	  	z-index: 99;
+	  }
+		&:after{
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f4c8ab+37&0+0,1+63 */
+background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(244,200,171,0.59) 37%, rgba(244,200,171,1) 63%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(244,200,171,0.59) 37%,rgba(244,200,171,1) 63%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(244,200,171,0.59) 37%,rgba(244,200,171,1) 63%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#f4c8ab',GradientType=0 ); /* IE6-9 */
+}
+	}
+
+	&.gr-white{
+		p,h1,h2,h3,a{
+	  	z-index: 0;
+	  }
+	  h1,h2,h3,a,.link{
+	  	z-index: 99;
+	  }
+		&:after{
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+37&0+0,1+63 */
+background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.59) 37%, rgba(255,255,255,1) 63%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,0.59) 37%,rgba(255,255,255,1) 63%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,0.59) 37%,rgba(255,255,255,1) 63%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+	}
+
+
+
+
+}
+
+
+.box-big{
+max-height: 120px;
+@include respond-from(xs){
+    max-height: 250px;
+    height: 250px;
+}
+@include respond-from(sm){
+    max-height: 300px;
+    height: 300px;
+}
+@include respond-from(lg){
+    max-height: 320px;
+    height: 320px;
+}
+@include respond-from(xl){
+    max-height: 420px;
+    height: 420px;
+}
+&:hover{
+	&:before{
+		background:$color-blue3;
+		content:"";
+		z-index:99;
+		width:100%;
+		height:100%;
+		position:absolute;
+		top:0;
+		left:0;
+		opacity:0.7;
+		trasition: all 0.5s ease;
+	}
+}
+
+}
+
+.box-medium{
+max-height: 120px;
+@include respond-from(xs){
+    max-height: 220px;
+    height: 220px;
+}
+@include respond-from(sm){
+    max-height: 250px;
+    height: 250px;
+}
+@include respond-from(lg){
+    max-height: 290px;
+    height: 290px;
+}
+@include respond-from(xl){
+    max-height: 380px;
+    height: 380px;
+}
+&:hover{
+	&:before{
+		background:$color-blue3;
+		content:"";
+		z-index:99;
+		width:100%;
+		height:100%;
+		position:absolute;
+		top:0;
+		left:0;
+		opacity:0.7;
+		trasition: all 0.5s ease;
+	}
+}
+
+}
+
+.box-small{
+max-height: 200px;
+margin-right:0px !important;
+&:nth-child(3n) {
+    margin-right: 0px !important;
+}
+&:nth-child(2n) {
+    margin-right: 0px !important;
+}
+@include respond-from(xs){
+    max-height: 200px;
+    height: 200px;
+}
+@include respond-from(sm){
+    max-height: 200px;
+    height: 200px;
+    &:nth-child(2n){
+	margin-left: .5rem!important;
+    }
+    &:nth-child(3n) {
+    margin-left: .5rem!important;
+	}
+}
+@include respond-from(lg){
+    max-height: 250px;
+    height: 250px;
+}
+@include respond-from(xl){
+    max-height: 300px;
+    height: 300px;
+
+}
+&:hover{
+	&:before{
+		background:$color-blue3;
+		content:"";
+		z-index:99;
+		width:100%;
+		height:100%;
+		position:absolute;
+		top:0;
+		left:0;
+		opacity:0.7;
+		trasition: all 0.5s ease;
+	}
+}
+
+}
+.w-{
+	&xs-{
+		@include respond-from(xs){
+		&100{
+		    width: 100% !important;
+			}
+			&auto{
+		    width: auto !important;
+			}
+		}
+	}
+	&sm-{
+		@include respond-from(sm){
+		&100{
+		    width: 100% !important;
+			}
+			&auto{
+		    width: auto !important;
+			}
+		}
+	}
+	&md-{
+		@include respond-from(md){
+		&100{
+		    width: 100% !important;
+			}
+			&auto{
+		    width: auto !important;
+			}
+		}
+	}
+	&lg-{
+		@include respond-from(lg){
+		&100{
+		    width: 100% !important;
+			}
+			&auto{
+		    width: auto !important;
+			}
+		}
+	}
+	&xl-{
+		@include respond-from(xl){
+		&100{
+		    width: 100% !important;
+			}
+			&auto{
+		    width: auto !important;
+			}
+		}
+	}
+	
+}
+
+.form-input{
+	p{
+		font-weight:normal;
+	}
+	input{
+		border:1px solid #000;
+		text-align:center;
+	}
+	input[type="text"]{
+		width:50px;
+		border:1px solid #000;
+	}
+
+
+
+
+
+}
+.squaredTwo {
+	  
+	  position: relative;
+
+	  label {
+		    width: 20px;
+		    height: 20px;
+		    cursor: pointer;
+		    position: absolute;
+		    left: 4px;
+		    top: 4px;
+		    border: 1px solid #000;
+		   
+	    &:after {
+	          content: '';
+			    width: 9px;
+			    height: 5px;
+			    position: absolute;
+			    top: 6px;
+			    left: 4px;
+			    border: 3px solid #000;
+			    border-top: none;
+			    border-right: none;
+			    background: transparent;
+			    opacity: 0;
+			    transform: rotate(-45deg);
+	    }
+    &:hover::after {
+      opacity: 0.3;
+    }
+  }
+
+}
+
+  
+	input[type=checkbox] {
+    visibility: hidden;
+    &:checked + label:after {
+      opacity: 1;
+    	}    
+  	}
+
+  	button{
+	outline:0;
+
+  		&:hover{
+  			cursor:pointer !important;
+  			transform: scale(1.05);
+  			transition: transform 0.4s ease;
+
+  		}
+  		&:active, &:focus{
+  			outline:0;
+  		}
+  	}
+
+.info p{
+	margin-bottom:0px;
+	font-weight:normal;
+
+}
+
+.sidebar{
+	a{
+
+		cursor: pointer;
+		&:hover,&.active{
+			background:#fff;
+	
+			cursor: pointer;
+			cursor:pointer;
+		}
+	}
+	.bg-blue1{
+		a{
+			
+			&:hover{
+				color: $color-blue1 !important;
+						cursor:pointer;}
+
+						&.active{
+						color: $color-blue1 !important;
+						cursor:pointer;
+						&:after {
+					    content: "";
+					    background: #fff;
+					    width: 20px;
+					    height: 100%;
+					    top: 0px;
+					    position: absolute;
+					    right: -20px;
+					    transition: all 0.8s ease;
+					}
+			}
+		}
+	}
+	.bg-blue2{
+		a{
+			&:hover,&.active{
+						color: $color-blue2 !important;
+			}
+		}
+	}
+	.bg-orange1{
+		a{
+			&:hover,&.active{
+						color: $color-orange1 !important;
+						cursor:pointer;
+			}
+
+			&.active{
+				&:after {
+					    content: "";
+					    background: #fff;
+					    width: 20px;
+					    height: 100%;
+					    top: 0px;
+					    position: absolute;
+					    right: -20px;
+					    transition: all 0.8s ease;
+					}
+			}
+		}
+	}
+}
+
+.round{
+	padding-left:10px;
+	align-items:center;
+	color:#000 !important;
+	cursor: pointer;
+	&:before{
+		content:"";
+		width:15px !important;
+		height:15px !important;
+		border-radius:50%;
+		position:relative;
+		margin-right:10px;
+		display:inline-block;
+	}
+
+	&.highcharts-series-0{
+		&:before{
+			background:#333333;
+		}
+
+	}
+
+
+	&.highcharts-series-1{
+		&:before{
+			background:#cccccc;
+		}
+
+	}
+
+	&.highcharts-series-2{
+		&:before{
+			background:#666666;
+		}
+
+	}
+
+	&.highcharts-series-3{
+		&:before{
+			background:#cccccc;
+		}
+	}
+	&.highcharts-series-4{
+		&:before{
+			background:#999999;
+		}
+
+	}
+	&.highcharts-series-5{
+		&:before{
+			background:#cccccc;
+		}
+
+	}
+	&.highcharts-series-6{
+		&:before{
+			background:#1f78b4;
+		}
+
+	}
+	&.highcharts-series-7{
+		&:before{
+			background:#a6cee3;
+		}
+
+	}
+	&.highcharts-series-8{
+		&:before{
+			background:#33a02c;
+		}
+
+	}
+	&.highcharts-series-9{
+		&:before{
+			background:#b2df8a;
+		}
+
+	}
+	&.highcharts-series-10{
+		&:before{
+			background:#ff7f00;
+		}
+
+	}
+	&.highcharts-series-11{
+		&:before{
+			background:#fdbf6f;
+		}
+
+	}
+	&.highcharts-series-12{
+		&:before{
+			background:#6a3d9a;
+		}
+
+	}
+	&.highcharts-series-13{
+		&:before{
+			background:#cab2d6;
+		}
+
+	}
+	&.highcharts-series-14{
+		&:before{
+			background:#f0e06b;
+		}
+
+	}
+	&.highcharts-series-15{
+		&:before{
+			background:#b15928;
+		}
+
+	}
+	&.highcharts-series-16{
+		&:before{
+			background:#fb9a99;
+		}
+
+	}
+	&.highcharts-series-17{
+		&:before{
+			background:#e31a1c;
+		}
+
+	}
+
+	&.white{
+		&:before{
+			background:#fff;
+			border:2px solid #333;
+		}
+		&.active{
+			&:after{
+				content: "";
+    width: 5px !important;
+    height: 5px !important;
+    border-radius: 50%;
+    position: absolute;
+    background: #000;
+    left: 15px;
+    top: 8px;
+    margin-right: 10px;
+    display: inline-block;
+			}
+		}
+
+	}
+
+	&.active{
+			&:after{
+		    content: "";
+    width: 5px !important;
+    height: 5px !important;
+    border-radius: 50%;
+    position: absolute;
+    background: #fff;
+    left: 15px;
+    top: 8px;
+    margin-right: 10px;
+    display: inline-block;
+		}
+	}
+
+}
+.formrowtext{
+		    font-family: Roboto Condensed, sans-serif !important; 
+	}
+
+
+	.popover{
+		max-width: 600px;
+	}

@@ -1,0 +1,452 @@
+@font-face {
+	font-family: Icons;
+	src: url(./fonts/icons/Icons.woff);
+}
+
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i&amp;subset=latin-ext);
+
+
+// == FONT  ==
+$primary-font: 'Roboto Condensed', sans-serif;
+$text-font: $primary-font;
+$headline-font: $primary-font;
+
+$primary-font-size: 16px;
+$primary-mobile-font-size: 14px;
+
+$primary-font-weight: 300;
+$h1-font-size: 48px ;
+$h2-font-size: 40px;
+
+$h2-font-weight: 100!important;
+$h3-font-weight: 100!important;
+$h4-font-weight: 100!important;
+
+$h2-padding: 20px 0px 10px 0px;
+
+$weight-thin: 200 !important;
+$normal-font-weight: 300 !important;
+$headline-font-weight: 200 !important;
+$strong-font-weight: 600 !important;
+$font-bold: 700 !important;
+$extra-font-weight: 900;
+
+$h3-font-size: 26px!important;
+$h4-font-size: 24px;
+
+
+$nav-font-weight: 500;
+$line-height: 1.5!important;
+
+@function calculateRem($size) {
+	$remSize: $size / 16px;
+	@return $remSize * 1rem !important;
+}
+
+@mixin font-size($size) {
+	font-size: $size  !important;
+	font-size: calculateRem($size);
+}
+
+.primary-font{
+	font-family: $primary-font;
+}
+
+.font-{
+
+	&italic{
+		font-style: italic;
+	}
+	&10{
+		@include font-size(10px);
+	}
+	&12{
+		@include font-size(12px);
+	}
+	&14{
+		@include font-size(14px);
+	}
+	&15{
+		@include font-size(14px);
+	}
+	&16{
+		@include font-size(16px);
+	}
+	&18{
+		@include font-size(18px);
+	}
+	&20{
+		@include font-size(20px);
+	}
+	&22{
+		@include font-size(22px);
+	}
+	&24{
+		@include font-size(24px);
+	}
+	&26{
+		@include font-size(26px);
+	}
+	&30{
+		@include font-size(30px);
+	}
+	&36{
+		@include font-size(36px);
+	}
+	&40{
+		@include font-size(40px);
+	}
+	&48{
+		@include font-size(48px);
+	}
+	&60{
+		@include font-size(60px);
+	}
+	&72{
+		@include font-size(72px);
+	}
+	&96{
+		@include font-size(96px);
+	}
+	
+
+
+	&sm-{
+		@include respond-from(sm){
+			&10{
+				@include font-size(10px);
+			}
+			&12{
+				@include font-size(12px);
+			}
+			&14{
+				@include font-size(14px);
+			}
+			&15{
+				@include font-size(14px);
+			}
+			&16{
+				@include font-size(16px);
+			}
+			&18{
+				@include font-size(18px);
+			}
+			&20{
+				@include font-size(20px);
+			}
+			&22{
+				@include font-size(22px);
+			}
+			&24{
+				@include font-size(24px);
+			}
+			&26{
+				@include font-size(26px);
+			}
+			&30{
+				@include font-size(30px);
+			}
+			&36{
+				@include font-size(36px);
+			}
+			&40{
+				@include font-size(40px);
+			}
+			&48{
+		@include font-size(48px);
+	}
+		&60{
+		@include font-size(60px);
+	}
+			&72{
+		@include font-size(72px);
+	}
+			&96{
+				@include font-size(96px);
+			}
+		}
+
+	}
+	&md-{
+		@include respond-from(md){
+			&10{
+				@include font-size(10px);
+			}
+			&12{
+				@include font-size(12px);
+			}
+			&14{
+				@include font-size(14px);
+			}
+			&15{
+				@include font-size(14px);
+			}
+			&16{
+				@include font-size(16px);
+			}
+			&18{
+				@include font-size(18px);
+			}
+			&20{
+				@include font-size(20px);
+			}
+			&22{
+				@include font-size(22px);
+			}
+			&24{
+				@include font-size(24px);
+			}
+			&26{
+				@include font-size(26px);
+			}
+			&30{
+				@include font-size(30px);
+			}
+			&36{
+				@include font-size(36px);
+			}
+			&40{
+				@include font-size(40px);
+			}
+			&48{
+		@include font-size(48px);
+	}
+	&60{
+		@include font-size(60px);
+	}
+			&72{
+		@include font-size(72px);
+	}
+			&96{
+				@include font-size(96px);
+			}
+		}
+	}
+	&lg-{
+		@include respond-from(lg){
+			&10{
+				@include font-size(10px);
+			}
+			&12{
+				@include font-size(12px);
+			}
+			&14{
+				@include font-size(14px);
+			}
+			&15{
+				@include font-size(14px);
+			}
+			&16{
+				@include font-size(16px);
+			}
+			&18{
+				@include font-size(18px);
+			}
+			&20{
+				@include font-size(20px);
+			}
+			&22{
+				@include font-size(22px);
+			}
+			&24{
+				@include font-size(24px);
+			}
+			&26{
+				@include font-size(26px);
+			}
+			&30{
+				@include font-size(30px);
+			}
+			&36{
+				@include font-size(36px);
+			}
+			&40{
+				@include font-size(40px);
+			}
+			&48{
+		@include font-size(48px);
+	}
+		&60{
+		@include font-size(60px);
+	}
+		
+			&72{
+		@include font-size(72px);
+	}
+			&96{
+				@include font-size(96px);
+			}
+		}
+	}
+
+	&xl-{
+		@include respond-from(xl){
+			&10{
+				@include font-size(10px);
+			}
+			&12{
+				@include font-size(12px);
+			}
+			&14{
+				@include font-size(14px);
+			}
+			&15{
+				@include font-size(14px);
+			}
+			&16{
+				@include font-size(16px);
+			}
+			&18{
+				@include font-size(18px);
+			}
+			&20{
+				@include font-size(20px);
+			}
+			&22{
+				@include font-size(22px);
+			}
+			&24{
+				@include font-size(24px);
+			}
+			&26{
+				@include font-size(26px);
+			}
+			&30{
+				@include font-size(30px);
+			}
+			&36{
+				@include font-size(36px);
+			}
+			&40{
+				@include font-size(40px);
+			}
+			&48{
+		@include font-size(48px);
+	}
+			&72{
+		@include font-size(72px);
+	}
+			&96{
+				@include font-size(96px);
+			}
+		}
+	}
+
+
+}
+
+.weight-{
+	&thin{
+		font-weight:$weight-thin;
+	}
+	&strong{
+		font-weight:$strong-font-weight;
+	}
+	&headline{
+		font-weight: $headline-font-weight;
+	}
+	&extra-strong{
+		font-weight: $extra-font-weight;
+	}
+}
+
+
+
+//Paragraphs
+
+p{
+	@include font-size(16px);
+	font-family: $primary-font;
+	font-weight: $primary-font-weight;
+	line-height: $line-height;
+	color: $text-color;
+	@include respond-from(xs){
+		font-size: $primary-mobile-font-size;
+	}
+	@include respond-from(md){
+		font-size: $primary-font-size;
+	}
+}
+a{
+	&:hover{
+		transition: all 0.4s ease-out;
+		text-decoration: none;
+	}
+}
+header a{
+
+	color: $link-color;
+	&:hover{
+
+		text-decoration: none;
+		transform: scale(1.04);
+		transition: all 0.4s ease-out;
+	}
+}
+
+li, table{
+	font-family: $primary-font;
+	font-weight: $primary-font-weight;
+	@include respond-from(xs){
+		font-size: $primary-mobile-font-size;
+	}
+	@include respond-from(md){
+		font-size: $primary-font-size;
+	}
+}
+
+//Headlines
+
+h1{
+	font-family: $headline-font;
+	font-weight: $headline-font-weight;
+	font-size: $h1-font-size;
+	color: $h1-color;
+	text-transform: uppercase;
+}
+
+h2{
+	font-family: $headline-font;
+	font-weight: $h2-font-weight;
+	font-size: $h2-font-size;
+	padding: $h2-padding;
+	color: $h2-color;
+}
+h3{
+	font-family: $headline-font;
+	font-size: $h3-font-size;
+	font-weight: $h3-font-weight;
+	color: $h3-color;
+	padding: $h2-padding;
+}
+h4{
+	color: $grey-dark;
+	font-size: 20px!important;
+	text-transform: uppercase;
+	margin-bottom: 20px!important;
+	font-family: $primary-font;
+	font-weight: 900;
+}
+
+.headline-font{
+	font-family: $primary-font;
+}
+
+.uppercase{
+	text-transform: uppercase;
+}
+
+// LINE HEIGHT
+
+.line-1{
+	line-height: 1!important;
+}
+.line-1_5{
+	line-height: 1.5!important;
+}
+.line-2{
+	line-height: 2!important;
+}
+.line-2_5{
+	line-height: 2.5!important;
+}

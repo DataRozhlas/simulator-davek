@@ -1,0 +1,53 @@
+
+@mixin menu-sm(){
+display:none;
+}
+
+
+$b-xs: 320px;
+$b-sm: 576px;
+$b-md: 768px;
+$b-lg: 992px;
+$b-xl: 1200px;
+
+
+@mixin respond-from($media) {
+  @if $media == xl {
+    @media only screen and (min-width: $b-xl) { @content; }
+  }
+   @if $media == lg {
+    @media only screen and (min-width: $b-lg){ @content; }
+  }
+  @else if $media == md {
+    @media only screen and (min-width: $b-md) { @content; }
+  }
+  @else if $media == sm {
+    @media only screen and (min-width: $b-sm) { @content; }
+  }
+    @else if $media == xs {
+    @media only screen and (min-width: $b-xs) { @content; }
+  }
+
+}
+
+@mixin respond-to($media) {
+  @if $media == xl {
+    @media only screen and (max-width: $b-xl - 1) { @content; }
+  }
+  @else if $media == lg {
+    @media only screen and (max-width: $b-lg - 1) { @content; }
+  }
+   @else if $media == md {
+    @media only screen and (max-width: $b-md - 1)  { @content; }
+  }
+  @else if $media == sm {
+    @media only screen and (max-width: $b-sm - 1)  { @content; }
+  }
+    @else if $media == xs {
+    @media only screen and (max-width: $b-xs - 1) { @content; }
+  }
+
+}
+
+
+

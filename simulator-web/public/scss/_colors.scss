@@ -1,0 +1,90 @@
+// == COLOR  ==
+
+
+$text-color: #333;
+$color-blue1: #1790c6; // blue light
+$color-blue2: #6dcaf3;
+$color-blue3: #c0ecff ; //blue dark
+$color-orange1: #c06243;
+$color-grey1: #787b8d;
+$color-white: #fff;
+
+$body-color: #787b8d!important;
+
+$link-color: $color-orange1;
+
+$primary-color: $color-blue1;
+$secondary-color: $color-orange1;
+
+$h1-color: $primary-color;
+$h2-color: $primary-color;
+$h3-color: $primary-color;
+
+$header-background: transparent;
+
+$footer-background-color: transparent;
+$footer-color: #7F7F7F;
+
+$form-color: #bcbcbc;
+
+$border-color: rgba(139, 139, 139, 0.5);
+
+$grey-body-color: #f9f9f9;
+$grey-dark: #eaeaea!important;
+
+
+
+
+$h3-color: $primary-color;
+$border-color: #eaeaea!important;
+
+.color-{
+	&blue1{
+		color: $color-blue1 !important;
+	}
+	&blue2{
+		color: $color-blue2 !important;
+	}
+	&blue3{
+		color: $color-blue3 !important;
+	}
+	&orange1{
+		color: $color-orange1 !important;
+	}
+	&grey1{
+		color: $color-orange1 !important;
+
+	}
+	&white{
+		color: $color-white !important;
+	}
+}
+.bg-{
+	&blue1{
+		background-color: $color-blue1;
+	}
+	&blue2{
+		background-color: $color-blue2 !important;
+	}
+	&blue3{
+		background-color: $color-blue3 !important;
+	}
+	&orange1{
+		background-color: $color-orange1 !important;
+	}
+	&grey1{
+		background-color: $color-orange1 !important;
+
+	}
+	&white{
+		color: $color-white;
+	}
+}
+
+a{
+	color: $link-color;
+}
+.form-input p{
+	color: $color-blue1;
+}
+
