@@ -600,7 +600,7 @@ function nakresliGraf(x = [], nazev = '', prvniDospelyPoExekuci = [], prvniDospe
 				// pokud je exekuce, na závěr se přidají srážky ze mzdy
 				if (prvniDospelyExekuce[0] || prvniDospelyExekuce[1] || druhyDospelyExekuce[0] || druhyDospelyExekuce[1] || tretiDospelyExekuce[0] || tretiDospelyExekuce[1]) {
 
-					s += '<br/><span style="color:' + colors[17] +'">' + '(srážky z příjmů: ' + this.points[17]['y'] + ' Kč)' + '</span>';
+					s += '<br/><span style="color:' + colors[17] +'">' + '(srážky z příjmů: ' + this.points[18]['y'] + ' Kč)' + '</span>';
 
 				};
 

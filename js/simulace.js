@@ -39,10 +39,7 @@ var prvniDospelyPrvniZamestnavatel = [0, 0, false, 0, false],
 // testovací rodinka
 
 //ED
-
 prvniDospelyPrvniZamestnavatel = [0, 0, true, 2, false];
 slozeniDomacnosti = [2, 2, 0, 0, 0, 0];
-prvniDospelyExekuce = [false, true, 3],
-bydleni = [8000, 2000, true, false, false, 4, 0];
-
+bydleni = [8000, 2000, true, false, false, 1, 0];
 //IT

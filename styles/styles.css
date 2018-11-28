@@ -1,0 +1,151 @@
+
+#container {
+	font-family: 'Roboto', sans-serif;
+}
+
+#title {
+	background: black;
+	color: white;
+	height: 60px;
+	margin: 10px;
+	font-size: 50px;
+	font-weight: bold;
+	padding: 10px 10px 10px 30px;
+}
+
+#upperwindow {
+	background: pink;
+	height: auto;
+	margin: 10px;
+	padding: 10px;
+	line-height: 1.5;
+	font-size: 14px;
+}
+
+#middlewindowgroup {
+	margin: 10px;
+	display: flex;
+}
+
+#buttonwindowgroup {
+	width: 340px;
+	margin-right: 10px;
+}
+
+#mainwindow {
+	background: lightgrey;
+	flex: 1;
+	padding: 10px;
+}
+
+#upperbuttonwindow {
+}
+
+#lowerbuttonwindow {
+	padding-top: 50px;
+}
+
+.bw-button {
+	font-size: 18px;
+	margin: 3px;
+	text-align: left;
+	width: 90%;
+	border-radius: 5px;
+	border-width: 1px;
+	padding: 5px;
+}
+
+.uw-button {
+	font-size: 18px;
+	margin: 7px;
+	text-align: left;
+	width: 10%;
+	border-radius: 5px;
+	border-width: 1px;
+	padding: 5px;
+}
+
+#bw-title {
+	margin: 10px;
+}
+
+.formrow {
+	padding-bottom: 10px;
+}
+
+.formrowtext {
+	display: inline;
+	padding-right: 5px;
+}
+
+.formrowtextfirst {
+	display: block;
+	padding-bottom: 5px;
+}
+
+.formrowinput {
+	display: inline;
+}
+
+.formrowradiodetail {
+	display: inline;
+	padding-left: 5px;
+}
+
+.formrowradiomain {
+	display: inline;
+	padding-left: 5px;
+}
+
+.inputnr {
+	border-radius: 5px;
+	border-width: 1px;
+	padding: 5px;
+}
+
+.taxbonus {
+	padding-left: 25px;
+}
+
+.mw-button {
+	font-size: 18px;
+	margin: 10px;
+	text-align: left;
+	width: 210px;
+	border-radius: 5px;
+	border-width: 1px;
+	padding: 5px;
+}
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 400px;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	padding: 5px 0;
+	border-radius: 6px;
+	position: absolute;
+	z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+}
+
+.mw-text h2 {
+	margin-top: 10px;
+	margin-left: 0px;
+}
+
+.typsmlouvyform {
+	border-radius: 5px;
+	border-width: 1px;
+	padding: 5px;
+}
